@@ -439,7 +439,7 @@
                     const rows = data.values || [];
                     const grid = document.getElementById(elementId);
                     grid.innerHTML = rows.map(row => {
-                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, keylink, taglink, dateformat] = row;
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                         return `
                             <div class="schedule__card">
                                 <img src="${img}" alt="schedule" />
