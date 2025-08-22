@@ -65,7 +65,7 @@
                     const rows = data.values || [];
                     const grid = document.getElementById(elementId);
                     grid.innerHTML = rows.map(row => {
-                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, keylink, taglink, dateformat] = row;
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                         return `
                             <div class="schedule__card">
                                 <img src="${img}" alt="schedule" />
@@ -99,7 +99,6 @@
                 });
         }
 
-        // เรียกใช้ฟังก์ชันโดยเปลี่ยน RANGE และ element ID ตาม section
         loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
         loadScheduleData('2025!A2:N', 'scheduleGrid2025');
         loadScheduleData('2024!A2:N', 'scheduleGrid2024');
