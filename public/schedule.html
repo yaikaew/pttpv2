@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <title>pippor & 2tee</title>
+    <link rel="icon" href="assets/icons/icon.png" type="image/png">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="nav">
+        <nav>
+            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+
+            <ul class="nav__links" id="nav-menu">
+                <li class="link"><a href="index.html">Home</a></li>
+                <li class="link"><a href="schedule.html">Cover</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Schedule Section -->
+    <section class="schedule" id="upcoming">
+        <div class="schedule__container">
+            <h2 class="section__title">Upcoming</h2>
+            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+        </div>
+    </section>
+    <section class="schedule" id="2025">
+        <div class="schedule__container">
+            <h2 class="section__title">2025</h2>
+            <div class="schedule__grid" id="scheduleGrid2025"></div>
+        </div>
+    </section>
+    <section class="schedule" id="2024">
+        <div class="schedule__container">
+            <h2 class="section__title">2024</h2>
+            <div class="schedule__grid" id="scheduleGrid2024"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer__bar">
+            &copy; All rights reserved. By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
+		    Since 26/7/2025 - Last Update 2/8/2025
+        </div>
+    </footer>
+
+    <script>
+        function loadScheduleData(range, elementId) {
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const rows = data.values || [];
+                    const grid = document.getElementById(elementId);
+                    grid.innerHTML = rows.map(row => {
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, keylink, taglink, dateformat] = row;
+                        return `
+                            <div class="schedule__card">
+                                <img src="${img}" alt="schedule" />
+                                <div class="schedule__details">
+                                    ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                                    ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                    ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+
+                                    <div class="schedule__info">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        <span>${date} ${time ? `| ${time}` : ''}</span>
+                                    </div>
+                                    ${location ? `
+                                        <div class="schedule__info">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>${location}</span>
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="schedule__btn">
+                                        ${
+                                            link
+                                                ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                                : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        // เรียกใช้ฟังก์ชันโดยเปลี่ยน RANGE และ element ID ตาม section
+        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+        loadScheduleData('2025!A2:N', 'scheduleGrid2025');
+        loadScheduleData('2024!A2:N', 'scheduleGrid2024');
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <title>pippor & 2tee</title>
+    <link rel="icon" href="assets/icons/icon.png" type="image/png">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="nav">
+        <nav>
+            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+
+            <ul class="nav__links" id="nav-menu">
+                <li class="link"><a href="#profile">Profile</a></li>
+                <li class="link"><a href="#schedule">Schedule</a></li>
+                <li class="link"><a href="#discography">Discography</a></li>
+                <li class="link"><a href="#filmography">Filmography</a></li>
+                <li class="link"><a href="#brand">Brand Presenter</a></li>
+                <li class="link"><a href="#awards">Awards</a></li>
+                <li class="link"><a href="#shows">Shows</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Profile Section -->
+    <section class="profile-section" id="profile">
+        <div class="profile-card">
+            <div class="profile-image">
+                <img src="https://pbs.twimg.com/media/GuB0uEoWMAAHVIT?format=jpg&name=large" alt="Por">
+            </div>
+            <div class="profile-text">
+                <h1><span>Por</span></h1>
+                <h2>Suppakarn Jirachotikul</h2>
+                <p>
+                    Rising actor-singer who debuted as a main member of DVI after competing on LAZiCON. Notable role as Punlee in Your Sky Series; upcoming as Qin in Duang With You Series.
+                </p>
+                <div class="social-links">
+                    <a href="https://x.com/porsuppakarn" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/porsuppakarn" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@porsuppakarn" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://weibo.com/u/7910928995" target="_blank"><i class="fa-brands fa-weibo"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-image">
+                <img src="https://pbs.twimg.com/media/Gt93Ot5WYAAMRKO?format=jpg&name=4096x4096" alt="TeeTee">
+            </div>
+            <div class="profile-text">
+                <h1><span>TeeTee</span></h1>
+                <h2>Wanpichit Nimitparkpoom</h2>
+                <p>
+                    New-generation actor recognized from DMD Friendship the Reality. Trained via TO BE NUMBER ONE IDOL. Appeared as Glaijai in Your Sky Series, with an upcoming lead as Duang in Duang With You Series.
+                </p>
+                <div class="social-links">
+                    <a href="https://x.com/twnpich" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/twnpich/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@teetee.wpc" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://weibo.com/u/7978599852" target="_blank"><i class="fa-brands fa-weibo"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="schedule" id="schedule">
+        <div class="schedule__container">
+            <h2 class="section__title">Schedule</h2>
+            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+            <div class="view-all">
+                <a href="schedule.html">View All Events</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discography Section -->
+    <section class="discography" id="discography">
+        <div class="discography__container">
+            <h2 class="section__title">Discography</h2>
+        </div>
+    
+        <div class="tab-menu">
+            <span class="tab-link active" data-tab="por">Por</span>
+            <span class="tab-link" data-tab="tee">TeeTee</span>
+            <span class="tab-link" data-tab="dexx">DEXX</span>
+        </div>
+    
+        <div id="por" class="tab-content active">
+            <div class="discography__grid">
+                <div class="discography__card">
+                    <img src="https://images.genius.com/9a7dce0598f3c8ed9d3532a739b61fb7.1000x1000x1.jpg" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">YESTERDAY TODAY TOMORROW</p>
+                        <p class="discography__subtitle">Trinity & 4Nologue Trainee</p>
+                        <a href="https://youtu.be/bpe9zQ5zDDc" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/Fnp7kO-aUAEb-4W?format=jpg&name=medium" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">Sugar</p>
+                        <p class="discography__subtitle">DVI</p>
+                        <a href="https://youtu.be/BvXbFJ3GrUw" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/FoK0-r2acAAGlkQ?format=jpg&name=medium" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">To The Top</p>
+                        <p class="discography__subtitle">PSYCHIC FEVER feat. DVI</p>
+                        <a href="https://youtu.be/0xRa0DwkOvw" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/F1PrFJdaEAAvqUW?format=jpg&name=large" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">Second Chance</p>
+                        <p class="discography__subtitle">DVI</p>
+                        <a href="https://youtu.be/57O1sPt22PE" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/GFBnObCbUAAXer5?format=jpg&name=4096x4096" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">เพื่อน (แอบ) รัก - Close(d) Friend</p>
+                        <p class="discography__subtitle">DVI</p>
+                        <a href="https://youtu.be/uDAO04OQi8c" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/GhvGt1DbwAArGN4?format=jpg&name=large" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">Perfect Match</p>
+                        <p class="discography__subtitle">DMD Gen4</p>
+                        <a href="https://youtu.be/F5Rl-NnAgjY" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/GidVC7ybcAEnwf7?format=jpg&name=large" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">ใกล้ใจ</p>
+                        <p class="discography__subtitle">Por Suppakarn</p>
+                        <a href="https://youtu.be/sevERDj4naU" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div id="tee" class="tab-content">
+            <div class="discography__grid">
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/GEHQKJFb0AAnz7E?format=jpg&name=4096x4096" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">รักเธอเต็มฟีด (LOVE FEED)</p>
+                        <p class="discography__subtitle">DMD BOYS</p>
+                        <a href="https://youtu.be/tb_z1s97fuU" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="discography__card">
+                    <img src="https://i.scdn.co/image/ab67616d0000b27335892d98b65b52bb75da0500" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">ศูนย์รวมความน่ารัก (Cuteness Center)</p>
+                        <p class="discography__subtitle">DMD Gen3</p>
+                        <a href="https://youtu.be/HaXOu4gzYmw" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dexx" class="tab-content">
+            <div class="discography__grid">
+                <div class="discography__card">
+                    <img src="https://pbs.twimg.com/media/GuQv8caacAA-v-j?format=jpg&name=large" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">CLANG CLANG</p>
+                        <p class="discography__subtitle">DEXX</p>
+                        <a href="https://youtu.be/GTY_Ss32G48" target="_blank">
+                            <button class="streaming">MV</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filmography Section -->
+    <section class="film" id="filmography">
+        <div class="film__container">
+            <h2 class="section__title">Filmography</h2>
+            <div class="film__grid">
+                <div class="film__card">
+                    <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="film" />
+                    <div class="film__details">
+                        <p>กี่หมื่นฟ้า Your Sky Series</p>
+                        <div class="role">ป๋อ รับบท พันลี้ <i class="ri-star-fill"></i> ตี๋ตี๋ รับบท ใกล้ใจ <br/> Punlee by Por <i class="ri-star-fill"></i> Glaijai by TeeTee</div>
+                        <div class="film_info">
+                            <div class="status"><span>Year</span> 2025</div>
+                            <a href="http://s.iq.com/cvgpz" target="_blank">
+                                <button class="rerun">iQIYI</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="film__card">
+                    <img src="https://pbs.twimg.com/media/GmZg7Lhb0AAYn69?format=jpg&name=medium" alt="film" />
+                    <div class="film__details">
+                        <p>กี่หมื่นฟ้า Your Sky Of Us</p>
+                        <div class="role">ป๋อ รับบท พันลี้ <i class="ri-star-fill"></i> ตี๋ตี๋ รับบท ใกล้ใจ <br/> Punlee by Por <i class="ri-star-fill"></i> Glaijai by TeeTee</div>
+                        <div class="film_info">
+                            <div class="status"><span>Year</span> 2025</div>
+                            <a href="http://s.iq.com/YourSkyOfUs" target="_blank">
+                                <button class="rerun">iQIYI</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="film__card">
+                    <img src="https://pbs.twimg.com/media/GkPQY-oa0AAZaIa?format=jpg&name=4096x4096" alt="film" />
+                    <div class="film__details">
+                        <p>ด้วงกับเธอ Duang With You Series</p>
+                        <div class="role">ตี๋ตี๋ รับบท ด้วง <i class="ri-star-fill"></i> ป๋อ รับบท ฉิน <br/> Duang by TeeTee <i class="ri-star-fill"></i> Qin by Por</div>
+                        <div class="film_info">
+                            <div class="status"><span>Coming Soon</span> </div>
+                            <a href="https://youtu.be/G7ExYljjGoo" target="_blank">
+                                <button class="rerun">PILOT</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="film__card">
+                    <img src="https://pbs.twimg.com/media/GkPmh--WgAAapoX?format=jpg&name=4096x4096" alt="film" />
+                    <div class="film__details">
+                        <p>DMD SITCOM หอตัวดี</p>
+                        <div class="role">#หอตัวดี</div>
+                        <div class="film_info">
+                            <div class="status"><span>Coming Soon</span> </div>
+                            <a href="https://x.com/DomundiTV/status/1892609941485346900" target="_blank">
+                                <button class="rerun">info</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Presenter Section -->
+    <section class="brand" id="brand">
+        <div class="brand__container">
+            <h2 class="section__title">Brand Presenter</h2>
+            <div class="brand__grid">
+                <div class="brand__card">
+                    <img src="https://pbs.twimg.com/media/GmH4xe7aEAAB8p6?format=jpg&name=medium" alt="Mille" />
+                    <div class="brand__details">
+                        <p class="brand__title">Friend of Mille</p>
+                        <p class="brand__subtitle">Start:16 Mar 2025</p>
+                    </div>
+                </div>
+                <div class="brand__card">
+                    <img src="https://pbs.twimg.com/media/GqJ4BLAagAA7bt7?format=jpg&name=large" alt="G2G" />
+                    <div class="brand__details">
+                        <p class="brand__title">Friends of G2G</p>
+                        <p class="brand__subtitle">Start:5 May 2025</p>
+                    </div>
+                </div>
+                <div class="brand__card">
+                    <img src="https://pbs.twimg.com/media/GvbVfO2WAAEADYV?format=jpg&name=large" alt="Maison Mylène" />
+                    <div class="brand__details">
+                        <p class="brand__title">Presenter of Maison Mylène</p>
+                        <p class="brand__subtitle">Start:9 Jul 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section class="awards" id="awards">
+        <div class="awards__container">
+            <h2 class="section__title">Awards</h2>
+            <div class="awards__grid">
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/FonGUx0XwAAdsTU?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง Sugar - DVI</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/GijVf26a0AAGzWk?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง Perfect Match - DMD Gen4</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/Gu8dfomb0AA-RXY?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/GtQ5yc6bMAAUaoE?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Thailand Y Content Awards 2024</p>
+                        <p class="awards__subtitle">รางวัลสาขานักแสดงดาวรุ่งแห่งปี - ป๋อ ศุภการ<br>เสนอชื่อเข้าชิง</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/GvgeIQ_WwAAFAP6?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/GwEjCqiXgAALTN1?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
+                    </div>
+                </div>
+                <div class="awards__card">
+                    <img src="https://pbs.twimg.com/media/GwolO6Ya0AA07hl?format=jpg&name=large" alt="" />
+                    <div class="awards__details">
+                        <p class="awards__title">Tpop Stage Show</p>
+                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shows Section -->
+    <section class="shows" id="shows">
+        <div class="shows__container">
+            <h2 class="section__title">Shows</h2>
+        </div>
+    
+        <div class="tab-menu-2">
+            <span class="tab-link-2 active" data-tab="online-shows">Online</span>
+            <span class="tab-link-2" data-tab="special">Specials</span>
+            <span class="tab-link-2" data-tab="bts">BTS</span>
+            <span class="tab-link-2" data-tab="presstour">Press Tours</span>
+            <span class="tab-link-2" data-tab="presscon">Press Conferences</span>
+            <span class="tab-link-2" data-tab="interview">Interview</span>
+            <!-- <span class="tab-link-2" data-tab="shows_all">shows_all</span> -->
+        </div>
+    
+        <div id="online-shows" class="tab-content-2 active">
+            <div class="shows__grid" id="online__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="special" class="tab-content-2">
+            <div class="shows__grid" id="specials__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="bts" class="tab-content-2">
+            <div class="shows__grid" id="bts__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="presstour" class="tab-content-2">
+            <div class="shows__grid" id="presstour__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="presscon" class="tab-content-2">
+            <div class="shows__grid" id="presscon__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="interview" class="tab-content-2">
+            <div class="shows__grid" id="interview__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div id="shows_all" class="tab-content-2">
+            <div class="shows__grid" id="shows__all">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        <div class="footer__bar">
+            &copy; All rights reserved. By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
+		    Since 26/7/2025 - Last Update 2/8/2025
+        </div>
+    </footer>
+
+    <script>
+        function loadScheduleData(range, elementId) {
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const rows = data.values || [];
+                    const grid = document.getElementById(elementId);
+                    grid.innerHTML = rows.map(row => {
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, keylink, taglink, dateformat] = row;
+                        return `
+                            <div class="schedule__card">
+                                <img src="${img}" alt="schedule" />
+                                <div class="schedule__details">
+                                    ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                                    ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                    ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+
+                                    <div class="schedule__info">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        <span>${date} ${time ? `| ${time}` : ''}</span>
+                                    </div>
+                                    ${location ? `
+                                        <div class="schedule__info">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>${location}</span>
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="schedule__btn">
+                                        ${
+                                            link
+                                                ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                                : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        function loadShowsData(range, elementId, typeFilter = null) {
+            const grid = document.getElementById(elementId);
+            
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    let rows = data.values || [];
+
+                    if (typeFilter) {
+                        rows = rows.filter(row => row[0] === typeFilter);
+                    }
+
+                    if (rows.length === 0) {
+                        grid.innerHTML = '<p>ไม่พบข้อมูล</p>';
+                    } else {
+                        grid.innerHTML = rows.map(row => {
+                            const [type, date, title, link, id, thumbnail, channel, imgchannel, views, view2] = row;
+                            return `
+                                <div class="showcard" onclick="openVideo('${link}')">
+                                    <div class="thumbnail">
+                                        <img src="${thumbnail}" alt="video">
+                                    </div>
+                                    <div class="info">
+                                        <img src="${imgchannel}" alt="channel">
+                                        <div class="text">
+                                            <p class="title">${title}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                });
+        }
+
+        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+        loadShowsData('shows!A2:J', 'online__all', 'Online Shows');
+        loadShowsData('shows!A2:J', 'specials__all', 'Specials');
+        loadShowsData('shows!A2:J', 'bts__all', 'BTS');
+        loadShowsData('shows!A2:J', 'presstour__all', 'Presstour');
+        loadShowsData('shows!A2:J', 'presscon__all', 'Presscon');
+        loadShowsData('shows!A2:J', 'interview__all', 'Interview');
+        loadShowsData('shows!A2:J', 'shows__all', '');
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
