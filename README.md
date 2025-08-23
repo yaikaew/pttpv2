@@ -15,7 +15,7 @@ This repository contains the source code for a website that uses **Google Sheets
 
 ## Demo
 
-![Website Screenshot](./assets/screenshot.png)
+![Website Screenshot](./public/assets/screenshot.png)
 *Example screenshot of the live website.*
 
 Live demo: [https://pttpv2.onrender.com](https://pttpv2.onrender.com)
