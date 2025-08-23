@@ -34,38 +34,9 @@
                 <h2 class="section__title">Outfits</h2>
             </div>
         </div>
-        <div class="outfits__grid" id="outfits__all"></div>
-        <script>
-            function loadOutfitsData(range, elementId) {
-                fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const rows = data.values || [];
-                        const grid = document.getElementById(elementId);
-                        grid.innerHTML = rows.map(row => {
-                            const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-                            return `
-                                ${outfit ? `
-                                    <div class="outfits__card">
-                                        <img src="${outfit}" alt="outfits" />
-                                        <div class="outfits__details">
-                                        <p class="outfits__date">${dateformat}</p>
-                                        <p class="outfits__tags">
-                                                <a href="${tag ? taglink : keylink}" target="_blank" rel="noopener noreferrer">
-                                                    ${tag || keyword}
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            `;
-                        }).join('');
-                    });
-            }
-
-            loadOutfitsData('Sheet1!A2:O', 'outfits__all');
-        </script>
-
+        <div class="outfits__grid" id="outfits__all">
+            <div class="loading-spinner"></div>
+        </div>
     </section>
 
     <footer class="footer">
@@ -74,6 +45,39 @@
 		    Since 26/7/2025 - Last Update 2/8/2025
         </div>
     </footer>
+
+    <script>
+        function loadOutfitsData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const rows = data.values || [];
+                    grid.innerHTML = rows.map(row => {
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                        return `
+                            ${outfit ? `
+                                <div class="outfits__card">
+                                    <img src="${outfit}" alt="outfits" />
+                                    <div class="outfits__details">
+                                    <p class="outfits__date">${dateformat}</p>
+                                    <p class="outfits__tags">
+                                            <a href="${tag ? taglink : keylink}" target="_blank" rel="noopener noreferrer">
+                                                ${tag || keyword}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        `;
+                    }).join('');
+                });
+        }
+
+        loadOutfitsData('Sheet1!A2:O', 'outfits__all');
+    </script>
 
     <script src="script.js"></script>
 </body>
