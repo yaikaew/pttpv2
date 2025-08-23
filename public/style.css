@@ -250,6 +250,18 @@ section {
     background-color: var(--extra-light);
 }
 
+.keytag {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.datetimelocation{
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
 .schedule__title {
     font-size: 1rem;
     font-weight: 600;
@@ -323,6 +335,94 @@ section {
     background: #6a5acd;
 }
 
+/* schedule list */
+.schedule__table__wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+.schedule_table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0 auto;
+    background: var(--extra-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    table-layout: fixed;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+.schedule_table {
+    min-width: 1000px;
+}
+.schedule_table th, .schedule_table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+.schedule_table td {
+    font-size: 0.9rem;
+}
+.schedule_table th {
+    background: var(--primary-color);
+    color: var(--extra-light);
+    font-weight: 600;
+}
+.schedule_table th:nth-child(1), .schedule_table td:nth-child(1),
+.schedule_table th:nth-child(3), .schedule_table td:nth-child(3) {
+    width: 6%;
+    min-width: 60px;
+}
+.schedule_table th:nth-child(2), .schedule_table td:nth-child(2) {
+    width: 10%;
+    min-width: 100px;
+}
+.schedule_table th:nth-child(4), .schedule_table td:nth-child(4),
+.schedule_table th:nth-child(5), .schedule_table td:nth-child(5),
+.schedule_table th:nth-child(6), .schedule_table td:nth-child(6) {
+    width: 23%;
+    min-width: 230px;
+}
+.schedule_table th:nth-child(7), .schedule_table td:nth-child(7) {
+    width: 9%;
+    min-width: 90px;
+}
+.schedule_table a {
+    color: var(--text-dark);
+}
+.schedule_table tr:last-child td:first-child {
+    border-bottom-left-radius: 1rem;
+}
+.schedule_table tr:last-child td:last-child {
+    border-bottom-right-radius: 1rem;
+}
+/* สลับสีระหว่าง row */
+.schedule_table tbody tr:nth-child(odd) td {
+    background-color: #f5f7fa;
+}
+.schedule_table tbody tr:nth-child(even) td {
+    background-color: #eaf1fb;
+}
+.schedule__rerun {
+    display: block;
+    width: 100%;
+    padding: 0.2rem 0rem;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    outline: none;
+    border: 1px solid var(--primary-color);
+    border-radius: 5rem;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+.schedule__rerun:hover {
+    color: var(--extra-light);
+    background-color: var(--primary-color);
+}
+
 /* outfits */
 .outfits__grid {
     display: grid;
@@ -371,7 +471,6 @@ section {
     font-size: 0.8rem;
     font-weight: 600;
 }
-
 /* discography */
 .tab-menu {
     display: flex;
