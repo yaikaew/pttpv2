@@ -323,6 +323,55 @@ section {
     background: #6a5acd;
 }
 
+/* outfits */
+.outfits__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    @media (width < 900px) {
+        gap: 1rem;
+    }
+}
+.outfits__card {
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    cursor: pointer;
+}
+.outfits__card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+.outfits__details {
+    position: absolute;
+    width: calc(100% - 2rem);
+    padding: 1rem;
+    bottom: -15rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: var(--extra-light);
+    background-color: var(--primary-color-dark);
+    backdrop-filter: blur(4px);
+    border-radius: 10px;
+    z-index: 1;
+    transition: 0.3s;
+}
+.outfits__card:hover .outfits__details {
+    bottom: 1rem;
+}
+.outfits__date {
+    font-size: 0.9rem;
+}
+.outfits__tags {
+    display: flex;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
 /* discography */
 .tab-menu {
     display: flex;
