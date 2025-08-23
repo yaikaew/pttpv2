@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Outfits | pippor & 2tee</title>
+    <link rel="icon" href="assets/icons/icon.png" type="image/png">
+</head>
+
+<body>
+    <div class="nav">
+        <nav>
+            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+
+            <ul class="nav__links" id="nav-menu">
+                <li class="link"><a href="index.html">Home</a></li>
+                <li class="link"><a href="schedule.html">Cover</a></li>
+                <li class="link"><a href="outfits.html" class="active">Outfits</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <section class="section__container discography__container" id="outfits">
+        <div class="section__header">
+            <div>
+                <h2 class="section__title">Outfits</h2>
+            </div>
+        </div>
+        <div class="outfits__grid" id="outfits__all"></div>
+        <script>
+            function loadOutfitsData(range, elementId) {
+                fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const rows = data.values || [];
+                        const grid = document.getElementById(elementId);
+                        grid.innerHTML = rows.map(row => {
+                            const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                            return `
+                                ${outfit ? `
+                                    <div class="outfits__card">
+                                        <img src="${outfit}" alt="outfits" />
+                                        <div class="outfits__details">
+                                        <p class="outfits__date">${dateformat}</p>
+                                        <p class="outfits__tags">
+                                                <a href="${tag ? taglink : keylink}" target="_blank" rel="noopener noreferrer">
+                                                    ${tag || keyword}
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            `;
+                        }).join('');
+                    });
+            }
+
+            loadOutfitsData('Sheet1!A2:O', 'outfits__all');
+        </script>
+
+    </section>
+
+    <footer class="footer">
+        <div class="footer__bar">
+            &copy; All rights reserved. By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
+		    Since 26/7/2025 - Last Update 2/8/2025
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
