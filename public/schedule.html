@@ -75,6 +75,9 @@
                     const rows = data.values || [];
                     grid.innerHTML = rows.map(row => {
                         const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+
+                        const isUpcoming = elementId === "scheduleGridUpcoming";
+
                         return `
                             <div class="schedule__card">
                                 <img src="${img}" alt="schedule" />
@@ -96,9 +99,12 @@
 
                                     <div class="schedule__btn">
                                         ${
-                                            link
-                                                ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
-                                                : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                            isUpcoming
+                                                ? (link
+                                                    ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                                    : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                                )
+                                                : (link ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>` : '')
                                         }
                                     </div>
                                 </div>
@@ -112,6 +118,7 @@
         loadScheduleData('2025!A2:N', 'scheduleGrid2025');
         loadScheduleData('2024!A2:N', 'scheduleGrid2024');
     </script>
+
 
     <script src="script.js"></script>
 
