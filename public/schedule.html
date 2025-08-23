@@ -35,19 +35,25 @@
     <section class="schedule" id="upcoming">
         <div class="schedule__container">
             <h2 class="section__title">Upcoming</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+            <div class="schedule__grid" id="scheduleGridUpcoming">
+                <div class="loading-spinner"></div>
+            </div>
         </div>
     </section>
     <section class="schedule" id="2025">
         <div class="schedule__container">
             <h2 class="section__title">2025</h2>
-            <div class="schedule__grid" id="scheduleGrid2025"></div>
+            <div class="schedule__grid" id="scheduleGrid2025">
+                <div class="loading-spinner"></div>
+            </div>
         </div>
     </section>
     <section class="schedule" id="2024">
         <div class="schedule__container">
             <h2 class="section__title">2024</h2>
-            <div class="schedule__grid" id="scheduleGrid2024"></div>
+            <div class="schedule__grid" id="scheduleGrid2024">
+                <div class="loading-spinner"></div>
+            </div>
         </div>
     </section>
 
@@ -60,11 +66,13 @@
 
     <script>
         function loadScheduleData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+            
             fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
                 .then(res => res.json())
                 .then(data => {
                     const rows = data.values || [];
-                    const grid = document.getElementById(elementId);
                     grid.innerHTML = rows.map(row => {
                         const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                         return `
