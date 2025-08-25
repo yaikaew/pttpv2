@@ -9,7 +9,6 @@
     --text-light: #767268;
     --extra-light: #ffffff;
     --max-width: 1200px;
-    --min-height: 90vh;
 }
 
 * {
@@ -113,7 +112,6 @@ nav {
 /* Sections */
 section {
     max-width: var(--max-width);
-    min-height: var(--min-height);
     margin: auto;
     padding: 5rem 1rem;
 }
