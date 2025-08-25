@@ -19,34 +19,6 @@ navLinksList.forEach((link) => {
     });
 });
 
-// ไฮไลท์เมนูขณะเลื่อน
-document.addEventListener("DOMContentLoaded", () => {
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll(".nav__links li a");
-
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach(link => {
-                        link.classList.remove("active");
-                        if (link.getAttribute("href") === `#${entry.target.id}`) {
-                            link.classList.add("active");
-                        }
-                    });
-                }
-            });
-        },
-        {
-            threshold: 0.3, // เห็น section 30% ถึงจะ active
-        }
-    );
-
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-});
-
 // for discography tab
 const tabLinks = document.querySelectorAll(".tab-link");
 const tabContents = document.querySelectorAll(".tab-content");
