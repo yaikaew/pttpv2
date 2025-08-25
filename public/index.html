@@ -80,7 +80,9 @@
     <section class="schedule" id="schedule">
         <div class="schedule__container">
             <h2 class="section__title">Schedule</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+            <div class="schedule__grid" id="scheduleGridUpcoming">
+                <div class="loading-spinner"></div>
+            </div>
             <div class="view-all">
                 <a href="schedule.html">View All Events</a>
             </div>
@@ -443,11 +445,13 @@
 
     <script>
         function loadScheduleData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+            
             fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
                 .then(res => res.json())
                 .then(data => {
                     const rows = data.values || [];
-                    const grid = document.getElementById(elementId);
                     grid.innerHTML = rows.map(row => {
                         const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                         return `
