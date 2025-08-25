@@ -80,12 +80,54 @@
     <section class="schedule" id="schedule">
         <div class="schedule__container">
             <h2 class="section__title">Schedule</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming">
-                <div class="loading-spinner"></div>
-            </div>
+            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
             <div class="view-all">
                 <a href="schedule.html">View All Events</a>
             </div>
+            <script>
+                function loadScheduleData(range, elementId) {
+                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const rows = data.values || [];
+                            const grid = document.getElementById(elementId);
+                            grid.innerHTML = rows.map(row => {
+                                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                                return `
+                                    <div class="schedule__card">
+                                        <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
+                                        <div class="schedule__details">
+                                            ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                            ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+
+                                            <div class="schedule__info">
+                                                <i class="fa-solid fa-calendar-days"></i>
+                                                <span>${date} ${time ? `| ${time}` : ''}</span>
+                                            </div>
+                                            ${location ? `
+                                                <div class="schedule__info">
+                                                    <i class="fa-solid fa-location-dot"></i>
+                                                    <span>${location}</span>
+                                                </div>
+                                            ` : ''}
+
+                                            <div class="schedule__btn">
+                                                ${
+                                                    link
+                                                        ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                                        : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        });
+                }
+
+                loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+            </script>
         </div>
     </section>
 
@@ -103,74 +145,53 @@
     
         <div id="por" class="tab-content active">
             <div class="discography__grid">
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/bpe9zQ5zDDc')">
                     <img src="https://images.genius.com/9a7dce0598f3c8ed9d3532a739b61fb7.1000x1000x1.jpg" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">YESTERDAY TODAY TOMORROW</p>
                         <p class="discography__subtitle">Trinity & 4Nologue Trainee</p>
-                        <a href="https://youtu.be/bpe9zQ5zDDc" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/BvXbFJ3GrUw')">
                     <img src="https://pbs.twimg.com/media/Fnp7kO-aUAEb-4W?format=jpg&name=medium" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">Sugar</p>
                         <p class="discography__subtitle">DVI</p>
-                        <a href="https://youtu.be/BvXbFJ3GrUw" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/0xRa0DwkOvw')">
                     <img src="https://pbs.twimg.com/media/FoK0-r2acAAGlkQ?format=jpg&name=medium" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">To The Top</p>
                         <p class="discography__subtitle">PSYCHIC FEVER feat. DVI</p>
-                        <a href="https://youtu.be/0xRa0DwkOvw" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/57O1sPt22PE')">
                     <img src="https://pbs.twimg.com/media/F1PrFJdaEAAvqUW?format=jpg&name=large" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">Second Chance</p>
                         <p class="discography__subtitle">DVI</p>
-                        <a href="https://youtu.be/57O1sPt22PE" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/uDAO04OQi8c')">
                     <img src="https://pbs.twimg.com/media/GFBnObCbUAAXer5?format=jpg&name=4096x4096" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">เพื่อน (แอบ) รัก - Close(d) Friend</p>
                         <p class="discography__subtitle">DVI</p>
-                        <a href="https://youtu.be/uDAO04OQi8c" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/Rnk8wYtEBsY')">
                     <img src="https://pbs.twimg.com/media/GhvGt1DbwAArGN4?format=jpg&name=large" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">Perfect Match</p>
                         <p class="discography__subtitle">DMD Gen4</p>
-                        <a href="https://youtu.be/F5Rl-NnAgjY" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/sevERDj4naU')">
                     <img src="https://pbs.twimg.com/media/GidVC7ybcAEnwf7?format=jpg&name=large" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">ใกล้ใจ</p>
                         <p class="discography__subtitle">Por Suppakarn</p>
-                        <a href="https://youtu.be/sevERDj4naU" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -178,24 +199,18 @@
     
         <div id="tee" class="tab-content">
             <div class="discography__grid">
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/tb_z1s97fuU')">
                     <img src="https://pbs.twimg.com/media/GEHQKJFb0AAnz7E?format=jpg&name=4096x4096" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">รักเธอเต็มฟีด (LOVE FEED)</p>
                         <p class="discography__subtitle">DMD BOYS</p>
-                        <a href="https://youtu.be/tb_z1s97fuU" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/HaXOu4gzYmw')">
                     <img src="https://i.scdn.co/image/ab67616d0000b27335892d98b65b52bb75da0500" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">ศูนย์รวมความน่ารัก (Cuteness Center)</p>
                         <p class="discography__subtitle">DMD Gen3</p>
-                        <a href="https://youtu.be/HaXOu4gzYmw" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -203,14 +218,11 @@
 
         <div id="dexx" class="tab-content">
             <div class="discography__grid">
-                <div class="discography__card">
+                <div class="discography__card" onclick="openLink('https://youtu.be/GTY_Ss32G48')">
                     <img src="https://pbs.twimg.com/media/GuQv8caacAA-v-j?format=jpg&name=large" alt="discography" />
                     <div class="discography__details">
                         <p class="discography__title">CLANG CLANG</p>
                         <p class="discography__subtitle">DEXX</p>
-                        <a href="https://youtu.be/GTY_Ss32G48" target="_blank">
-                            <button class="streaming">MV</button>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -223,7 +235,7 @@
             <h2 class="section__title">Filmography</h2>
             <div class="film__grid">
                 <div class="film__card">
-                    <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="film" />
+                    <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="film" onclick="openLink('https://youtube.com/playlist?list=PLcTibKbv20S4l3tuUU0ydM9BzZEc0nrLm')"/>
                     <div class="film__details">
                         <p class="film__title">กี่หมื่นฟ้า Your Sky Series</p>
                         <div class="film__role">ป๋อ รับบท พันลี้ <i class="ri-star-fill"></i> ตี๋ตี๋ รับบท ใกล้ใจ <br/> Punlee by Por <i class="ri-star-fill"></i> Glaijai by TeeTee</div>
@@ -241,7 +253,7 @@
                     </div>
                 </div>
                 <div class="film__card">
-                    <img src="https://pbs.twimg.com/media/GmZg7Lhb0AAYn69?format=jpg&name=medium" alt="film" />
+                    <img src="https://pbs.twimg.com/media/GmZg7Lhb0AAYn69?format=jpg&name=medium" alt="film" onclick="openLink('http://s.iq.com/YourSkyOfUs')"/>
                     <div class="film__details">
                         <p class="film__title">กี่หมื่นฟ้า Your Sky Of Us</p>
                         <div class="film__role">ป๋อ รับบท พันลี้ <i class="ri-star-fill"></i> ตี๋ตี๋ รับบท ใกล้ใจ <br/> Punlee by Por <i class="ri-star-fill"></i> Glaijai by TeeTee</div>
@@ -256,7 +268,7 @@
                     </div>
                 </div>
                 <div class="film__card">
-                    <img src="https://pbs.twimg.com/media/GkPQY-oa0AAZaIa?format=jpg&name=4096x4096" alt="film" />
+                    <img src="https://pbs.twimg.com/media/GkPQY-oa0AAZaIa?format=jpg&name=4096x4096" alt="film" onclick="openLink('https://youtu.be/G7ExYljjGoo')"/>
                     <div class="film__details">
                         <p class="film__title">ด้วงกับเธอ Duang With You Series</p>
                         <div class="film__role">ตี๋ตี๋ รับบท ด้วง <i class="ri-star-fill"></i> ป๋อ รับบท ฉิน <br/> Duang by TeeTee <i class="ri-star-fill"></i> Qin by Por</div>
@@ -271,7 +283,7 @@
                     </div>
                 </div>
                 <div class="film__card">
-                    <img src="https://pbs.twimg.com/media/GkPmh--WgAAapoX?format=jpg&name=4096x4096" alt="film" />
+                    <img src="https://pbs.twimg.com/media/GkPmh--WgAAapoX?format=jpg&name=4096x4096" alt="film" onclick="openLink('https://x.com/DomundiTV/status/1892609941485346900')"/>
                     <div class="film__details">
                         <p class="film__title">DMD SITCOM หอตัวดี</p>
                         <div class="film__role">#หอตัวดี</div>
@@ -293,29 +305,45 @@
     <section class="brand" id="brand">
         <div class="brand__container">
             <h2 class="section__title">Brand Presenter</h2>
-            <div class="brand__grid">
-                <div class="brand__card">
-                    <img src="https://pbs.twimg.com/media/GmH4xe7aEAAB8p6?format=jpg&name=medium" alt="Mille" />
-                    <div class="brand__details">
-                        <p class="brand__title">Friend of Mille</p>
-                        <p class="brand__subtitle">Start: 16 Mar 2025</p>
-                    </div>
-                </div>
-                <div class="brand__card">
-                    <img src="https://pbs.twimg.com/media/GqJ4BLAagAA7bt7?format=jpg&name=large" alt="G2G" />
-                    <div class="brand__details">
-                        <p class="brand__title">Friends of G2G</p>
-                        <p class="brand__subtitle">Start: 5 May 2025</p>
-                    </div>
-                </div>
-                <div class="brand__card">
-                    <img src="https://pbs.twimg.com/media/GvbVfO2WAAEADYV?format=jpg&name=large" alt="Maison Mylène" />
-                    <div class="brand__details">
-                        <p class="brand__title">Presenter of Maison Mylène</p>
-                        <p class="brand__subtitle">Start: 9 Jul 2025</p>
-                    </div>
-                </div>
+            <div class="brand__grid" id="presenterGrid">
+                <div class="loading-spinner"></div>
             </div>
+            <script>
+                function loadPresenterData(range, elementId) {
+                    const grid = document.getElementById(elementId);
+                    
+                    grid.innerHTML = '<div class="loading-spinner"></div>';
+
+                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            let rows = data.values || [];
+
+                            grid.innerHTML = rows.map(row => {
+                                const [artist, date, brand, link, dmd, img] = row;
+                                return `
+                                    <div class="brand__card" onclick="openLink('${dmd}')">
+                                        <img src="${img}" alt="${brand}" />
+                                        <div class="brand__details">
+                                            <p class="brand__title">${brand}</p>
+                                            <p class="brand__subtitle">Start: ${date}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        })
+                        .catch(error => {
+                            console.error('There has been a problem with your fetch operation:', error);
+                            grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                        });
+                }
+                loadPresenterData('presenter!A2:H', 'presenterGrid');
+            </script>
         </div>
     </section>
 
@@ -323,57 +351,56 @@
     <section class="awards" id="awards">
         <div class="awards__container">
             <h2 class="section__title">Awards</h2>
-            <div class="awards__grid">
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/FonGUx0XwAAdsTU?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง Sugar - DVI</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/GijVf26a0AAGzWk?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง Perfect Match - DMD Gen4</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/Gu8dfomb0AA-RXY?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/GtQ5yc6bMAAUaoE?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Thailand Y Content Awards 2024</p>
-                        <p class="awards__subtitle">รางวัลสาขานักแสดงดาวรุ่งแห่งปี - ป๋อ ศุภการ<br>เสนอชื่อเข้าชิง</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/GvgeIQ_WwAAFAP6?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/GwEjCqiXgAALTN1?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
-                    </div>
-                </div>
-                <div class="awards__card">
-                    <img src="https://pbs.twimg.com/media/GwolO6Ya0AA07hl?format=jpg&name=large" alt="" />
-                    <div class="awards__details">
-                        <p class="awards__title">Tpop Stage Show</p>
-                        <p class="awards__subtitle">Rookie of the week เพลง CLANG CLANG - DEXX</p>
-                    </div>
-                </div>
+            <div class="awards__grid" id="awardsGrid">
+                <div class="loading-spinner"></div>
             </div>
+            <script>
+                function loadAwardsData(range, elementId) {
+                    const grid = document.getElementById(elementId);
+                    
+                    grid.innerHTML = '<div class="loading-spinner"></div>';
+
+                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            let rows = data.values || [];
+
+                            grid.innerHTML = rows.map(row => {
+                                const [artist, date, award, category, result, link, note, img] = row;
+
+                                let resultHTML = '';
+                                if (result === 'ได้รับรางวัล') {
+                                    resultHTML = `<p class="awards__result received">${result}</p>`;
+                                } else if (result === 'เสนอชื่อเข้าชิง') {
+                                    resultHTML = `<p class="awards__result nominated">${result}</p>`;
+                                } else {
+                                    resultHTML = `<p class="awards__result">${result}</p>`;
+                                }
+
+                                return `
+                                    <div class="awards__card" onclick="openLink('${link}')">
+                                        <img src="${img}" alt="" />
+                                        <div class="awards__details">
+                                            <p class="awards__title">${award}</p>
+                                            <p class="awards__subtitle">${category}</p>
+                                            ${resultHTML}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        })
+                        .catch(error => {
+                            console.error('There has been a problem with your fetch operation:', error);
+                            grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                        });
+                }
+                loadAwardsData('awards!A2:H', 'awardsGrid');
+            </script>
         </div>
     </section>
 
@@ -435,6 +462,61 @@
             </div>
         </div>
 
+        <script>
+            function loadShowsData(range, elementId, typeFilter = null) {
+                const grid = document.getElementById(elementId);
+                
+                grid.innerHTML = '<div class="loading-spinner"></div>';
+
+                fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        let rows = data.values || [];
+
+                        if (typeFilter) {
+                            rows = rows.filter(row => row[0] === typeFilter);
+                        }
+
+                        if (rows.length === 0) {
+                            grid.innerHTML = '<p>ไม่พบข้อมูล</p>';
+                        } else {
+                            grid.innerHTML = rows.map(row => {
+                                const [type, date, title, link, id, thumbnail, channel, imgchannel, views, view2] = row;
+                                return `
+                                    <div class="showcard" onclick="openLink('${link}')">
+                                        <div class="thumbnail">
+                                            <img src="${thumbnail}" alt="video">
+                                        </div>
+                                        <div class="info">
+                                            <img src="${imgchannel}" alt="channel">
+                                            <div class="text">
+                                                <p class="title">${title}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                        grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                    });
+            }
+
+            loadShowsData('shows!A2:J', 'online__all', 'Online Shows');
+            loadShowsData('shows!A2:J', 'specials__all', 'Specials');
+            loadShowsData('shows!A2:J', 'bts__all', 'BTS');
+            loadShowsData('shows!A2:J', 'presstour__all', 'Presstour');
+            loadShowsData('shows!A2:J', 'presscon__all', 'Presscon');
+            loadShowsData('shows!A2:J', 'interview__all', 'Interview');
+            loadShowsData('shows!A2:J', 'shows__all', '');
+        </script>
     </section>
 
     <footer class="footer">
@@ -444,104 +526,6 @@
     </footer>
 
     <script>
-        function loadScheduleData(range, elementId) {
-            const grid = document.getElementById(elementId);
-            grid.innerHTML = '<div class="loading-spinner"></div>';
-            
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    const rows = data.values || [];
-                    grid.innerHTML = rows.map(row => {
-                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-                        return `
-                            <div class="schedule__card">
-                                <img src="${img}" alt="schedule" />
-                                <div class="schedule__details">
-                                    ${title ? `<p class="schedule__title">${title}</p>` : ''}
-                                    ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                    ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-
-                                    <div class="schedule__info">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        <span>${date} ${time ? `| ${time}` : ''}</span>
-                                    </div>
-                                    ${location ? `
-                                        <div class="schedule__info">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            <span>${location}</span>
-                                        </div>
-                                    ` : ''}
-
-                                    <div class="schedule__btn">
-                                        ${
-                                            link
-                                                ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
-                                                : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                });
-        }
-
-        function loadShowsData(range, elementId, typeFilter = null) {
-            const grid = document.getElementById(elementId);
-            
-            grid.innerHTML = '<div class="loading-spinner"></div>';
-
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (typeFilter) {
-                        rows = rows.filter(row => row[0] === typeFilter);
-                    }
-
-                    if (rows.length === 0) {
-                        grid.innerHTML = '<p>ไม่พบข้อมูล</p>';
-                    } else {
-                        grid.innerHTML = rows.map(row => {
-                            const [type, date, title, link, id, thumbnail, channel, imgchannel, views, view2] = row;
-                            return `
-                                <div class="showcard" onclick="openVideo('${link}')">
-                                    <div class="thumbnail">
-                                        <img src="${thumbnail}" alt="video">
-                                    </div>
-                                    <div class="info">
-                                        <img src="${imgchannel}" alt="channel">
-                                        <div class="text">
-                                            <p class="title">${title}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-                    }
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
-                    grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-                });
-        }
-
-        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
-        loadShowsData('shows!A2:J', 'online__all', 'Online Shows');
-        loadShowsData('shows!A2:J', 'specials__all', 'Specials');
-        loadShowsData('shows!A2:J', 'bts__all', 'BTS');
-        loadShowsData('shows!A2:J', 'presstour__all', 'Presstour');
-        loadShowsData('shows!A2:J', 'presscon__all', 'Presscon');
-        loadShowsData('shows!A2:J', 'interview__all', 'Interview');
-        loadShowsData('shows!A2:J', 'shows__all', '');
-
         // ไฮไลท์เมนูขณะเลื่อน
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll("section[id]");
