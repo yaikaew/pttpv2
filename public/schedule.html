@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css" />
-    <title>pippor & 2tee</title>
+    <title>Schedule | pttp</title>
     <link rel="icon" href="assets/icons/icon.png" type="image/png">
 </head>
 
@@ -36,25 +36,19 @@
     <section class="schedule" id="upcoming">
         <div class="schedule__container">
             <h2 class="section__title">Upcoming</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming">
-                <div class="loading-spinner"></div>
-            </div>
+            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
         </div>
     </section>
     <section class="schedule" id="2025">
         <div class="schedule__container">
             <h2 class="section__title">2025</h2>
-            <div class="schedule__grid" id="scheduleGrid2025">
-                <div class="loading-spinner"></div>
-            </div>
+            <div class="schedule__grid" id="scheduleGrid2025"></div>
         </div>
     </section>
     <section class="schedule" id="2024">
         <div class="schedule__container">
             <h2 class="section__title">2024</h2>
-            <div class="schedule__grid" id="scheduleGrid2024">
-                <div class="loading-spinner"></div>
-            </div>
+            <div class="schedule__grid" id="scheduleGrid2024"></div>
         </div>
     </section>
 
@@ -78,35 +72,46 @@
 
                         const isUpcoming = elementId === "scheduleGridUpcoming";
 
+                        let btnHtml = "";
+                        if (isUpcoming) {
+                            if (link) {
+                                btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
+                            } else if (info) {
+                                btnHtml = `<a href="${info}" target="_blank" class="streaming">info</a>`;
+                            }
+                        } else {
+                            if (link) {
+                                btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
+                            }
+                        }
+
                         return `
                             <div class="schedule__card">
-                                <img src="${img}" alt="schedule" />
+                                <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
                                 <div class="schedule__details">
                                     ${title ? `<p class="schedule__title">${title}</p>` : ''}
-                                    ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                    ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
 
-                                    <div class="schedule__info">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        <span>${date} ${time ? `| ${time}` : ''}</span>
-                                    </div>
-                                    ${location ? `
-                                        <div class="schedule__info">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            <span>${location}</span>
+                                    ${ (keyword || tag) ? `
+                                        <div class="keytag">
+                                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                            ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
                                         </div>
                                     ` : ''}
 
-                                    <div class="schedule__btn">
-                                        ${
-                                            isUpcoming
-                                                ? (link
-                                                    ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
-                                                    : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
-                                                )
-                                                : (link ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>` : '')
-                                        }
+                                    <div class="datetimelocation">
+                                        <div class="schedule__info">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            <span>${date} ${time ? `| ${time}` : ''}</span>
+                                        </div>
+                                        ${location ? `
+                                            <div class="schedule__info">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                <span>${location}</span>
+                                            </div>
+                                        ` : ''}
                                     </div>
+
+                                    ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
                                 </div>
                             </div>
                         `;

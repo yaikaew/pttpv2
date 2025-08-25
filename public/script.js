@@ -1,5 +1,5 @@
 // เปิดลิ้งค์
-function openVideo(url) {
+function openLink(url) {
     window.open(url, "_blank");
 }
 
