@@ -466,6 +466,7 @@ section {
     font-size: 0.8rem;
     font-weight: 600;
 }
+
 /* discography */
 .tab-menu {
     display: flex;
@@ -524,8 +525,21 @@ section {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    aspect-ratio: 1 / 1;
+    /* aspect-ratio: 1 / 1; */
     display: block;
+}
+
+.Teetee{
+    border: 3px solid purple;
+}
+.Por{
+    border: 3px solid skyblue;
+}
+.PTTP{
+    border: 3px solid pink;
+}
+.DEXX{
+    border: 3px solid blue;
 }
 
 .discography__details {
@@ -553,9 +567,9 @@ section {
 }
 
 .discography__subtitle {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
+    /* font-weight: 600; */
+    /* margin-bottom: 0.2rem; */
 }
 
 /* filmography */

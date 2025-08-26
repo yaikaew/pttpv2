@@ -137,98 +137,97 @@
         <div class="discography__container">
             <h2 class="section__title">Discography</h2>
         </div>
-    
-        <div class="tab-menu">
-            <span class="tab-link active" data-tab="por">Por</span>
-            <span class="tab-link" data-tab="tee">TeeTee</span>
-            <span class="tab-link" data-tab="dexx">DEXX</span>
-        </div>
-    
-        <div id="por" class="tab-content active">
-            <div class="discography__grid">
-                <div class="discography__card" onclick="openLink('https://youtu.be/bpe9zQ5zDDc')">
-                    <img src="https://images.genius.com/9a7dce0598f3c8ed9d3532a739b61fb7.1000x1000x1.jpg" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">YESTERDAY TODAY TOMORROW</p>
-                        <p class="discography__subtitle">Trinity & 4Nologue Trainee</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/BvXbFJ3GrUw')">
-                    <img src="https://pbs.twimg.com/media/Fnp7kO-aUAEb-4W?format=jpg&name=medium" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">Sugar</p>
-                        <p class="discography__subtitle">DVI</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/0xRa0DwkOvw')">
-                    <img src="https://pbs.twimg.com/media/FoK0-r2acAAGlkQ?format=jpg&name=medium" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">To The Top</p>
-                        <p class="discography__subtitle">PSYCHIC FEVER feat. DVI</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/57O1sPt22PE')">
-                    <img src="https://pbs.twimg.com/media/F1PrFJdaEAAvqUW?format=jpg&name=large" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">Second Chance</p>
-                        <p class="discography__subtitle">DVI</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/uDAO04OQi8c')">
-                    <img src="https://pbs.twimg.com/media/GFBnObCbUAAXer5?format=jpg&name=4096x4096" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">เพื่อน (แอบ) รัก - Close(d) Friend</p>
-                        <p class="discography__subtitle">DVI</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/Rnk8wYtEBsY')">
-                    <img src="https://pbs.twimg.com/media/GhvGt1DbwAArGN4?format=jpg&name=large" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">Perfect Match</p>
-                        <p class="discography__subtitle">DMD Gen4</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/sevERDj4naU')">
-                    <img src="https://pbs.twimg.com/media/GidVC7ybcAEnwf7?format=jpg&name=large" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">ใกล้ใจ</p>
-                        <p class="discography__subtitle">Por Suppakarn</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div id="tee" class="tab-content">
-            <div class="discography__grid">
-                <div class="discography__card" onclick="openLink('https://youtu.be/tb_z1s97fuU')">
-                    <img src="https://pbs.twimg.com/media/GEHQKJFb0AAnz7E?format=jpg&name=4096x4096" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">รักเธอเต็มฟีด (LOVE FEED)</p>
-                        <p class="discography__subtitle">DMD BOYS</p>
-                    </div>
-                </div>
-                <div class="discography__card" onclick="openLink('https://youtu.be/HaXOu4gzYmw')">
-                    <img src="https://i.scdn.co/image/ab67616d0000b27335892d98b65b52bb75da0500" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">ศูนย์รวมความน่ารัก (Cuteness Center)</p>
-                        <p class="discography__subtitle">DMD Gen3</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div id="dexx" class="tab-content">
-            <div class="discography__grid">
-                <div class="discography__card" onclick="openLink('https://youtu.be/GTY_Ss32G48')">
-                    <img src="https://pbs.twimg.com/media/GuQv8caacAA-v-j?format=jpg&name=large" alt="discography" />
-                    <div class="discography__details">
-                        <p class="discography__title">CLANG CLANG</p>
-                        <p class="discography__subtitle">DEXX</p>
+        <div class="tab-menu" id="tabMenu"></div>
+        <div class="tab-contents" id="tabContents"></div>
+    </section>
+
+    <script>
+        // function createDiscographyCard(row) {
+        //     const [type, artist, date, song, artist2, link, link2, img, streaming, note, channel, imgchannel] = row;
+        //     return `
+
+        //     <div class="discography__card" onclick="openLink('${link}')">
+        //         <img src="${img}" alt="discography" />
+        //         <div class="discography__details">
+        //             <p class="discography__title">${song}</p>
+        //             <p class="discography__subtitle">${artist2}</p>
+        //         </div>
+        //     </div>
+        //     `;
+        // }
+        function createDiscographyCard(row) {
+            const [type, artist, date, song, artist2, link, link2, img, streaming, note, channel, imgchannel] = row;
+            return `
+            <div class="showcard" onclick="openLink('${link}')">
+                <div class="thumbnail">
+                    <img src="${img}" alt="video">
+                </div>
+                <div class="info">
+                    <img src="${imgchannel}" alt="channel">
+                    <div class="text">
+                        <p class="title">${song}</p>
+                        <p class="channel">${artist2} ${note ? ` • ${note}` : ''}</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            `;
+        }
+
+        function loadDiscographyData(range) {
+            const tabMenu = document.getElementById("tabMenu");
+            const tabContents = document.getElementById("tabContents");
+
+            tabMenu.innerHTML = `<div class="loading-spinner"></div>`;
+            tabContents.innerHTML = "";
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                let rows = data.values || [];
+                if (rows.length === 0) {
+                tabContents.innerHTML = "<p>ไม่พบข้อมูล</p>";
+                return;
+                }
+
+                // หา types ไม่ซ้ำ
+                const types = [...new Set(rows.map(r => r[1]))]; 
+
+                // สร้าง tab menu
+                tabMenu.innerHTML = types.map((artist, idx) => 
+                `<span class="tab-link ${idx===0?'active':''}" data-tab="${artist}">${artist}</span>`
+                ).join("");
+
+                // สร้าง content ของแต่ละ type
+                tabContents.innerHTML = types.map((artist, idx) => {
+                const filtered = rows.filter(r => r[1] === artist);
+                return `
+                    <div id="${artist}" class="tab-content ${idx===0?'active':''}">
+                        <div class="discography__grid">
+                            ${filtered.map(createDiscographyCard).join("")}
+                        </div>
+                    </div>`;
+                }).join("");
+
+                // Event เปลี่ยน tab
+                document.querySelectorAll(".tab-link").forEach(tab => {
+                tab.addEventListener("click", () => {
+                    document.querySelectorAll(".tab-link").forEach(t => t.classList.remove("active"));
+                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                    tab.classList.add("active");
+                    document.getElementById(tab.dataset.tab).classList.add("active");
+                });
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                tabContents.innerHTML = "<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+            });
+        }
+
+        // โหลดข้อมูลครั้งเดียว
+        loadDiscographyData("discography!A2:L");
+    </script>
 
     <!-- Filmography Section -->
     <section class="film" id="filmography">
