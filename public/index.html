@@ -101,19 +101,26 @@
                             <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
                             <div class="schedule__details">
                                 ${title ? `<p class="schedule__title">${title}</p>` : ''}
-                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-
-                                <div class="schedule__info">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                    <span>${date} ${time ? `| ${time}` : ''}</span>
-                                </div>
-                                ${location ? `
-                                    <div class="schedule__info">
-                                        <i class="fa-solid fa-location-dot"></i>
-                                        <span>${location}</span>
+                                
+                                ${(keyword || tag) ? `
+                                    <div class="keytag">
+                                        ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                        ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
                                     </div>
                                 ` : ''}
+                                
+                                <div class="datetimelocation">
+                                    <div class="schedule__info">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        <span>${date} ${time ? `| ${time}` : ''}</span>
+                                    </div>
+                                    ${location ? `
+                                        <div class="schedule__info">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>${location}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
 
                                 <div class="schedule__btn">
                                     ${
