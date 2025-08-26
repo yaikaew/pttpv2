@@ -769,6 +769,7 @@ section {
     gap: 2rem;
     margin-bottom: 1rem;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .tab-menu-2 .tab-link-2 {
@@ -796,15 +797,25 @@ section {
     display: block;
 
 }
-@media (width < 900px) {
+@media (max-width: 900px) {
     .tab-menu-2 {
-        display: none;
+        display: flex;
+        overflow-x: auto;      /* เปิด scroll ซ้าย-ขวา */
+        white-space: nowrap;   /* ไม่ตัดบรรทัด */
+        gap: 8px;
+        padding: 8px 0;
+        scrollbar-width: none; /* ซ่อน scrollbar บน Firefox */
     }
-    .tab-content-2 {
-        display: none !important;
+
+    .tab-menu-2::-webkit-scrollbar {
+        display: none;         /* ซ่อน scrollbar บน Chrome/Safari */
     }
-    #shows_all {
-        display: block !important;
+
+    .tab-link-2 {
+        display: inline-block;
+        flex: 0 0 auto;        /* บังคับไม่ให้ยืด */
+        padding: 6px 12px;
+        cursor: pointer;
     }
 }
 
@@ -828,12 +839,11 @@ section {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background: red;
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
-    font-size: 12px;
+    font-size: 0.7rem;
     padding: 4px 8px;
     border-radius: 6px;
-    font-weight: bold;
 }
 
 .info {
@@ -865,11 +875,10 @@ section {
     text-overflow: ellipsis;
 }
 
-
 .channel {
     color: var(--text-light);
     font-size: 0.8rem;
-    font-weight: lighter;
+    font-weight: 400;
 }
 
 .views {

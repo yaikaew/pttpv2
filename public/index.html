@@ -84,52 +84,53 @@
             <div class="view-all">
                 <a href="schedule.html">View All Events</a>
             </div>
-            <script>
-                function loadScheduleData(range, elementId) {
-                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            const rows = data.values || [];
-                            const grid = document.getElementById(elementId);
-                            grid.innerHTML = rows.map(row => {
-                                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-                                return `
-                                    <div class="schedule__card">
-                                        <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
-                                        <div class="schedule__details">
-                                            ${title ? `<p class="schedule__title">${title}</p>` : ''}
-                                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                            ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-
-                                            <div class="schedule__info">
-                                                <i class="fa-solid fa-calendar-days"></i>
-                                                <span>${date} ${time ? `| ${time}` : ''}</span>
-                                            </div>
-                                            ${location ? `
-                                                <div class="schedule__info">
-                                                    <i class="fa-solid fa-location-dot"></i>
-                                                    <span>${location}</span>
-                                                </div>
-                                            ` : ''}
-
-                                            <div class="schedule__btn">
-                                                ${
-                                                    link
-                                                        ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
-                                                        : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('');
-                        });
-                }
-
-                loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
-            </script>
         </div>
     </section>
+
+    <script>
+        function loadScheduleData(range, elementId) {
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                const rows = data.values || [];
+                const grid = document.getElementById(elementId);
+                grid.innerHTML = rows.map(row => {
+                    const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                    return `
+                        <div class="schedule__card">
+                            <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
+                            <div class="schedule__details">
+                                ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+
+                                <div class="schedule__info">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <span>${date} ${time ? `| ${time}` : ''}</span>
+                                </div>
+                                ${location ? `
+                                    <div class="schedule__info">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span>${location}</span>
+                                    </div>
+                                ` : ''}
+
+                                <div class="schedule__btn">
+                                    ${
+                                        link
+                                            ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                            : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+
+        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+    </script>
 
     <!-- Discography Section -->
     <section class="discography" id="discography">
@@ -308,44 +309,45 @@
             <div class="brand__grid" id="presenterGrid">
                 <div class="loading-spinner"></div>
             </div>
-            <script>
-                function loadPresenterData(range, elementId) {
-                    const grid = document.getElementById(elementId);
-                    
-                    grid.innerHTML = '<div class="loading-spinner"></div>';
-
-                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                        .then(res => {
-                            if (!res.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return res.json();
-                        })
-                        .then(data => {
-                            let rows = data.values || [];
-
-                            grid.innerHTML = rows.map(row => {
-                                const [artist, date, brand, link, dmd, img] = row;
-                                return `
-                                    <div class="brand__card" onclick="openLink('${dmd}')">
-                                        <img src="${img}" alt="${brand}" />
-                                        <div class="brand__details">
-                                            <p class="brand__title">${brand}</p>
-                                            <p class="brand__subtitle">Start: ${date}</p>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('');
-                        })
-                        .catch(error => {
-                            console.error('There has been a problem with your fetch operation:', error);
-                            grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-                        });
-                }
-                loadPresenterData('presenter!A2:H', 'presenterGrid');
-            </script>
         </div>
     </section>
+
+    <script>
+        function loadPresenterData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                let rows = data.values || [];
+
+                grid.innerHTML = rows.map(row => {
+                    const [artist, date, brand, link, dmd, img] = row;
+                    return `
+                        <div class="brand__card" onclick="openLink('${dmd}')">
+                            <img src="${img}" alt="${brand}" />
+                            <div class="brand__details">
+                                <p class="brand__title">${brand}</p>
+                                <p class="brand__subtitle">Start: ${date}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+            });
+        }
+        loadPresenterData('presenter!A2:H', 'presenterGrid');
+    </script>
 
     <!-- Awards Section -->
     <section class="awards" id="awards">
@@ -354,170 +356,136 @@
             <div class="awards__grid" id="awardsGrid">
                 <div class="loading-spinner"></div>
             </div>
-            <script>
-                function loadAwardsData(range, elementId) {
-                    const grid = document.getElementById(elementId);
-                    
-                    grid.innerHTML = '<div class="loading-spinner"></div>';
-
-                    fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                        .then(res => {
-                            if (!res.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return res.json();
-                        })
-                        .then(data => {
-                            let rows = data.values || [];
-
-                            grid.innerHTML = rows.map(row => {
-                                const [artist, date, award, category, result, link, note, img] = row;
-
-                                let resultHTML = '';
-                                if (result === 'ได้รับรางวัล') {
-                                    resultHTML = `<p class="awards__result received">${result}</p>`;
-                                } else if (result === 'เสนอชื่อเข้าชิง') {
-                                    resultHTML = `<p class="awards__result nominated">${result}</p>`;
-                                } else {
-                                    resultHTML = `<p class="awards__result">${result}</p>`;
-                                }
-
-                                return `
-                                    <div class="awards__card" onclick="openLink('${link}')">
-                                        <img src="${img}" alt="" />
-                                        <div class="awards__details">
-                                            <p class="awards__title">${award}</p>
-                                            <p class="awards__subtitle">${category}</p>
-                                            ${resultHTML}
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('');
-                        })
-                        .catch(error => {
-                            console.error('There has been a problem with your fetch operation:', error);
-                            grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-                        });
-                }
-                loadAwardsData('awards!A2:H', 'awardsGrid');
-            </script>
         </div>
     </section>
+
+    <script>
+        function loadAwardsData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                let rows = data.values || [];
+
+                grid.innerHTML = rows.map(row => {
+                    const [artist, date, award, category, result, link, note, img] = row;
+
+                    let resultHTML = '';
+                    if (result === 'ได้รับรางวัล') {
+                        resultHTML = `<p class="awards__result received">${result}</p>`;
+                    } else if (result === 'เสนอชื่อเข้าชิง') {
+                        resultHTML = `<p class="awards__result nominated">${result}</p>`;
+                    } else {
+                        resultHTML = `<p class="awards__result">${result}</p>`;
+                    }
+
+                    return `
+                        <div class="awards__card" onclick="openLink('${link}')">
+                            <img src="${img}" alt="" />
+                            <div class="awards__details">
+                                <p class="awards__title">${award}</p>
+                                <p class="awards__subtitle">${category}</p>
+                                ${resultHTML}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+            });
+        }
+        loadAwardsData('awards!A2:H', 'awardsGrid');
+    </script>
 
     <!-- Shows Section -->
     <section class="shows" id="shows">
         <div class="shows__container">
             <h2 class="section__title">Shows</h2>
         </div>
-    
-        <div class="tab-menu-2">
-            <span class="tab-link-2 active" data-tab="online-shows">Online</span>
-            <span class="tab-link-2" data-tab="special">Specials</span>
-            <span class="tab-link-2" data-tab="bts">BTS</span>
-            <span class="tab-link-2" data-tab="presstour">Press Tours</span>
-            <span class="tab-link-2" data-tab="presscon">Press Conferences</span>
-            <span class="tab-link-2" data-tab="interview">Interview</span>
-            <!-- <span class="tab-link-2" data-tab="shows_all">shows_all</span> -->
-        </div>
-    
-        <div id="online-shows" class="tab-content-2 active">
-            <div class="shows__grid" id="online__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
 
-        <div id="special" class="tab-content-2">
-            <div class="shows__grid" id="specials__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <div id="bts" class="tab-content-2">
-            <div class="shows__grid" id="bts__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <div id="presstour" class="tab-content-2">
-            <div class="shows__grid" id="presstour__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <div id="presscon" class="tab-content-2">
-            <div class="shows__grid" id="presscon__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <div id="interview" class="tab-content-2">
-            <div class="shows__grid" id="interview__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <div id="shows_all" class="tab-content-2">
-            <div class="shows__grid" id="shows__all">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-
-        <script>
-            function loadShowsData(range, elementId, typeFilter = null) {
-                const grid = document.getElementById(elementId);
-                
-                grid.innerHTML = '<div class="loading-spinner"></div>';
-
-                fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return res.json();
-                    })
-                    .then(data => {
-                        let rows = data.values || [];
-
-                        if (typeFilter) {
-                            rows = rows.filter(row => row[0] === typeFilter);
-                        }
-
-                        if (rows.length === 0) {
-                            grid.innerHTML = '<p>ไม่พบข้อมูล</p>';
-                        } else {
-                            grid.innerHTML = rows.map(row => {
-                                const [type, date, title, link, id, thumbnail, channel, imgchannel, views, view2] = row;
-                                return `
-                                    <div class="showcard" onclick="openLink('${link}')">
-                                        <div class="thumbnail">
-                                            <img src="${thumbnail}" alt="video">
-                                        </div>
-                                        <div class="info">
-                                            <img src="${imgchannel}" alt="channel">
-                                            <div class="text">
-                                                <p class="title">${title}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There has been a problem with your fetch operation:', error);
-                        grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-                    });
-            }
-
-            loadShowsData('shows!A2:J', 'online__all', 'Online Shows');
-            loadShowsData('shows!A2:J', 'specials__all', 'Specials');
-            loadShowsData('shows!A2:J', 'bts__all', 'BTS');
-            loadShowsData('shows!A2:J', 'presstour__all', 'Presstour');
-            loadShowsData('shows!A2:J', 'presscon__all', 'Presscon');
-            loadShowsData('shows!A2:J', 'interview__all', 'Interview');
-            loadShowsData('shows!A2:J', 'shows__all', '');
-        </script>
+        <div class="tab-menu-2" id="tabMenu"></div>
+        <div class="tab-contents" id="tabContents"></div>
     </section>
+
+    <script>
+        function createShowCard(row) {
+            const [type, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
+            return `
+            <div class="showcard" onclick="openLink('${link}')">
+                <div class="thumbnail">
+                    <img src="${thumbnail}" alt="video">
+                    <span class="badge">${duration}</span>
+                </div>
+                <div class="info">
+                    <img src="${imgchannel}" alt="channel">
+                    <div class="text">
+                        <p class="title">${title}</p>
+                        <p class="channel">${channel} • ${date}</p>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function loadShowsData(range) {
+            const tabMenu = document.getElementById("tabMenu");
+            const tabContents = document.getElementById("tabContents");
+
+            tabMenu.innerHTML = `<div class="loading-spinner"></div>`;
+            tabContents.innerHTML = "";
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                let rows = data.values || [];
+                if (rows.length === 0) {
+                tabContents.innerHTML = "<p>ไม่พบข้อมูล</p>";
+                return;
+                }
+
+                const types = [...new Set(rows.map(r => r[0]))]; 
+
+                tabMenu.innerHTML = types.map((type, idx) => 
+                `<span class="tab-link-2 ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
+                ).join("");
+
+                tabContents.innerHTML = types.map((type, idx) => {
+                const filtered = rows.filter(r => r[0] === type);
+                return `
+                    <div id="${type}" class="tab-content-2 ${idx===0?'active':''}">
+                    <div class="shows__grid">
+                        ${filtered.map(createShowCard).join("")}
+                    </div>
+                    </div>`;
+                }).join("");
+
+                document.querySelectorAll(".tab-link-2").forEach(tab => {
+                tab.addEventListener("click", () => {
+                    document.querySelectorAll(".tab-link-2").forEach(t => t.classList.remove("active"));
+                    document.querySelectorAll(".tab-content-2").forEach(c => c.classList.remove("active"));
+                    tab.classList.add("active");
+                    document.getElementById(tab.dataset.tab).classList.add("active");
+                });
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                tabContents.innerHTML = "<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+            });
+        }
+
+        loadShowsData("shows!A2:I");
+    </script>
 
     <footer class="footer">
         <div class="footer__bar">
