@@ -489,6 +489,28 @@ section {
 .tab-menu .tab-link.active {
     color: var(--primary-color);
 }
+@media (max-width: 900px) {
+    .tab-menu {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 8px;
+        padding: 8px 0;
+        scrollbar-width: none;
+    }
+
+    .tab-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-link {
+        display: inline-block;
+        flex: 0 0 auto;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+}
 
 .tab-content {
     display: none;
@@ -814,20 +836,21 @@ section {
 @media (max-width: 900px) {
     .tab-menu-2 {
         display: flex;
-        overflow-x: auto;      /* เปิด scroll ซ้าย-ขวา */
-        white-space: nowrap;   /* ไม่ตัดบรรทัด */
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
         gap: 8px;
         padding: 8px 0;
-        scrollbar-width: none; /* ซ่อน scrollbar บน Firefox */
+        scrollbar-width: none;
     }
 
     .tab-menu-2::-webkit-scrollbar {
-        display: none;         /* ซ่อน scrollbar บน Chrome/Safari */
+        display: none;
     }
 
     .tab-link-2 {
         display: inline-block;
-        flex: 0 0 auto;        /* บังคับไม่ให้ยืด */
+        flex: 0 0 auto;
         padding: 6px 12px;
         cursor: pointer;
     }
