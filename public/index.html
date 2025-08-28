@@ -425,7 +425,7 @@
 
     <script>
         function createShowCard(row) {
-            const [type, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
+            const [type, artist, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
             return `
             <div class="showcard" onclick="openLink('${link}')">
                 <div class="thumbnail">
@@ -490,7 +490,7 @@
             });
         }
 
-        loadShowsData("shows!A2:I");
+        loadShowsData("shows!A2:J");
     </script>
 
     <footer class="footer">
