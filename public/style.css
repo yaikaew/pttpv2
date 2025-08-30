@@ -318,16 +318,16 @@ section {
     margin-top: 40px;
 }
 .view-all a {
-    padding: 12px 24px;
-    background: var(--primary-color);
-    color: var(--extra-light);
+    padding: 10px 30px;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     text-decoration: none;
     border-radius: 30px;
-    font-weight: bold;
     transition: background 0.3s;
 }
 .view-all a:hover {
-    background: #6a5acd;
+    background: var(--primary-color);
+    color: var(--extra-light);
 }
 
 /* schedule list */
