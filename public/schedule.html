@@ -59,99 +59,69 @@
     </footer>
 
     <script>
-        function createCard(row, isUpcoming) {
-            const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-
-            let btnHtml = "";
-            if (isUpcoming) {
-                if (link) {
-                    btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
-                } else if (info) {
-                    btnHtml = `<a href="${info}" target="_blank" class="streaming">info</a>`;
-                }
-            } else {
-                if (link) {
-                    btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
-                }
-            }
-
-            return `
-                <div class="schedule__card">
-                    <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
-                    <div class="schedule__details">
-                        ${title ? `<p class="schedule__title">${title}</p>` : ''}
-
-                        ${ (keyword || tag) ? `
-                            <div class="keytag">
-                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-                            </div>
-                        ` : ''}
-
-                        <div class="datetimelocation">
-                            <div class="schedule__info">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                <span>${date} ${time ? `| ${time}` : ''}</span>
-                            </div>
-                            ${location ? `
-                                <div class="schedule__info">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>${location}</span>
-                                </div>
-                            ` : ''}
-                        </div>
-
-                        ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        function loadScheduleData(range) {
-            const gridUpcoming = document.getElementById("scheduleGridUpcoming");
-            const grid2025 = document.getElementById("scheduleGrid2025");
-            const grid2024 = document.getElementById("scheduleGrid2024");
-
-            gridUpcoming.innerHTML = grid2025.innerHTML = grid2024.innerHTML = '<div class="loading-spinner"></div>';
-
+        function loadScheduleData(range, elementId) {
+            const grid = document.getElementById(elementId);
+            grid.innerHTML = '<div class="loading-spinner"></div>';
+            
             fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-            .then(res => res.json())
-            .then(data => {
-            let rows = data.values || [];
-            let today = new Date();
+                .then(res => res.json())
+                .then(data => {
+                    const rows = data.values || [];
+                    grid.innerHTML = rows.map(row => {
+                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
 
-            gridUpcoming.innerHTML = "";
-            grid2025.innerHTML = "";
-            grid2024.innerHTML = "";
+                        const isUpcoming = elementId === "scheduleGridUpcoming";
 
-            rows.forEach(row => {
-                const [date] = row;
-                if (!date) return;
+                        let btnHtml = "";
+                        if (isUpcoming) {
+                            if (link) {
+                                btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
+                            } else if (info) {
+                                btnHtml = `<a href="${info}" target="_blank" class="streaming">info</a>`;
+                            }
+                        } else {
+                            if (link) {
+                                btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
+                            }
+                        }
 
-                let d = new Date(date);
+                        return `
+                            <div class="schedule__card">
+                                <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
+                                <div class="schedule__details">
+                                    ${title ? `<p class="schedule__title">${title}</p>` : ''}
 
-                // Upcoming
-                if (d >= today) {
-                    gridUpcoming.innerHTML += createCard(row, true);
-                }
+                                    ${ (keyword || tag) ? `
+                                        <div class="keytag">
+                                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                            ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+                                        </div>
+                                    ` : ''}
 
-                // 2025
-                if (d.getFullYear() === 2025) {
-                    grid2025.innerHTML += createCard(row, false);
-                }
+                                    <div class="datetimelocation">
+                                        <div class="schedule__info">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            <span>${date} ${time ? `| ${time}` : ''}</span>
+                                        </div>
+                                        ${location ? `
+                                            <div class="schedule__info">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                <span>${location}</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
 
-                // 2024
-                if (d.getFullYear() === 2024) {
-                    grid2024.innerHTML += createCard(row, false);
-                }
-            });
-            })
-            .catch(err => {
-                console.error("Error loading data:", err);
-            });
+                                    ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
         }
 
-        loadScheduleData('Sheet1!A2:O');
+        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+        loadScheduleData('2025!A2:N', 'scheduleGrid2025');
+        loadScheduleData('2024!A2:N', 'scheduleGrid2024');
     </script>
 
 
