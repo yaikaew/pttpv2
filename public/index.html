@@ -88,55 +88,78 @@
     </section>
 
     <script>
-        function loadScheduleData(range, elementId) {
+        function createCard(row, isUpcoming) {
+            const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+
+            return `
+                <div class="schedule__card">
+                    <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
+                    <div class="schedule__details">
+                        ${title ? `<p class="schedule__title">${title}</p>` : ''}
+
+                        ${ (keyword || tag) ? `
+                            <div class="keytag">
+                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+                            </div>
+                        ` : ''}
+
+                        <div class="datetimelocation">
+                            <div class="schedule__info">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>${date} ${time ? `| ${time}` : ''}</span>
+                            </div>
+                            ${location ? `
+                                <div class="schedule__info">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span>${location}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="schedule__btn">
+                            ${
+                                link
+                                    ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
+                                    : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadScheduleData(range) {
+            const gridUpcoming = document.getElementById("scheduleGridUpcoming");
+
+            gridUpcoming.innerHTML = '<div class="loading-spinner"></div>';
+
             fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
             .then(data => {
-                const rows = data.values || [];
-                const grid = document.getElementById(elementId);
-                grid.innerHTML = rows.map(row => {
-                    const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-                    return `
-                        <div class="schedule__card">
-                            <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
-                            <div class="schedule__details">
-                                ${title ? `<p class="schedule__title">${title}</p>` : ''}
-                                
-                                ${(keyword || tag) ? `
-                                    <div class="keytag">
-                                        ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                        ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-                                    </div>
-                                ` : ''}
-                                
-                                <div class="datetimelocation">
-                                    <div class="schedule__info">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        <span>${date} ${time ? `| ${time}` : ''}</span>
-                                    </div>
-                                    ${location ? `
-                                        <div class="schedule__info">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            <span>${location}</span>
-                                        </div>
-                                    ` : ''}
-                                </div>
+            let rows = data.values || [];
+            let today = new Date();
 
-                                <div class="schedule__btn">
-                                    ${
-                                        link
-                                            ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
-                                            : (info ? `<a href="${info}" target="_blank" class="streaming">info</a>` : '')
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+            gridUpcoming.innerHTML = "";
+
+            rows.forEach(row => {
+                const [date] = row;
+                if (!date) return;
+
+                let d = new Date(date);
+
+                // Upcoming
+                if (d >= today) {
+                    gridUpcoming.innerHTML += createCard(row, true);
+                }
+            });
+            })
+            .catch(err => {
+                console.error("Error loading data:", err);
             });
         }
 
-        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
+        loadScheduleData('Sheet1!A2:O');
     </script>
 
     <!-- Discography Section -->
