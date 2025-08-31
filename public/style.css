@@ -8,7 +8,7 @@
     --text-dark: #0d213f;
     --text-light: #767268;
     --extra-light: #ffffff;
-    --max-width: 1200px;
+    --max-width: 1400px;
 }
 
 * {
@@ -216,9 +216,9 @@ section {
 /* schedule */
 .schedule__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
 .schedule__card {
@@ -317,6 +317,7 @@ section {
     text-align: center;
     margin-top: 40px;
 }
+
 .view-all a {
     padding: 10px 30px;
     color: var(--primary-color);
@@ -422,10 +423,8 @@ section {
 .outfits__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    @media (width < 900px) {
-        gap: 1rem;
-    }
+    gap: 1rem;
+    margin: 2rem 0;
 }
 .outfits__card {
     overflow: hidden;
@@ -528,11 +527,9 @@ section {
 
 .discography__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
-    @media (width < 900px) {
-        gap: 1rem;
-    }
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
 .discography__card {
@@ -597,9 +594,9 @@ section {
 /* filmography */
 .film__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
 .film__card {
@@ -674,10 +671,8 @@ section {
 .brand__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    @media (width < 900px) {
-        gap: 1rem;
-    }
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
 .brand__card {
@@ -730,10 +725,8 @@ section {
 .awards__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    @media (width < 900px) {
-        gap: 1rem;
-    }
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
 .awards__card {
@@ -796,8 +789,8 @@ section {
 /* shows */
 .shows__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
 }
 
 .tab-menu-2 {
@@ -854,6 +847,7 @@ section {
         padding: 6px 12px;
         cursor: pointer;
     }
+
     .tab-menu-2 .tab-link-2:first-child {
         margin-left: 3rem;
     }

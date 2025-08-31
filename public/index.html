@@ -385,9 +385,9 @@
                     const [artist, date, award, category, result, link, note, img] = row;
 
                     let resultHTML = '';
-                    if (result === 'ได้รับรางวัล') {
+                    if (result === 'Received') {
                         resultHTML = `<p class="awards__result received">${result}</p>`;
-                    } else if (result === 'เสนอชื่อเข้าชิง') {
+                    } else if (result === 'Nominated') {
                         resultHTML = `<p class="awards__result nominated">${result}</p>`;
                     } else {
                         resultHTML = `<p class="awards__result">${result}</p>`;
