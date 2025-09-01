@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <title>pippor & 2tee</title>
+    <link rel="icon" href="assets/icons/icon.png" type="image/png">
+    <style>
+        .filter-controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="nav">
+        <nav>
+            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+
+            <ul class="nav__links" id="nav-menu">
+                <li class="link"><a href="index.html">Home</a></li>
+                <li class="link"><a href="schedule.html">Cover</a></li>
+                <li class="link"><a href="schedule_list.html">Lists</a></li>
+                <li class="link"><a href="outfits.html">Outfits</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Custom Range Section -->
+    <section class="schedule" id="custom-range">
+        <div class="schedule__container">
+            <h2 class="section__title">Custom Range</h2>
+            <div class="filter-controls">
+                <label>Start Date:
+                    <input type="date" id="start-date">
+                </label>
+                <label>End Date:
+                    <input type="date" id="end-date">
+                </label>
+            </div>
+            <div class="schedule__table__wrapper">
+                <table class="schedule_table" id="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Artist</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Title</th>
+                            <th>Location</th>
+                            <th>Hashtag</th>
+                            <th>Rerun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="custom_list"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer__bar">
+            &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br />
+        </div>
+    </footer>
+
+    <script>
+        function renderRows(rows) {
+            return rows.map(row => {
+                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                return `
+                <tr>
+                    <td>${artist || ""}</td>
+                    <td>${date || ""}</td>
+                    <td>${time || ""}</td>
+                    <td>${title || ""}</td>
+                    <td>${location || ""}</td>
+                    <td>
+                        ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                        ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+                    </td>
+                    <td>
+                        ${link ? `<a href="${link}" class="schedule__rerun" target="_blank" rel="noopener noreferrer">Rerun</a>` : ''}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function loadScheduleData(range, elementId, spinnerId, tableId, filterFn = null) {
+            const grid = document.getElementById(elementId);
+            const spinner = spinnerId ? document.getElementById(spinnerId) : null;
+            const table = document.getElementById(tableId);
+
+            if (spinner) spinner.style.display = "block";
+            table.style.display = "none";
+            grid.innerHTML = "";
+
+            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (spinner) spinner.style.display = "none";
+                table.style.display = "table";
+
+                let rows = data.values || [];
+                if (filterFn) {
+                    rows = rows.filter(filterFn);
+                }
+
+                grid.innerHTML = renderRows(rows);
+            });
+        }
+
+        function updateCustomRange() {
+            const start = document.getElementById("start-date").value;
+            const end = document.getElementById("end-date").value;
+
+            if (!start || !end) return;
+
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+
+            loadScheduleData('Sheet1!A2:N', 'custom_list', null, 'table-custom', row => {
+                const [date] = row;
+                if (!date) return false;
+                const d = new Date(date);
+                return d >= startDate && d <= endDate;
+            });
+        }
+
+        document.getElementById("start-date").addEventListener("change", updateCustomRange);
+        document.getElementById("end-date").addEventListener("change", updateCustomRange);
+
+    </script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
