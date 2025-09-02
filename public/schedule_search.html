@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css" />
     <title>pippor & 2tee</title>
-    <link rel="icon" href="assets/icons/icon.png" type="image/png">
+    <link rel="icon" href="assets/icons/icon.png" type="image/png">หห
     <style>
         .filter-controls {
             margin-bottom: 20px;
+        }
+        section {
+            padding-top: 3rem 1rem;
         }
     </style>
 </head>
@@ -37,10 +40,10 @@
         </nav>
     </div>
 
-    <!-- Custom Range Section -->
-    <section class="schedule" id="custom-range">
+    <!-- Date Filter -->
+    <section class="schedule" id="date-range">
         <div class="schedule__container">
-            <h2 class="section__title">Custom Range</h2>
+            <h2 class="section__title">Select Range</h2>
             <div class="filter-controls">
                 <label>Start Date:
                     <input type="date" id="start-date">
@@ -49,6 +52,13 @@
                     <input type="date" id="end-date">
                 </label>
             </div>
+        </div>
+    </section>
+
+    <!-- Custom Range Table -->
+    <section class="schedule" id="custom-range">
+        <div class="schedule__container">
+            <h2 class="section__title">Table View</h2>
             <div class="schedule__table__wrapper">
                 <table class="schedule_table" id="table-custom">
                     <thead>
@@ -68,6 +78,14 @@
         </div>
     </section>
 
+    <!-- Upcoming Card View -->
+    <section class="schedule" id="upcoming">
+        <div class="schedule__container">
+            <h2 class="section__title">Card View</h2>
+            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+        </div>
+    </section>
+
     <footer class="footer">
         <div class="footer__bar">
             &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br />
@@ -75,53 +93,87 @@
     </footer>
 
     <script>
+        // สร้างแถวตาราง
         function renderRows(rows) {
             return rows.map(row => {
                 const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                 return `
-                <tr>
-                    <td>${artist || ""}</td>
-                    <td>${date || ""}</td>
-                    <td>${time || ""}</td>
-                    <td>${title || ""}</td>
-                    <td>${location || ""}</td>
-                    <td>
-                        ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                        ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
-                    </td>
-                    <td>
-                        ${link ? `<a href="${link}" class="schedule__rerun" target="_blank" rel="noopener noreferrer">Rerun</a>` : ''}
-                    </td>
-                </tr>
-                `;
+          <tr>
+            <td>${artist || ""}</td>
+            <td>${date || ""}</td>
+            <td>${time || ""}</td>
+            <td>${title || ""}</td>
+            <td>${location || ""}</td>
+            <td>
+              ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
+              ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+            </td>
+            <td>
+              ${link ? `<a href="${link}" class="schedule__rerun" target="_blank">Rerun</a>` : ''}
+            </td>
+          </tr>
+        `;
             }).join('');
         }
 
-        function loadScheduleData(range, elementId, spinnerId, tableId, filterFn = null) {
-            const grid = document.getElementById(elementId);
-            const spinner = spinnerId ? document.getElementById(spinnerId) : null;
-            const table = document.getElementById(tableId);
+        // แสดงเป็น card
+        function renderCards(rows) {
+            return rows.map(row => {
+                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
 
-            if (spinner) spinner.style.display = "block";
-            table.style.display = "none";
-            grid.innerHTML = "";
-
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (spinner) spinner.style.display = "none";
-                table.style.display = "table";
-
-                let rows = data.values || [];
-                if (filterFn) {
-                    rows = rows.filter(filterFn);
+                let btnHtml = "";
+                if (link) {
+                    btnHtml = `<a href="${link}" target="_blank" class="streaming">Rerun</a>`;
+                } else if (info) {
+                    btnHtml = `<a href="${info}" target="_blank" class="streaming">Info</a>`;
                 }
 
-                grid.innerHTML = renderRows(rows);
-            });
+                return `
+          <div class="schedule__card">
+            <img src="${img}" alt="schedule" ${link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
+            <div class="schedule__details">
+              ${title ? `<p class="schedule__title">${title}</p>` : ''}
+
+              ${(keyword || tag) ? `
+                <div class="keytag">
+                  ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
+                  ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+                </div>` : ''}
+
+              <div class="datetimelocation">
+                <div class="schedule__info">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <span>${date} ${time ? `| ${time}` : ''}</span>
+                </div>
+                ${location ? `
+                  <div class="schedule__info">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>${location}</span>
+                  </div>` : ''}
+              </div>
+
+              ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
+            </div>
+          </div>
+        `;
+            }).join('');
         }
 
-        function updateCustomRange() {
+        // โหลดข้อมูล + กรอง
+        function loadScheduleData(range, filterFn = null) {
+            return fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                .then(res => res.json())
+                .then(data => {
+                    let rows = data.values || [];
+                    if (filterFn) {
+                        rows = rows.filter(filterFn);
+                    }
+                    return rows;
+                });
+        }
+
+        // อัปเดตทั้ง Table + Card
+        function updateAll() {
             const start = document.getElementById("start-date").value;
             const end = document.getElementById("end-date").value;
 
@@ -130,17 +182,26 @@
             const startDate = new Date(start);
             const endDate = new Date(end);
 
-            loadScheduleData('Sheet1!A2:N', 'custom_list', null, 'table-custom', row => {
+            const filterFn = row => {
                 const [date] = row;
                 if (!date) return false;
                 const d = new Date(date);
                 return d >= startDate && d <= endDate;
+            };
+
+            // Table view
+            loadScheduleData('Sheet1!A2:N', filterFn).then(rows => {
+                document.getElementById("custom_list").innerHTML = renderRows(rows);
+            });
+
+            // Card view
+            loadScheduleData('upcoming!A2:N', filterFn).then(rows => {
+                document.getElementById("scheduleGridUpcoming").innerHTML = renderCards(rows);
             });
         }
 
-        document.getElementById("start-date").addEventListener("change", updateCustomRange);
-        document.getElementById("end-date").addEventListener("change", updateCustomRange);
-
+        document.getElementById("start-date").addEventListener("change", updateAll);
+        document.getElementById("end-date").addEventListener("change", updateAll);
     </script>
 
     <script src="script.js"></script>
