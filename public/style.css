@@ -467,67 +467,9 @@ section {
 }
 
 /* discography */
-.tab-menu {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 1rem;
-    justify-content: center;
-}
-
-.tab-menu .tab-link {
-    font-size: 18px;
-    cursor: pointer;
-    color: var(--text-light);
-    text-decoration: none;
-}
-
-.tab-menu .tab-link:hover {
-    color: var(--primary-color);
-}
-
-.tab-menu .tab-link.active {
-    color: var(--primary-color);
-}
-@media (max-width: 900px) {
-    .tab-menu {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 8px;
-        padding: 8px 0;
-        scrollbar-width: none;
-    }
-
-    .tab-menu::-webkit-scrollbar {
-        display: none;
-    }
-
-    .tab-link {
-        display: inline-block;
-        flex: 0 0 auto;
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-}
-
-.tab-content {
-    display: none;
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-
 .discography__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
     margin: 2rem 0;
 }
@@ -563,26 +505,35 @@ section {
 
 .discography__details {
     position: absolute;
-    width: calc(100% - 2rem);
-    padding: 1rem;
-    bottom: -15rem;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     text-align: center;
     color: var(--text-dark);
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    border-radius: inherit;
     z-index: 1;
-    transition: 0.3s;
+    padding: 0.5rem;
 }
 
 .discography__card:hover .discography__details {
-    bottom: 1rem;
+    opacity: 1;
 }
 
 .discography__title {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 .discography__subtitle {
