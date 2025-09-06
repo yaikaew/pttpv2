@@ -161,7 +161,7 @@
 
         // โหลดข้อมูล + กรอง
         function loadScheduleData(range, filterFn = null) {
-            return fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            return fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
                 .then(res => res.json())
                 .then(data => {
                     let rows = data.values || [];

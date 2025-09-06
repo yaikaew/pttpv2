@@ -89,7 +89,7 @@
 
     <script>
         function loadScheduleData(range, elementId) {
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
             .then(data => {
                 const rows = data.values || [];
@@ -165,7 +165,7 @@
             const container = document.getElementById("singleGrid");
             container.innerHTML = `<div class="loading-spinner"></div>`;
 
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
             .then(data => {
                 let rows = data.values || [];
@@ -442,7 +442,7 @@
             
             grid.innerHTML = '<div class="loading-spinner"></div>';
 
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -489,7 +489,7 @@
             
             grid.innerHTML = '<div class="loading-spinner"></div>';
 
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -568,7 +568,7 @@
             tabMenu2.innerHTML = `<div class="loading-spinner"></div>`;
             tabContents2.innerHTML = "";
 
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
             .then(data => {
                 let rows = data.values || [];

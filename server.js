@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
 
 // API endpoint สำหรับ frontend
-app.get('/api/schedule', async (req, res) => {
+app.get('/api/spreadsheets', async (req, res) => {
     const range = req.query.range;
     const sheetId = process.env.SHEET_ID;
     const apiKey = process.env.API_KEY;

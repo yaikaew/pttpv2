@@ -41,7 +41,7 @@
                 const grid = document.getElementById(elementId);
                 grid.innerHTML = '<div class="loading-spinner"></div>';
 
-                fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
                     .then(res => res.json())
                     .then(data => {
                         const rows = data.values || [];

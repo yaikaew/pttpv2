@@ -116,7 +116,7 @@
             table.style.display = "none";
             grid.innerHTML = "";
             
-            fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
                 .then(res => res.json())
                 .then(data => {
                     spinner.style.display = "none";
