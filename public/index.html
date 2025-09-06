@@ -143,97 +143,48 @@
     <section class="discography" id="discography">
         <div class="discography__container">
             <h2 class="section__title">Discography</h2>
+            <div class="discography__grid" id="singleGrid"></div>
         </div>
-
-        <div class="tab-menu" id="tabMenu"></div>
-        <div class="tab-contents" id="tabContents"></div>
     </section>
 
     <script>
-        // function createDiscographyCard(row) {
-        //     const [type, artist, date, song, artist2, link, link2, img, streaming, note, channel, imgchannel] = row;
-        //     return `
-
-        //     <div class="discography__card" onclick="openLink('${link}')">
-        //         <img src="${img}" alt="discography" />
-        //         <div class="discography__details">
-        //             <p class="discography__title">${song}</p>
-        //             <p class="discography__subtitle">${artist2}</p>
-        //         </div>
-        //     </div>
-        //     `;
-        // }
         function createDiscographyCard(row) {
-            const [type, artist, date, song, artist2, link, link2, img, streaming, note, channel, imgchannel] = row;
+            const [date, song, artist, link, img, formatdate] = row;
             return `
-            <div class="showcard" onclick="openLink('${link}')">
-                <div class="thumbnail">
-                    <img src="${img}" alt="video">
-                </div>
-                <div class="info">
-                    <img src="${imgchannel}" alt="channel">
-                    <div class="text">
-                        <p class="title">${song}</p>
-                        <p class="channel">${artist2} ${note ? ` • ${note}` : ''}</p>
+            <div class="discography__card" onclick="openLink('${link}')">
+                    <img src="${img}" alt="discography" />
+                    <div class="discography__details">
+                        <p class="discography__title">${song}</p>
+                        <p class="discography__subtitle">${artist} <br/>${formatdate}</p>
                     </div>
                 </div>
-            </div>
             `;
         }
 
         function loadDiscographyData(range) {
-            const tabMenu = document.getElementById("tabMenu");
-            const tabContents = document.getElementById("tabContents");
-
-            tabMenu.innerHTML = `<div class="loading-spinner"></div>`;
-            tabContents.innerHTML = "";
+            const container = document.getElementById("singleGrid");
+            container.innerHTML = `<div class="loading-spinner"></div>`;
 
             fetch(`/api/schedule?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
             .then(data => {
                 let rows = data.values || [];
+
                 if (rows.length === 0) {
-                tabContents.innerHTML = "<p>ไม่พบข้อมูล</p>";
-                return;
+                    container.innerHTML = "<p>no data</p>";
+                    return;
                 }
 
-                // หา types ไม่ซ้ำ
-                const types = [...new Set(rows.map(r => r[1]))]; 
-
-                // สร้าง tab menu
-                tabMenu.innerHTML = types.map((artist, idx) => 
-                `<span class="tab-link ${idx===0?'active':''}" data-tab="${artist}">${artist}</span>`
-                ).join("");
-
-                // สร้าง content ของแต่ละ type
-                tabContents.innerHTML = types.map((artist, idx) => {
-                const filtered = rows.filter(r => r[1] === artist);
-                return `
-                    <div id="${artist}" class="tab-content ${idx===0?'active':''}">
-                        <div class="discography__grid">
-                            ${filtered.map(createDiscographyCard).join("")}
-                        </div>
-                    </div>`;
-                }).join("");
-
-                // Event เปลี่ยน tab
-                document.querySelectorAll(".tab-link").forEach(tab => {
-                tab.addEventListener("click", () => {
-                    document.querySelectorAll(".tab-link").forEach(t => t.classList.remove("active"));
-                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                    tab.classList.add("active");
-                    document.getElementById(tab.dataset.tab).classList.add("active");
-                });
-                });
+                container.innerHTML = rows.map(createDiscographyCard).join("");
             })
             .catch(err => {
                 console.error(err);
-                tabContents.innerHTML = "<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+                container.innerHTML = "<p>error fetch data</p>";
             });
         }
 
         // โหลดข้อมูลครั้งเดียว
-        loadDiscographyData("discography!A2:L");
+        loadDiscographyData("discography!A2:Z");
     </script>
 
     <!-- Filmography Section -->
