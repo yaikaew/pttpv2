@@ -592,6 +592,58 @@ section {
 }
 
 /* filmography */
+.film-menu {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.film-menu .film-link {
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.film-menu .film-link:hover {
+    color: var(--primary-color);
+}
+
+.film-menu .film-link.active {
+    color: var(--primary-color);
+}
+@media (max-width: 900px) {
+    .film-menu {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 8px;
+        padding: 8px 0;
+        scrollbar-width: none;
+    }
+
+    .film-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    .film-link {
+        display: inline-block;
+        flex: 0 0 auto;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+}
+
+.film-content {
+    display: none;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.film-content.active {
+    display: block;
+}
 .film__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
@@ -608,6 +660,7 @@ section {
 }
 .film__card img {
     width: 100%;
+    aspect-ratio: 3 / 4;
     object-fit: cover;
 }
 
@@ -639,6 +692,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: auto;
 }
 
 .status {

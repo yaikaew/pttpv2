@@ -33,6 +33,20 @@ tabLinks.forEach((link) => {
     });
 });
 
+// for film tab
+const filmLinks = document.querySelectorAll(".film-link");
+const filmContents = document.querySelectorAll(".film-content");
+
+filmLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+        filmLinks.forEach((btn) => btn.classList.remove("active"));
+        filmContents.forEach((content) => content.classList.remove("active"));
+
+        link.classList.add("active");
+        document.getElementById(link.dataset.tab).classList.add("active");
+    });
+});
+
 // for shows tab
 const tabLinks2 = document.querySelectorAll(".tab-link-2");
 const tabContents2 = document.querySelectorAll(".tab-content-2");
