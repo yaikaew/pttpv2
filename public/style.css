@@ -248,13 +248,13 @@ section {
 .keytag {
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: 0.3rem;
 }
 
 .datetimelocation{
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.4rem;
 }
 
 .schedule__title {

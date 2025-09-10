@@ -149,9 +149,9 @@
 
     <script>
         function createDiscographyCard(row) {
-            const [date, song, artist, link, img, formatdate] = row;
+            const [artist2, date, song, artist, link, img, formatdate] = row;
             return `
-            <div class="discography__card" onclick="openLink('${link}')">
+            <div class="discography__card ${artist2}" onclick="openLink('${link}')">
                 <img src="${img}" alt="discography" />
                 <div class="discography__details">
                     <p class="discography__title">${song}</p>
