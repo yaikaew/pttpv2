@@ -121,7 +121,7 @@
                 .then(data => {
                     spinner.style.display = "none";
                     table.style.display = "table";
-                    const rows = data.values || [];
+                    let rows = data.values || [];
                     grid.innerHTML = rows.map(row => {
                         const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
 
