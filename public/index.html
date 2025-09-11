@@ -151,11 +151,15 @@
         function createDiscographyCard(row) {
             const [artist2, date, song, artist, link, img, formatdate] = row;
             return `
-            <div class="discography__card ${artist2}" onclick="openLink('${link}')">
+            <div class="discography__card ${artist2}">
                 <img src="${img}" alt="discography" />
                 <div class="discography__details">
-                    <p class="discography__title">${song}</p>
-                    <p class="discography__subtitle">${artist} <br/>${formatdate}</p>
+                    <div class="discography__title">${song}</div>
+                    <div class="discography__artist">${artist}</div>
+                    <div class="discography__info">${formatdate}</div>
+                    <div class="discography__info play_btn" onclick="openLink('${link}')">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
                 </div>
             </div>
             `;
