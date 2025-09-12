@@ -56,9 +56,29 @@
     </section>
 
     <!-- Custom Range Table -->
+    <section class="schedule" id="custom-range-2">
+        <div class="schedule__container">
+            <h2 class="section__title">upcoming</h2>
+            <div class="schedule__table__wrapper">
+                <table class="schedule_table" id="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Artist</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Title</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="custom_list_2"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    
     <section class="schedule" id="custom-range">
         <div class="schedule__container">
-            <h2 class="section__title">Table View</h2>
+            <h2 class="section__title">wrap up</h2>
             <div class="schedule__table__wrapper">
                 <table class="schedule_table" id="table-custom">
                     <thead>
@@ -98,21 +118,36 @@
             return rows.map(row => {
                 const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                 return `
-          <tr>
-            <td>${artist || ""}</td>
-            <td>${date || ""}</td>
-            <td>${time || ""}</td>
-            <td>${title || ""}</td>
-            <td>${location || ""}</td>
-            <td>
-              ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
-              ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
-            </td>
-            <td>
-              ${link ? `<a href="${link}" class="schedule__rerun" target="_blank">Rerun</a>` : ''}
-            </td>
-          </tr>
-        `;
+                    <tr>
+                        <td>${artist || ""}</td>
+                        <td>${date || ""}</td>
+                        <td>${time || ""}</td>
+                        <td>${title || ""}</td>
+                        <td>${location || ""}</td>
+                        <td>
+                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
+                            ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+                        </td>
+                        <td>
+                            ${link ? `<a href="${link}" class="schedule__rerun" target="_blank">Rerun</a>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderRows2(rows) {
+            return rows.map(row => {
+                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                return `
+                    <tr>
+                        <td>${artist || ""}</td>
+                        <td>${date || ""}</td>
+                        <td>${time || ""}</td>
+                        <td>${title || ""}</td>
+                        <td>${location || ""}</td>
+                    </tr>
+                `;
             }).join('');
         }
 
@@ -129,33 +164,33 @@
                 }
 
                 return `
-          <div class="schedule__card">
-            <img src="${img}" alt="schedule" ${link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
-            <div class="schedule__details">
-              ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                    <div class="schedule__card">
+                        <img src="${img}" alt="schedule" ${link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
+                        <div class="schedule__details">
+                            ${title ? `<p class="schedule__title">${title}</p>` : ''}
 
-              ${(keyword || tag) ? `
-                <div class="keytag">
-                  ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
-                  ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
-                </div>` : ''}
+                            ${(keyword || tag) ? `
+                                <div class="keytag">
+                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
+                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+                                </div>` : ''}
 
-              <div class="datetimelocation">
-                <div class="schedule__info">
-                  <i class="fa-solid fa-calendar-days"></i>
-                  <span>${date} ${time ? `| ${time}` : ''}</span>
-                </div>
-                ${location ? `
-                  <div class="schedule__info">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>${location}</span>
-                  </div>` : ''}
-              </div>
+                            <div class="datetimelocation">
+                                <div class="schedule__info">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>${date} ${time ? `| ${time}` : ''}</span>
+                                </div>
+                                ${location ? `
+                                <div class="schedule__info">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span>${location}</span>
+                                </div>` : ''}
+                            </div>
 
-              ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
-            </div>
-          </div>
-        `;
+                            ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
+                        </div>
+                    </div>
+                `;
             }).join('');
         }
 
@@ -192,6 +227,11 @@
             // Table view
             loadScheduleData('Sheet1!A2:N', filterFn).then(rows => {
                 document.getElementById("custom_list").innerHTML = renderRows(rows);
+            });
+
+            // Table view
+            loadScheduleData('Sheet1!A2:N', filterFn).then(rows => {
+                document.getElementById("custom_list_2").innerHTML = renderRows2(rows);
             });
 
             // Card view
