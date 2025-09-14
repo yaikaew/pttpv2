@@ -152,7 +152,7 @@
             const [artist2, date, song, artist, link, img, formatdate] = row;
             return `
             <div class="discography__card ${artist2}">
-                <img src="${img}" alt="discography" />
+                <img src="${img}" alt="${song}" />
                 <div class="discography__details">
                     <div class="discography__title">${song}</div>
                     <div class="discography__artist">${artist}</div>
@@ -206,64 +206,72 @@
                 <div class="film__card">
                     <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="film"/>
                     <div class="film__details">
-                        <p class="film__title">กี่หมื่นฟ้า Your Sky Series</p>
-                        <div class="film__role">
-                            Por as Punlee - Sasin Phisut <br/>TeeTee as Ghlaijai - Ghlaijai Burirat
-                        </div>
-                        <div class="film__info">
-                            Network: one31 <br/>
-                            Episodes: 6 <br/>
-                            Released: 17 Nov 2024 - 2 Feb 2025
-                        </div>
-                        <div class="film__info play_btn" onclick="openLink('https://youtube.com/playlist?list=PLcTibKbv20S4l3tuUU0ydM9BzZEc0nrLm')">
-                            <i class="fa-solid fa-play"></i>
+                        <div class="film__content">
+                            <p class="film__title">กี่หมื่นฟ้า Your Sky Series</p>
+                            <div class="film__role">
+                                Por as Punlee - Sasin Phisut <br/>TeeTee as Ghlaijai - Ghlaijai Burirat
+                            </div>
+                            <div class="film__info">
+                                Network: one31 <br/>
+                                Episodes: 6 <br/>
+                                Released: 17 Nov 2024 - 2 Feb 2025
+                            </div>
+                            <div class="film__info play_btn" onclick="openLink('https://youtube.com/playlist?list=PLcTibKbv20S4l3tuUU0ydM9BzZEc0nrLm')">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="film__card">
                     <img src="https://pbs.twimg.com/media/GmZg7Lhb0AAYn69?format=jpg&name=medium" alt="film" />
                     <div class="film__details">
-                        <p class="film__title">กี่หมื่นฟ้า Your Sky Of Us</p>
-                        <div class="film__role">
-                            Por as Punlee - Sasin Phisut <br/>TeeTee as Ghlaijai - Ghlaijai Burirat
-                        </div>
-                        <div class="film__info">
-                            Network: one31 <br/>
-                            Episodes: 3 <br/>
-                            Released: 29 Mar 2025 - 19 Apr 2025
-                        </div>
-                        <div class="film__info play_btn" onclick="openLink('http://s.iq.com/YourSkyOfUs')">
-                            <i class="fa-solid fa-play"></i>
+                        <div class="film__content">
+                            <p class="film__title">กี่หมื่นฟ้า Your Sky Of Us</p>
+                            <div class="film__role">
+                                Por as Punlee - Sasin Phisut <br/>TeeTee as Ghlaijai - Ghlaijai Burirat
+                            </div>
+                            <div class="film__info">
+                                Network: one31 <br/>
+                                Episodes: 3 <br/>
+                                Released: 29 Mar 2025 - 19 Apr 2025
+                            </div>
+                            <div class="film__info play_btn" onclick="openLink('http://s.iq.com/YourSkyOfUs')">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="film__card">
                     <img src="https://pbs.twimg.com/media/GkPQY-oa0AAZaIa?format=jpg&name=4096x4096" alt="film" />
                     <div class="film__details">
-                        <p class="film__title">ด้วงกับเธอ Duang With You Series</p>
-                        <div class="film__role">TeeTee as Duang <br/>Por as Qin</div>
-                        <!-- <div class="film__info">
-                            Network: one31 <br/>
-                            Episodes: 6 <br/>
-                            Released: 6 Oct 2024 - 10 Nov 2024
-                        </div> -->
-                        <div class="film__info play_btn" onclick="openLink('https://youtu.be/G7ExYljjGoo')">
-                            <i class="fa-solid fa-play"></i>
+                        <div class="film__content">
+                            <p class="film__title">ด้วงกับเธอ Duang With You Series</p>
+                            <div class="film__role">TeeTee as Duang <br/>Por as Qin</div>
+                            <!-- <div class="film__info">
+                                Network: one31 <br/>
+                                Episodes: 6 <br/>
+                                Released: 6 Oct 2024 - 10 Nov 2024
+                            </div> -->
+                            <div class="film__info play_btn" onclick="openLink('https://youtu.be/G7ExYljjGoo')">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="film__card">
                     <img src="https://pbs.twimg.com/media/GkPmh--WgAAapoX?format=jpg&name=4096x4096" alt="film" />
                     <div class="film__details">
-                        <p class="film__title">DMD SITCOM หอตัวดี</p>
-                        <div class="film__role">#หอตัวดี</div>
-                        <!-- <div class="film__info">
-                            Network: one31 <br/>
-                            Episodes: 6 <br/>
-                            Released: 6 Oct 2024 - 10 Nov 2024
-                        </div> -->
-                        <div class="film__info play_btn" onclick="openLink('https://x.com/DomundiTV/status/1892609941485346900')">
-                            <i class="fa-solid fa-play"></i>
+                        <div class="film__content">
+                            <p class="film__title">DMD SITCOM หอตัวดี</p>
+                            <div class="film__role">#หอตัวดี</div>
+                            <!-- <div class="film__info">
+                                Network: one31 <br/>
+                                Episodes: 6 <br/>
+                                Released: 6 Oct 2024 - 10 Nov 2024
+                            </div> -->
+                            <div class="film__info play_btn" onclick="openLink('https://x.com/DomundiTV/status/1892609941485346900')">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
