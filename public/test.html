@@ -7,9 +7,9 @@
     <style>
         body {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
@@ -17,25 +17,58 @@
             padding: 20px;
             gap: 20px;
         }
-
-        .container {
-            position: relative;
-            width: 80vw;
-            max-width: 400px;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
+        
+        /* Shared styles for both card types */
+        .grid-container {
+            width: 100%;
+            max-width: 1200px;
         }
 
-        .container img {
+        .discography__grid,
+        .film__grid {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .discography__grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        .film__grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .discography__card,
+        .film__card {
+            overflow: hidden;
+            position: relative;
+            isolation: isolate;
+            cursor: pointer;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .discography__card img {
+            aspect-ratio: 1 / 1;
+        }
+        .film__card img {
+            aspect-ratio: 3 / 4;
+        }
+
+        .discography__card img,
+        .film__card img {
             display: block;
             width: 100%;
             height: auto;
-            transition: filter 0.5s ease;
+            transition: filter 0.3s ease;
+            object-fit: cover;
         }
 
-        .overlay {
+        .discography__details,
+        .film__details {
             position: absolute;
             top: 0;
             left: 0;
@@ -44,148 +77,152 @@
             opacity: 0;
             transition: opacity 0.5s ease;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             backdrop-filter: blur(8px);
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 1rem;
         }
-
-        /* --- CSS state for showing the overlay --- */
-        .container:hover .overlay,
-        .container.show-overlay .overlay {
+        
+        /* CSS state for showing the details */
+        .discography__card:hover .discography__details,
+        .film__card:hover .film__details,
+        .show-details .discography__details,
+        .show-details .film__details {
             opacity: 1;
         }
 
-        .container:hover img,
-        .container.show-overlay img {
+        .discography__card:hover img,
+        .film__card:hover img,
+        .show-details img {
             filter: brightness(0.7);
         }
-        /* ----------------------------------------- */
 
-        .text-content {
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        /* Content styles */
+        .discography__content,
+        .film__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #333;
         }
         
-        .text-content h3 {
+        .discography__title,
+        .film__title {
+            font-size: 1rem;
+            font-weight: 600;
             margin: 0;
-            font-size: 1.8em;
-            font-weight: bold;
         }
 
-        .text-content p {
-            margin: 5px 0;
-            font-size: 1em;
+        .discography__artist,
+        .discography__info,
+        .film__role,
+        .film__info {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        .play_btn {
+            font-size: 2.5rem;
+            margin-top: 1rem;
+            cursor: pointer;
         }
 
-        .play-icon {
-            font-size: 2.5em;
-            margin-top: 15px;
+        .play_btn i {
+            color: #333;
             transition: transform 0.3s ease;
         }
-        
-        .play-icon:hover {
-            transform: scale(1.1);
-        }
 
-        @media (max-width: 600px) {
-            .container {
-                width: 90vw;
-            }
+        .play_btn:hover i {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
 
-<!-- Card 1 -->
-<div class="container">
-    <img src="https://placehold.co/800x1000/ff7f50/fff?text=Album+1" alt="Album Cover 1">
-    <div class="overlay">
-        <div class="text-content">
-            <h3>Title A</h3>
-            <p>Artist A</p>
-            <p>Date A</p>
-            <span class="play-icon">&#9654;</span>
+<div class="discography__grid" id="singleGrid">
+    <div class="discography__card" data-link="https://www.google.com">
+        <img src="https://placehold.co/800x1000/ff7f50/fff?text=Album+1" alt="Album 1" />
+        <div class="discography__details">
+            <div class="discography__content">
+                <p class="discography__title">Song 1</p>
+                <p class="discography__artist">Artist 1</p>
+                <p class="discography__info">01-01-2024</p>
+                <p class="discography__info play_btn">
+                    <i class="fa-solid fa-play"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="discography__card" data-link="https://www.google.com">
+        <img src="https://placehold.co/800x1000/7fffd4/333?text=Album+2" alt="Album 2" />
+        <div class="discography__details">
+            <div class="discography__content">
+                <p class="discography__title">Song 2</p>
+                <p class="discography__artist">Artist 2</p>
+                <p class="discography__info">02-02-2024</p>
+                <p class="discography__info play_btn">
+                    <i class="fa-solid fa-play"></i>
+                </p>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Card 2 -->
-<div class="container">
-    <img src="https://placehold.co/800x1000/7fffd4/333?text=Album+2" alt="Album Cover 2">
-    <div class="overlay">
-        <div class="text-content">
-            <h3>Title B</h3>
-            <p>Artist B</p>
-            <p>Date B</p>
-            <span class="play-icon">&#9654;</span>
+<div class="film__grid">
+    <div class="film__card" data-link="https://youtube.com/playlist?list=PLcTibKbv20S4l3tuUU0ydM9BzZEc0nrLm">
+        <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="film"/>
+        <div class="film__details">
+            <div class="film__content">
+                <div class="film__title">กี่หมื่นฟ้า Your Sky Series</div>
+                <div class="film__role">
+                    Por as Punlee - Sasin Phisut <br/>TeeTee as Ghlaijai - Ghlaijai Burirat
+                </div>
+                <div class="film__info">
+                    Network: one31 <br/>
+                    Episodes: 6 <br/>
+                    Released: 17 Nov 2024 - 2 Feb 2025
+                </div>
+                <div class="film__info play_btn">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Add more film cards here -->
 </div>
 
-<!-- Card 3 -->
-<div class="container">
-    <img src="https://placehold.co/800x1000/a020f0/fff?text=Album+3" alt="Album Cover 3">
-    <div class="overlay">
-        <div class="text-content">
-            <h3>Title C</h3>
-            <p>Artist C</p>
-            <p>Date C</p>
-            <span class="play-icon">&#9654;</span>
-        </div>
-    </div>
-</div>
-
-<!-- Card 4 -->
-<div class="container">
-    <img src="https://placehold.co/800x1000/ffd700/333?text=Album+4" alt="Album Cover 4">
-    <div class="overlay">
-        <div class="text-content">
-            <h3>Title D</h3>
-            <p>Artist D</p>
-            <p>Date D</p>
-            <span class="play-icon">&#9654;</span>
-        </div>
-    </div>
-</div>
-
-<!-- Card 5 -->
-<div class="container">
-    <img src="https://placehold.co/800x1000/3cb371/fff?text=Album+5" alt="Album Cover 5">
-    <div class="overlay">
-        <div class="text-content">
-            <h3>Title E</h3>
-            <p>Artist E</p>
-            <p>Date E</p>
-            <span class="play-icon">&#9654;</span>
-        </div>
-    </div>
-</div>
+<!-- Load Font Awesome for the play icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const containers = document.querySelectorAll('.container');
+        const cards = document.querySelectorAll('.discography__card, .film__card');
 
-        containers.forEach(container => {
-            // Add click event listener for mobile devices
-            container.addEventListener('click', () => {
-                // Toggle the 'show-overlay' class to show/hide the overlay
-                container.classList.toggle('show-overlay');
-            });
+        cards.forEach(card => {
+            // Add click event listener for both card types
+            card.addEventListener('click', (event) => {
+                // Remove 'show-details' class from all other cards
+                cards.forEach(otherCard => {
+                    if (otherCard !== card) {
+                        otherCard.classList.remove('show-details');
+                    }
+                });
 
-            // Prevent the click event from propagating to the body when clicking inside a container
-            container.addEventListener('touchstart', (event) => {
-                event.stopPropagation();
-            });
-        });
+                // Toggle the 'show-details' class on the clicked card
+                card.classList.toggle('show-details');
 
-        // Add a click listener to the document body to hide the overlay
-        // when clicking outside any container
-        document.addEventListener('click', (event) => {
-            containers.forEach(container => {
-                if (!container.contains(event.target)) {
-                    container.classList.remove('show-overlay');
+                // If the click is on the play button, open the link
+                if (event.target.closest('.play_btn')) {
+                    const link = card.dataset.link;
+                    if (link) {
+                        window.open(link, '_blank');
+                    }
                 }
             });
         });
