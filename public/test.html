@@ -51,13 +51,17 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .container:hover .overlay {
+        /* --- CSS state for showing the overlay --- */
+        .container:hover .overlay,
+        .container.show-overlay .overlay {
             opacity: 1;
         }
 
-        .container:hover img {
+        .container:hover img,
+        .container.show-overlay img {
             filter: brightness(0.7);
         }
+        /* ----------------------------------------- */
 
         .text-content {
             color: #fff;
@@ -158,6 +162,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const containers = document.querySelectorAll('.container');
+
+        containers.forEach(container => {
+            // Add click event listener for mobile devices
+            container.addEventListener('click', () => {
+                // Toggle the 'show-overlay' class to show/hide the overlay
+                container.classList.toggle('show-overlay');
+            });
+
+            // Prevent the click event from propagating to the body when clicking inside a container
+            container.addEventListener('touchstart', (event) => {
+                event.stopPropagation();
+            });
+        });
+
+        // Add a click listener to the document body to hide the overlay
+        // when clicking outside any container
+        document.addEventListener('click', (event) => {
+            containers.forEach(container => {
+                if (!container.contains(event.target)) {
+                    container.classList.remove('show-overlay');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
