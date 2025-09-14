@@ -60,3 +60,31 @@ tabLinks2.forEach((link) => {
         document.getElementById(link.dataset.tab).classList.add("active");
     });
 });
+
+// for overlay click
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.discography__card, .film__card');
+
+    cards.forEach(card => {
+        // Add click event listener for mobile devices
+        card.addEventListener('click', (event) => {
+            // Remove 'show-details' class from all other cards
+            cards.forEach(otherCard => {
+                if (otherCard !== card) {
+                    otherCard.classList.remove('show-details');
+                }
+            });
+
+            // Toggle the 'show-details' class on the clicked card
+            card.classList.toggle('show-details');
+
+            // If the click is on the play button, open the link
+            if (event.target.closest('.play_btn')) {
+                const link = card.dataset.link;
+                if (link) {
+                    window.open(link, '_blank');
+                }
+            }
+        });
+    });
+});

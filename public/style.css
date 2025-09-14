@@ -17,6 +17,19 @@
     box-sizing: border-box;
     font-family: Bai Jamjuree;
 }
+.Teetee{
+    border: 2px solid purple;
+}
+.Por{
+    border: 2px solid skyblue;
+}
+.PTTP{
+    border: 2px solid pink;
+}
+.DEXX{
+    border: 2px solid blue;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -472,14 +485,16 @@ section {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
     margin: 2rem 0;
+    width: 100%;
 }
 
 .discography__card {
     overflow: hidden;
     position: relative;
     isolation: isolate;
-    /* cursor: pointer; */
+    cursor: pointer;
     border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .discography__card img {
@@ -491,19 +506,6 @@ section {
     aspect-ratio: 1 / 1;
 }
 
-.Teetee{
-    border: 2px solid purple;
-}
-.Por{
-    border: 2px solid skyblue;
-}
-.PTTP{
-    border: 2px solid pink;
-}
-.DEXX{
-    border: 2px solid blue;
-}
-
 .discography__details {
     position: absolute;
     top: 0;
@@ -513,51 +515,60 @@ section {
     opacity: 0;
     transition: opacity 0.5s ease;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     backdrop-filter: blur(8px);
     background-color: rgba(255, 255, 255, 0.6);
+    padding: 1rem;
 }
 
-.discography__card:hover .discography__details {
+.discography__card:hover .discography__details,
+.discography__card.show-details .discography__details {
     opacity: 1;
 }
 
-.discography__card:hover img {
+.discography__card:hover img,
+.discography__card.show-details img {
     filter: brightness(0.7);
+}
+
+.discography__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-dark);
 }
 
 .discography__title {
     font-size: 1rem;
     font-weight: 600;
-    text-align: center;
-    color: var(--text-dark);
+    margin: 0;
 }
 
-.discography__artist {
-    color: var(--text-dark);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    margin-top: 0.5rem;
-}
-
+.discography__artist,
 .discography__info {
-    display: flex;
-    color: var(--text-dark);
     font-size: 0.9rem;
     font-weight: 500;
-    text-align: center;
     margin-top: 0.5rem;
 }
 
 .play_btn {
-    color: var(--text-dark);
-    background-color: transparent;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
     cursor: pointer;
-    text-decoration: none;
-    text-align: center;
+}
+
+.play_btn i {
+    color: var(--text-dark);
+    transition: transform 0.3s ease;
+}
+
+.play_btn:hover i {
+    transform: scale(1.1);
 }
 
 /* filmography */
