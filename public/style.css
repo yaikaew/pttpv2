@@ -494,7 +494,6 @@ section {
     isolation: isolate;
     cursor: pointer;
     border-radius: 1rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .discography__card img {
