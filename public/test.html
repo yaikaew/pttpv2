@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Effect</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 80vw;
+            max-width: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: filter 0.5s ease;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container:hover .overlay {
+            opacity: 1;
+        }
+
+        .container:hover img {
+            filter: brightness(0.7);
+        }
+
+        .text-content {
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        
+        .text-content h3 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .text-content p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        .play-icon {
+            font-size: 2.5em;
+            margin-top: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .play-icon:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Card 1 -->
+<div class="container">
+    <img src="https://placehold.co/800x1000/ff7f50/fff?text=Album+1" alt="Album Cover 1">
+    <div class="overlay">
+        <div class="text-content">
+            <h3>Title A</h3>
+            <p>Artist A</p>
+            <p>Date A</p>
+            <span class="play-icon">&#9654;</span>
+        </div>
+    </div>
+</div>
+
+<!-- Card 2 -->
+<div class="container">
+    <img src="https://placehold.co/800x1000/7fffd4/333?text=Album+2" alt="Album Cover 2">
+    <div class="overlay">
+        <div class="text-content">
+            <h3>Title B</h3>
+            <p>Artist B</p>
+            <p>Date B</p>
+            <span class="play-icon">&#9654;</span>
+        </div>
+    </div>
+</div>
+
+<!-- Card 3 -->
+<div class="container">
+    <img src="https://placehold.co/800x1000/a020f0/fff?text=Album+3" alt="Album Cover 3">
+    <div class="overlay">
+        <div class="text-content">
+            <h3>Title C</h3>
+            <p>Artist C</p>
+            <p>Date C</p>
+            <span class="play-icon">&#9654;</span>
+        </div>
+    </div>
+</div>
+
+<!-- Card 4 -->
+<div class="container">
+    <img src="https://placehold.co/800x1000/ffd700/333?text=Album+4" alt="Album Cover 4">
+    <div class="overlay">
+        <div class="text-content">
+            <h3>Title D</h3>
+            <p>Artist D</p>
+            <p>Date D</p>
+            <span class="play-icon">&#9654;</span>
+        </div>
+    </div>
+</div>
+
+<!-- Card 5 -->
+<div class="container">
+    <img src="https://placehold.co/800x1000/3cb371/fff?text=Album+5" alt="Album Cover 5">
+    <div class="overlay">
+        <div class="text-content">
+            <h3>Title E</h3>
+            <p>Artist E</p>
+            <p>Date E</p>
+            <span class="play-icon">&#9654;</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
