@@ -63,7 +63,7 @@ tabLinks2.forEach((link) => {
 
 // for overlay click
 document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.discography__card');
+    const cards = document.querySelectorAll('.ent-card');
 
     cards.forEach(card => {
         // Add click event listener for mobile devices
