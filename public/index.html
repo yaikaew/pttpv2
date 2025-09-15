@@ -152,13 +152,13 @@
             const [artist2, date, song, artist, link, img, formatdate] = row;
 
             return `
-            <div class="ent-card ${artist2}" data-link="${link}">
+            <div class="ent-card ${artist2}">
                 <img src="${img}" alt="${song}" class="song-img" />
                 <div class="ent-details">
                     <p class="ent-title">${song}</p>
                     <p class="ent-subtitle-1">${artist}</p>
                     <p class="ent-subtitle-2">${formatdate}</p>
-                    <p class="play_btn">
+                    <p class="play_btn" onclick="openLink('${link}')">
                         <i class="fa-solid fa-play"></i>
                     </p>
                 </div>
@@ -205,13 +205,13 @@
             const [type, title, role, info, link, img] = row;
 
             return `
-            <div class="ent-card" data-link="${link}">
+            <div class="ent-card">
                 <img src="${img}" alt="${title}" class="film-img" />
                 <div class="ent-details">
                     <p class="ent-title">${title}</p>
                     <p class="ent-subtitle-1">${role}</p>
                     <p class="ent-subtitle-2">${info}</p>
-                    <p class="play_btn">
+                    <p class="play_btn" onclick="openLink('${link}')">
                         <i class="fa-solid fa-play"></i>
                     </p>
                 </div>
