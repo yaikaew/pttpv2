@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css" />
     <title>Outfits | pttp</title>
     <link rel="icon" href="assets/icons/icon.png" type="image/png">
@@ -14,13 +15,13 @@
 <body>
     <div class="nav">
         <nav>
-            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+            <div class="nav-logo"><span><a href="index.html">PTTP</a></span></div>
 
-            <div class="nav__toggle" id="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
 
-            <ul class="nav__links" id="nav-menu">
+            <ul class="nav-links" id="nav-menu">
                 <li class="link"><a href="index.html">Home</a></li>
                 <li class="link"><a href="schedule.html">Cover</a></li>
                 <li class="link"><a href="schedule_list.html">Lists</a></li>
@@ -29,13 +30,13 @@
         </nav>
     </div>
 
-    <section class="section__container discography__container" id="outfits">
-        <div class="section__header">
+    <section class="section-container discography-container" id="outfits">
+        <div class="section-header">
             <div>
-                <h2 class="section__title">Outfits</h2>
+                <h2 class="section-title">Outfits</h2>
             </div>
         </div>
-        <div class="outfits__grid" id="outfits__all"></div>
+        <div class="outfits-grid" id="outfits-all"></div>
         <script>
             function loadOutfitsData(range, elementId) {
                 const grid = document.getElementById(elementId);
@@ -49,11 +50,11 @@
                             const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                             return `
                                 ${outfit ? `
-                                    <div class="outfits__card">
+                                    <div class="outfits-card">
                                         <img src="${outfit}" alt="outfits" />
-                                        <div class="outfits__details">
-                                        <p class="outfits__date">${dateformat}</p>
-                                        <p class="outfits__tags">
+                                        <div class="outfits-details">
+                                        <p class="outfits-date">${dateformat}</p>
+                                        <p class="outfits-tags">
                                                 <a href="${tag ? taglink : keylink}" target="_blank" rel="noopener noreferrer">
                                                     ${tag || keyword}
                                                 </a>
@@ -66,13 +67,13 @@
                     });
             }
 
-            loadOutfitsData('Sheet1!A2:O', 'outfits__all');
+            loadOutfitsData('Sheet1!A2:O', 'outfits-all');
         </script>
 
     </section>
 
     <footer class="footer">
-        <div class="footer__bar">
+        <div class="footer-bar">
             &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
         </div>
     </footer>

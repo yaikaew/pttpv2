@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css" />
-    <title>Schedule | pttp</title>
+    <title>pippor & 2tee</title>
     <link rel="icon" href="assets/icons/icon.png" type="image/png">
 </head>
 
@@ -17,13 +17,13 @@
     <!-- Navbar -->
     <div class="nav">
         <nav>
-            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+            <div class="nav-logo"><span><a href="index.html">PTTP</a></span></div>
 
-            <div class="nav__toggle" id="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
 
-            <ul class="nav__links" id="nav-menu">
+            <ul class="nav-links" id="nav-menu">
                 <li class="link"><a href="index.html">Home</a></li>
                 <li class="link"><a href="schedule.html" class="active">Cover</a></li>
                 <li class="link"><a href="schedule_list.html">Lists</a></li>
@@ -34,26 +34,26 @@
 
     <!-- Schedule Section -->
     <section class="schedule" id="upcoming">
-        <div class="schedule__container">
-            <h2 class="section__title">Upcoming</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+        <div class="schedule-container">
+            <h2 class="section-title">Upcoming</h2>
+            <div class="schedule-grid" id="scheduleGridUpcoming"></div>
         </div>
     </section>
     <section class="schedule" id="2025">
-        <div class="schedule__container">
-            <h2 class="section__title">2025</h2>
-            <div class="schedule__grid" id="scheduleGrid2025"></div>
+        <div class="schedule-container">
+            <h2 class="section-title">2025</h2>
+            <div class="schedule-grid" id="scheduleGrid2025"></div>
         </div>
     </section>
     <section class="schedule" id="2024">
-        <div class="schedule__container">
-            <h2 class="section__title">2024</h2>
-            <div class="schedule__grid" id="scheduleGrid2024"></div>
+        <div class="schedule-container">
+            <h2 class="section-title">2024</h2>
+            <div class="schedule-grid" id="scheduleGrid2024"></div>
         </div>
     </section>
 
     <footer class="footer">
-        <div class="footer__bar">
+        <div class="footer-bar">
             &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
         </div>
     </footer>
@@ -63,7 +63,7 @@
             const grid = document.getElementById(elementId);
             grid.innerHTML = '<div class="loading-spinner"></div>';
             
-            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`)
                 .then(res => res.json())
                 .then(data => {
                     let rows = data.values || [];
@@ -86,32 +86,32 @@
                         }
 
                         return `
-                            <div class="schedule__card">
+                            <div class="schedule-card">
                                 <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
-                                <div class="schedule__details">
-                                    ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                                <div class="schedule-details">
+                                    ${title ? `<p class="schedule-title">${title}</p>` : ''}
 
                                     ${ (keyword || tag) ? `
                                         <div class="keytag">
-                                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                            ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+                                            ${keyword ? `<a href="${keylink}" class="schedule-tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                            ${tag ? `<a href="${taglink}" class="schedule-tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
                                         </div>
                                     ` : ''}
 
                                     <div class="datetimelocation">
-                                        <div class="schedule__info">
+                                        <div class="schedule-info">
                                             <i class="fa-solid fa-calendar-days"></i>
                                             <span>${date} ${time ? `| ${time}` : ''}</span>
                                         </div>
                                         ${location ? `
-                                            <div class="schedule__info">
+                                            <div class="schedule-info">
                                                 <i class="fa-solid fa-location-dot"></i>
                                                 <span>${location}</span>
                                             </div>
                                         ` : ''}
                                     </div>
 
-                                    ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
+                                    ${btnHtml ? `<div class="schedule-btn">${btnHtml}</div>` : ''}
                                 </div>
                             </div>
                         `;
@@ -119,9 +119,9 @@
                 });
         }
 
-        loadScheduleData('upcoming!A2:N', 'scheduleGridUpcoming');
-        loadScheduleData('2025!A2:N', 'scheduleGrid2025');
-        loadScheduleData('2024!A2:N', 'scheduleGrid2024');
+        loadScheduleData('upcoming!A2:Z', 'scheduleGridUpcoming');
+        loadScheduleData('2025!A2:Z', 'scheduleGrid2025');
+        loadScheduleData('2024!A2:Z', 'scheduleGrid2024');
     </script>
 
 

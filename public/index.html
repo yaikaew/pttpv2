@@ -17,13 +17,13 @@
     <!-- Navbar -->
     <div class="nav">
         <nav>
-            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+            <div class="nav-logo"><span><a href="index.html">PTTP</a></span></div>
 
-            <div class="nav__toggle" id="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
 
-            <ul class="nav__links" id="nav-menu">
+            <ul class="nav-links" id="nav-menu">
                 <li class="link"><a href="#profile">Profile</a></li>
                 <li class="link"><a href="#schedule">Schedule</a></li>
                 <li class="link"><a href="#discography">Discography</a></li>
@@ -78,9 +78,9 @@
 
     <!-- Schedule Section -->
     <section class="schedule" id="schedule">
-        <div class="schedule__container">
-            <h2 class="section__title">Schedule</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+        <div class="schedule-container">
+            <h2 class="section-title">Schedule</h2>
+            <div class="schedule-grid" id="scheduleGridUpcoming"></div>
             <div class="view-all">
                 <a href="schedule.html">View All Events</a>
             </div>
@@ -94,35 +94,36 @@
             .then(data => {
                 let rows = data.values || [];
                 const grid = document.getElementById(elementId);
+
                 grid.innerHTML = rows.map(row => {
                     const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                     return `
-                        <div class="schedule__card">
+                        <div class="schedule-card">
                             <img src="${img}" alt="schedule" ${ link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')}/>
-                            <div class="schedule__details">
-                                ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                            <div class="schedule-details">
+                                ${title ? `<p class="schedule-title">${title}</p>` : ''}
                                 
                                 ${(keyword || tag) ? `
                                     <div class="keytag">
-                                        ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
-                                        ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
+                                        ${keyword ? `<a href="${keylink}" class="schedule-tag" target="_blank" rel="noopener noreferrer">${keyword}</a>` : ''}
+                                        ${tag ? `<a href="${taglink}" class="schedule-tag" target="_blank" rel="noopener noreferrer">${tag}</a>` : ''}
                                     </div>
                                 ` : ''}
                                 
                                 <div class="datetimelocation">
-                                    <div class="schedule__info">
+                                    <div class="schedule-info">
                                         <i class="fa-solid fa-calendar-days"></i>
                                         <span>${date} ${time ? `| ${time}` : ''}</span>
                                     </div>
                                     ${location ? `
-                                        <div class="schedule__info">
+                                        <div class="schedule-info">
                                             <i class="fa-solid fa-location-dot"></i>
                                             <span>${location}</span>
                                         </div>
                                     ` : ''}
                                 </div>
 
-                                <div class="schedule__btn">
+                                <div class="schedule-btn">
                                     ${
                                         link
                                             ? `<a href="${link}" target="_blank" class="streaming">Rerun</a>`
@@ -141,8 +142,8 @@
 
     <!-- Discography Section -->
     <section class="discography" id="discography">
-        <div class="discography__container">
-            <h2 class="section__title">Discography</h2>
+        <div class="discography-container">
+            <h2 class="section-title">Discography</h2>
             <div class="discography-grid" id="singleGrid"></div>
         </div>
     </section>
@@ -153,7 +154,7 @@
 
             return `
             <div class="ent-card ${artist2}">
-                <img src="${img}" alt="${song}" class="song-img" />
+                <img src="${img}" alt="${song}" class="img-11" />
                 <div class="ent-details">
                     <p class="ent-title">${song}</p>
                     <p class="ent-subtitle-1">${artist}</p>
@@ -194,10 +195,11 @@
 
     <!-- Filmography Section -->
     <section class="film" id="filmography">
-        <div class="film__container">
-            <h2 class="section__title">Filmography</h2>
-            <div class="film-grid" id="filmGrid"></div>
+        <div class="film-container">
+            <h2 class="section-title">Filmography</h2>
         </div>
+        <div class="tab-film-menu" id="tabFilmMenu"></div>
+        <div class="tab-film-contents" id="tabFilmContents"></div>
     </section>
 
     <script>
@@ -206,21 +208,148 @@
 
             return `
             <div class="ent-card">
-                <img src="${img}" alt="${title}" class="film-img" />
+                <img src="${img}" alt="${title}" class="img-34" />
                 <div class="ent-details">
                     <p class="ent-title">${title}</p>
                     <p class="ent-subtitle-1">${role}</p>
                     <p class="ent-subtitle-2">${info}</p>
-                    <p class="play_btn" onclick="openLink('${link}')">
-                        <i class="fa-solid fa-play"></i>
-                    </p>
+                    <p class="play_btn" onclick="openLink('${link}')"><i class="fa-solid fa-play"></i></p>
                 </div>
             </div>
             `;
         }
 
         function loadFilmData(range) {
-            const container = document.getElementById("filmGrid");
+            const tabFilmMenu = document.getElementById("tabFilmMenu");
+            const tabFilmContents = document.getElementById("tabFilmContents");
+
+            tabFilmMenu.innerHTML = `<div class="loading-spinner"></div>`;
+            tabFilmContents.innerHTML = "";
+
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                let rows = data.values || [];
+
+                if (rows.length === 0) {
+                    tabFilmContents.innerHTML = `<p>No data available</p>`;
+                    tabFilmMenu.innerHTML = "";
+                    return;
+                }
+
+                const types = [...new Set(rows.map(r => r[0]))]; 
+
+                tabFilmMenu.innerHTML = types.map((type, idx) => 
+                    `<span class="film-link ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
+                ).join("");
+
+                tabFilmContents.innerHTML = types.map((type, idx) => {
+                    const filtered = rows.filter(r => r[0] === type);
+                    return `
+                        <div id="${type}" class="film-content ${idx===0?'active':''}">
+                            <div class="film-grid">
+                                ${filtered.map(createFilmCard).join("")}
+                            </div>
+                        </div>`;
+                }).join("");
+
+                document.querySelectorAll(".film-link").forEach(tab => {
+                    tab.addEventListener("click", () => {
+                        document.querySelectorAll(".film-link").forEach(t => t.classList.remove("active"));
+                        document.querySelectorAll(".film-content").forEach(c => c.classList.remove("active"));
+                        tab.classList.add("active");
+                        document.getElementById(tab.dataset.tab).classList.add("active");
+                    });
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = "<p>error fetch data</p>";
+            });
+        }
+
+        loadFilmData("film!A2:Z");
+    </script>
+
+
+
+    <!-- Brand Presenter Section -->
+    <section class="brand" id="brand">
+        <div class="brand-container">
+            <h2 class="section-title">Brand Presenter</h2>
+            <div class="brand-grid" id="presenterGrid"></div>
+        </div>
+    </section>
+
+    <script>
+        function createPresenterCard(row) {
+            const [artist, date, brand, link, dmd, img] = row;
+
+            return `
+                <div class="ent-card">
+                    <img src="${img}" alt="${brand}" class="img-11"/>
+                    <div class="ent-details">
+                        <p class="ent-title">${brand}</p>
+                        <p class="ent-subtitle-1">Start: ${date}</p>
+                        <p class="play_btn" onclick="openLink('${dmd}')">
+                            <i class="fa-solid fa-link"></i>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        function loadPresenterData(range) {
+            const container = document.getElementById("presenterGrid");
+            container.innerHTML = `<div class="loading-spinner"></div>`;
+            
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                let rows = data.values || [];
+
+                if (rows.length === 0) {
+                    container.innerHTML = "<p>no data</p>";
+                    return;
+                }
+
+                container.innerHTML = rows.map(createPresenterCard).join("");
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = "<p>error fetch data</p>";
+            });
+        }
+        loadPresenterData('presenter!A2:Z');
+    </script>
+
+    <!-- Awards Section -->
+    <section class="awards" id="awards">
+        <div class="awards-container">
+            <h2 class="section-title">Awards</h2>
+            <div class="awards-grid" id="awardsGrid"></div>
+        </div>
+    </section>
+
+    <script>
+        function createAwardsCard(row) {
+            const [artist, date, award, category, result, link, note, img] = row;
+
+            return `
+                <div class="ent-card">
+                    <img src="${img}" alt="${award}" class="img-11" />
+                    <div class="ent-details">
+                        <p class="ent-title">${award}</p>
+                        <p class="ent-subtitle-1">${category}</p>
+                        <p class="ent-subtitle-2 ${result}">${result}</p>
+                        <p class="play_btn" onclick="openLink('${link}')">
+                        <i class="fa-solid fa-link"></i>
+                    </p>
+                    </div>
+                </div>
+            `;
+        }
+        function loadAwardsData(range) {
+            const container = document.getElementById("awardsGrid");
             container.innerHTML = `<div class="loading-spinner"></div>`;
 
             fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
@@ -233,143 +362,31 @@
                     return;
                 }
 
-                container.innerHTML = rows.map(createFilmCard).join("");
+                container.innerHTML = rows.map(createAwardsCard).join("");
             })
             .catch(err => {
                 console.error(err);
                 container.innerHTML = "<p>error fetch data</p>";
             });
         }
-
-        // โหลดข้อมูลครั้งเดียว
-        loadFilmData("film!A2:Z");
-    </script>
-
-    <!-- Brand Presenter Section -->
-    <section class="brand" id="brand">
-        <div class="brand__container">
-            <h2 class="section__title">Brand Presenter</h2>
-            <div class="brand__grid" id="presenterGrid">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        function loadPresenterData(range, elementId) {
-            const grid = document.getElementById(elementId);
-            
-            grid.innerHTML = '<div class="loading-spinner"></div>';
-
-            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            })
-            .then(data => {
-                let rows = data.values || [];
-
-                if (rows.length === 0) {
-                    grid.innerHTML = '<p>No data available</p>';
-                    return;
-                }
-
-                grid.innerHTML = rows.map(row => {
-                    const [artist, date, brand, link, dmd, img] = row;
-                    return `
-                        <div class="brand__card" onclick="openLink('${dmd}')">
-                            <img src="${img}" alt="${brand}" />
-                            <div class="brand__details">
-                                <p class="brand__title">${brand}</p>
-                                <p class="brand__subtitle">Start: ${date}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-                grid.innerHTML = '<p>Error loading data</p>';
-            });
-        }
-        loadPresenterData('presenter!A2:Z', 'presenterGrid');
-    </script>
-
-    <!-- Awards Section -->
-    <section class="awards" id="awards">
-        <div class="awards__container">
-            <h2 class="section__title">Awards</h2>
-            <div class="awards__grid" id="awardsGrid">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        function loadAwardsData(range, elementId) {
-            const grid = document.getElementById(elementId);
-            
-            grid.innerHTML = '<div class="loading-spinner"></div>';
-
-            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            })
-            .then(data => {
-                let rows = data.values || [];
-
-                grid.innerHTML = rows.map(row => {
-                    const [artist, date, award, category, result, link, note, img] = row;
-
-                    let resultHTML = '';
-                    if (result === 'Received') {
-                        resultHTML = `<p class="awards__result received">${result}</p>`;
-                    } else if (result === 'Nominated') {
-                        resultHTML = `<p class="awards__result nominated">${result}</p>`;
-                    } else {
-                        resultHTML = `<p class="awards__result">${result}</p>`;
-                    }
-
-                    return `
-                        <div class="awards__card" onclick="openLink('${link}')">
-                            <img src="${img}" alt="" />
-                            <div class="awards__details">
-                                <p class="awards__title">${award}</p>
-                                <p class="awards__subtitle">${category}</p>
-                                ${resultHTML}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-                grid.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-            });
-        }
-        loadAwardsData('awards!A2:Z', 'awardsGrid');
+        loadAwardsData('awards!A2:Z');
     </script>
 
     <!-- Shows Section -->
     <section class="shows" id="shows">
-        <div class="shows__container">
-            <h2 class="section__title">Shows</h2>
+        <div class="shows-container">
+            <h2 class="section-title">Shows</h2>
         </div>
 
-        <div class="tab-menu-2" id="tabMenu2"></div>
-        <div class="tab-contents" id="tabContents2"></div>
+        <div class="tab-shows-menu" id="tabShowsMenu"></div>
+        <div class="tab-shows-contents" id="tabShowsContents"></div>
     </section>
 
     <script>
-        function createShowCard(row) {
+        function createshowscard(row) {
             const [type, artist, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
             return `
-            <div class="showcard" onclick="openLink('${link}')">
+            <div class="showscard" onclick="openLink('${link}')">
                 <div class="thumbnail">
                     <img src="${thumbnail}" alt="video">
                     <span class="badge">${duration}</span>
@@ -386,11 +403,11 @@
         }
 
         function loadShowsData(range) {
-            const tabMenu2 = document.getElementById("tabMenu2");
-            const tabContents2 = document.getElementById("tabContents2");
+            const tabShowsMenu = document.getElementById("tabShowsMenu");
+            const tabShowsContents = document.getElementById("tabShowsContents");
 
-            tabMenu2.innerHTML = `<div class="loading-spinner"></div>`;
-            tabContents2.innerHTML = "";
+            tabShowsMenu.innerHTML = `<div class="loading-spinner"></div>`;
+            tabShowsContents.innerHTML = "";
 
             fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
@@ -398,31 +415,31 @@
                 let rows = data.values || [];
 
                 if (rows.length === 0) {
-                    tabContents2.innerHTML = `<p>No data available</p>`;
-                    tabMenu2.innerHTML = "";
+                    tabShowsContents.innerHTML = `<p>No data available</p>`;
+                    tabShowsMenu.innerHTML = "";
                     return;
                 }
 
                 const types = [...new Set(rows.map(r => r[0]))]; 
 
-                tabMenu2.innerHTML = types.map((type, idx) => 
-                    `<span class="tab-link-2 ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
+                tabShowsMenu.innerHTML = types.map((type, idx) => 
+                    `<span class="shows-link ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
                 ).join("");
 
-                tabContents2.innerHTML = types.map((type, idx) => {
+                tabShowsContents.innerHTML = types.map((type, idx) => {
                     const filtered = rows.filter(r => r[0] === type);
                     return `
-                        <div id="${type}" class="tab-content-2 ${idx===0?'active':''}">
-                            <div class="shows__grid">
-                                ${filtered.map(createShowCard).join("")}
+                        <div id="${type}" class="shows-content ${idx===0?'active':''}">
+                            <div class="shows-grid">
+                                ${filtered.map(createshowscard).join("")}
                             </div>
                         </div>`;
                 }).join("");
 
-                document.querySelectorAll(".tab-link-2").forEach(tab => {
+                document.querySelectorAll(".shows-link").forEach(tab => {
                     tab.addEventListener("click", () => {
-                        document.querySelectorAll(".tab-link-2").forEach(t => t.classList.remove("active"));
-                        document.querySelectorAll(".tab-content-2").forEach(c => c.classList.remove("active"));
+                        document.querySelectorAll(".shows-link").forEach(t => t.classList.remove("active"));
+                        document.querySelectorAll(".shows-content").forEach(c => c.classList.remove("active"));
                         tab.classList.add("active");
                         document.getElementById(tab.dataset.tab).classList.add("active");
                     });
@@ -430,16 +447,16 @@
             })
             .catch(err => {
                 console.error(err);
-                tabContents2.innerHTML = `<p>Error loading data</p>`;
+                tabShowsContents.innerHTML = `<p>Error loading data</p>`;
             });
         }
 
-        loadShowsData("shows!A2:Z");
+        loadShowsData("shows!A2:J");
     </script>
 
 
     <footer class="footer">
-        <div class="footer__bar">
+        <div class="footer-bar">
             &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br/>
         </div>
     </footer>
@@ -448,7 +465,7 @@
         // ไฮไลท์เมนูขณะเลื่อน
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll("section[id]");
-            const navLinks = document.querySelectorAll(".nav__links li a");
+            const navLinks = document.querySelectorAll(".nav-links li a");
 
             const observer = new IntersectionObserver(
                 (entries) => {

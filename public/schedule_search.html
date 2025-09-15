@@ -25,13 +25,13 @@
     <!-- Navbar -->
     <div class="nav">
         <nav>
-            <div class="nav__logo"><span><a href="index.html">PTTP</a></span></div>
+            <div class="nav-logo"><span><a href="index.html">PTTP</a></span></div>
 
-            <div class="nav__toggle" id="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
             </div>
 
-            <ul class="nav__links" id="nav-menu">
+            <ul class="nav-links" id="nav-menu">
                 <li class="link"><a href="index.html">Home</a></li>
                 <li class="link"><a href="schedule.html">Cover</a></li>
                 <li class="link"><a href="schedule_list.html">Lists</a></li>
@@ -42,8 +42,8 @@
 
     <!-- Date Filter -->
     <section class="schedule" id="date-range">
-        <div class="schedule__container">
-            <h2 class="section__title">Select Range</h2>
+        <div class="schedule-container">
+            <h2 class="section-title">Select Range</h2>
             <div class="filter-controls">
                 <label>Start Date:
                     <input type="date" id="start-date">
@@ -57,10 +57,10 @@
 
     <!-- Custom Range Table -->
     <section class="schedule" id="custom-range-2">
-        <div class="schedule__container">
-            <h2 class="section__title">upcoming</h2>
-            <div class="schedule__table__wrapper">
-                <table class="schedule_table" id="table-custom">
+        <div class="schedule-container">
+            <h2 class="section-title">upcoming</h2>
+            <div class="schedule-table-wrapper">
+                <table class="schedule-table" id="table-custom">
                     <thead>
                         <tr>
                             <th>Artist</th>
@@ -75,12 +75,12 @@
             </div>
         </div>
     </section>
-    
+
     <section class="schedule" id="custom-range">
-        <div class="schedule__container">
-            <h2 class="section__title">wrap up</h2>
-            <div class="schedule__table__wrapper">
-                <table class="schedule_table" id="table-custom">
+        <div class="schedule-container">
+            <h2 class="section-title">wrap up</h2>
+            <div class="schedule-table-wrapper">
+                <table class="schedule-table" id="table-custom">
                     <thead>
                         <tr>
                             <th>Artist</th>
@@ -100,14 +100,14 @@
 
     <!-- Upcoming Card View -->
     <section class="schedule" id="upcoming">
-        <div class="schedule__container">
-            <h2 class="section__title">Card View</h2>
-            <div class="schedule__grid" id="scheduleGridUpcoming"></div>
+        <div class="schedule-container">
+            <h2 class="section-title">Card View</h2>
+            <div class="schedule-grid" id="scheduleGridUpcoming"></div>
         </div>
     </section>
 
     <footer class="footer">
-        <div class="footer__bar">
+        <div class="footer-bar">
             &copy; Made with Love | By <a href="https://x.com/yorkorrrr">yorkor</a><br />
         </div>
     </footer>
@@ -125,11 +125,11 @@
                         <td>${title || ""}</td>
                         <td>${location || ""}</td>
                         <td>
-                            ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
-                            ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+                            ${keyword ? `<a href="${keylink}" class="schedule-tag" target="_blank">${keyword}</a>` : ''}
+                            ${tag ? `${keyword ? '<br/>' : ''}<a href="${taglink}" class="schedule-tag" target="_blank">${tag}</a>` : ''}
                         </td>
                         <td>
-                            ${link ? `<a href="${link}" class="schedule__rerun" target="_blank">Rerun</a>` : ''}
+                            ${link ? `<a href="${link}" class="schedule-rerun" target="_blank">Rerun</a>` : ''}
                         </td>
                     </tr>
                 `;
@@ -164,30 +164,30 @@
                 }
 
                 return `
-                    <div class="schedule__card">
+                    <div class="schedule-card">
                         <img src="${img}" alt="schedule" ${link ? `onclick="openLink('${link}')"` : (info ? `onclick="openLink('${info}')"` : '')} />
-                        <div class="schedule__details">
-                            ${title ? `<p class="schedule__title">${title}</p>` : ''}
+                        <div class="schedule-details">
+                            ${title ? `<p class="schedule-title">${title}</p>` : ''}
 
                             ${(keyword || tag) ? `
                                 <div class="keytag">
-                                ${keyword ? `<a href="${keylink}" class="schedule__tag" target="_blank">${keyword}</a>` : ''}
-                                ${tag ? `<a href="${taglink}" class="schedule__tag" target="_blank">${tag}</a>` : ''}
+                                ${keyword ? `<a href="${keylink}" class="schedule-tag" target="_blank">${keyword}</a>` : ''}
+                                ${tag ? `<a href="${taglink}" class="schedule-tag" target="_blank">${tag}</a>` : ''}
                                 </div>` : ''}
 
                             <div class="datetimelocation">
-                                <div class="schedule__info">
+                                <div class="schedule-info">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>${date} ${time ? `| ${time}` : ''}</span>
                                 </div>
                                 ${location ? `
-                                <div class="schedule__info">
+                                <div class="schedule-info">
                                     <i class="fa-solid fa-location-dot"></i>
                                     <span>${location}</span>
                                 </div>` : ''}
                             </div>
 
-                            ${btnHtml ? `<div class="schedule__btn">${btnHtml}</div>` : ''}
+                            ${btnHtml ? `<div class="schedule-btn">${btnHtml}</div>` : ''}
                         </div>
                     </div>
                 `;
