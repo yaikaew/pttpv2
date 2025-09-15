@@ -229,7 +229,8 @@ section {
 /* schedule */
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    grid-template-columns: repeat(auto-fit, 330px);
+    justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
@@ -435,7 +436,8 @@ section {
 /* outfits */
 .outfits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, 300px);
+    justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
@@ -482,7 +484,7 @@ section {
 /* grid */
 .discography-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 330px);
+    grid-template-columns: repeat(auto-fit, 250px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
@@ -496,13 +498,15 @@ section {
 }
 .brand-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, 250px);
+    justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 .awards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, 250px);
+    justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
