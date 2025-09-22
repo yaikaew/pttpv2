@@ -154,7 +154,7 @@
 
             return `
             <div class="ent-card ${artist2}">
-                <img src="${img}" alt="${song}" class="img-11" />
+                <img src="${img}" alt="${song}" class="img-11" onclick="openLink('${link}')" />
                 <div class="ent-details">
                     <p class="ent-title">${song}</p>
                     <p class="ent-subtitle-1">${artist}</p>
@@ -208,7 +208,7 @@
 
             return `
             <div class="ent-card">
-                <img src="${img}" alt="${title}" class="img-34" />
+                <img src="${img}" alt="${title}" class="img-34" onclick="openLink('${link}')" />
                 <div class="ent-details">
                     <p class="ent-title">${title}</p>
                     <p class="ent-subtitle-1">${role}</p>
@@ -287,7 +287,7 @@
 
             return `
                 <div class="ent-card">
-                    <img src="${img}" alt="${brand}" class="img-11"/>
+                    <img src="${img}" alt="${brand}" class="img-11" onclick="openLink('${dmd}')" />
                     <div class="ent-details">
                         <p class="ent-title">${brand}</p>
                         <p class="ent-subtitle-1">Start: ${date}</p>
@@ -336,7 +336,7 @@
 
             return `
                 <div class="ent-card">
-                    <img src="${img}" alt="${award}" class="img-11" />
+                    <img src="${img}" alt="${award}" class="img-11" onclick="openLink('${link}')" />
                     <div class="ent-details">
                         <p class="ent-title">${award}</p>
                         <p class="ent-subtitle-1">${category}</p>
