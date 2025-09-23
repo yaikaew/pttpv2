@@ -615,11 +615,13 @@ section {
 }
 
 .ent-card:hover .ent-details,
+.ent-card:active .ent-details,
 .ent-card.show-details .ent-details {
     opacity: 1;
 }
 
 .ent-card:hover img,
+.ent-card:active img,
 .ent-card.show-details img {
     filter: brightness(0.7);
 }
