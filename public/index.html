@@ -438,34 +438,47 @@
                     return;
                 }
 
-                const types = [...new Set(rows.map(r => r[0]))]; 
-
-                tabShowsMenu.innerHTML = types.map((type, idx) => 
-                    `<span class="shows-link ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
-                ).join("");
-
-                tabShowsContents.innerHTML = types.map((type, idx) => {
-                    const filtered = rows.filter(r => r[0] === type);
-                    return `
-                        <div id="${type}" class="shows-content ${idx===0?'active':''}">
+                // Check for mobile viewport (<= 900px)
+                if (window.matchMedia("(max-width: 900px)").matches) {
+                    // On mobile, show all items in a single list
+                    tabShowsMenu.innerHTML = ""; // Hide the tab menu
+                    tabShowsContents.innerHTML = `
+                        <div class="shows-content active">
                             <div class="shows-grid">
-                                ${filtered.map(createshowscard).join("")}
+                                ${rows.map(createshowscard).join("")}
                             </div>
                         </div>`;
-                }).join("");
+                } else {
+                    // On desktop, use the tabbed view
+                    const types = [...new Set(rows.map(r => r[0]))]; 
 
-                document.querySelectorAll(".shows-link").forEach(tab => {
-                    tab.addEventListener("click", () => {
-                        document.querySelectorAll(".shows-link").forEach(t => t.classList.remove("active"));
-                        document.querySelectorAll(".shows-content").forEach(c => c.classList.remove("active"));
-                        tab.classList.add("active");
-                        document.getElementById(tab.dataset.tab).classList.add("active");
+                    tabShowsMenu.innerHTML = types.map((type, idx) => 
+                        `<span class="shows-link ${idx===0?'active':''}" data-tab="${type}">${type}</span>`
+                    ).join("");
+
+                    tabShowsContents.innerHTML = types.map((type, idx) => {
+                        const filtered = rows.filter(r => r[0] === type);
+                        return `
+                            <div id="${type}" class="shows-content ${idx===0?'active':''}">
+                                <div class="shows-grid">
+                                    ${filtered.map(createshowscard).join("")}
+                                </div>
+                            </div>`;
+                    }).join("");
+
+                    document.querySelectorAll(".shows-link").forEach(tab => {
+                        tab.addEventListener("click", () => {
+                            document.querySelectorAll(".shows-link").forEach(t => t.classList.remove("active"));
+                            document.querySelectorAll(".shows-content").forEach(c => c.classList.remove("active"));
+                            tab.classList.add("active");
+                            document.getElementById(tab.dataset.tab).classList.add("active");
+                        });
                     });
-                });
+                }
             })
             .catch(err => {
                 console.error(err);
-                tabShowsContents.innerHTML = `<p>Error loading data</p>`;
+                tabShowsContents.innerHTML = `<p>Error loading data: ${err.message}</p>`;
             });
         }
 
