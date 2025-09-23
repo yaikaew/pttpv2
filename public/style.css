@@ -484,28 +484,28 @@ section {
 /* grid */
 .discography-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(auto-fit, 210px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 .film-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 330px);
+    grid-template-columns: repeat(auto-fit, 210px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 .brand-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(auto-fit, 210px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 .awards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(auto-fit, 210px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;

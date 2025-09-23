@@ -137,7 +137,10 @@
             });
         }
 
-        loadScheduleData('upcoming!A2:Z', 'scheduleGridUpcoming');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScheduleData('upcoming!A2:Z', 'scheduleGridUpcoming');
+        });
     </script>
 
     <!-- Discography Section -->
@@ -157,8 +160,8 @@
                 <img src="${img}" alt="${song}" class="img-11" />
                 <div class="ent-details">
                     <p class="ent-title">${song}</p>
-                    <p class="ent-subtitle-1">${artist}</p>
-                    <p class="ent-subtitle-2">${formatdate}</p>
+                    <p class="ent-subtitle">${artist}</p>
+                    <p class="ent-subtitle">${formatdate}</p>
                     <p class="play_btn" onclick="openLink('${link}')">
                         <i class="fa-solid fa-play"></i>
                     </p>
@@ -188,9 +191,10 @@
                 container.innerHTML = "<p>error fetch data</p>";
             });
         }
-
-        // โหลดข้อมูลครั้งเดียว
-        loadDiscographyData("discography!A2:Z");
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDiscographyData("discography!A2:Z");
+        });
     </script>
 
     <!-- Filmography Section -->
@@ -211,8 +215,8 @@
                 <img src="${img}" alt="${title}" class="img-34" />
                 <div class="ent-details">
                     <p class="ent-title">${title}</p>
-                    <p class="ent-subtitle-1">${role}</p>
-                    <p class="ent-subtitle-2">${info}</p>
+                    <p class="ent-subtitle">${role}</p>
+                    <p class="ent-subtitle">${info}</p>
                     <p class="play_btn" onclick="openLink('${link}')"><i class="fa-solid fa-play"></i></p>
                 </div>
             </div>
@@ -268,7 +272,10 @@
             });
         }
 
-        loadFilmData("film!A2:Z");
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFilmData("film!A2:Z");
+        });
     </script>
 
 
@@ -290,7 +297,7 @@
                     <img src="${img}" alt="${brand}" class="img-11" />
                     <div class="ent-details">
                         <p class="ent-title">${brand}</p>
-                        <p class="ent-subtitle-1">Start: ${date}</p>
+                        <p class="ent-subtitle">Start: ${date}</p>
                         <p class="play_btn" onclick="openLink('${dmd}')">
                             <i class="fa-solid fa-link"></i>
                         </p>
@@ -319,7 +326,10 @@
                 container.innerHTML = "<p>error fetch data</p>";
             });
         }
-        loadPresenterData('presenter!A2:Z');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPresenterData('presenter!A2:Z');
+        });
     </script>
 
     <!-- Awards Section -->
@@ -348,43 +358,10 @@
             `;
         }
 
-        // Function to add event listeners to all cards
-        function addCardEventListeners() {
-            document.querySelectorAll('.ent-card').forEach(card => {
-                // Toggle details on click/touch
-                card.addEventListener('click', (event) => {
-                    // Prevent link from triggering
-                    const isLink = event.target.closest('.play_btn');
-                    if (isLink) {
-                        return;
-                    }
-
-                    // Hide details of other cards before toggling the clicked one
-                    document.querySelectorAll('.ent-card.show-details').forEach(otherCard => {
-                        if (otherCard !== card) {
-                            otherCard.classList.remove('show-details');
-                        }
-                    });
-
-                    card.classList.toggle('show-details');
-                });
-            });
-
-            // Handle clicks outside the cards to close all open details
-            document.body.addEventListener('click', (event) => {
-                const isInsideCard = event.target.closest('.ent-card');
-                if (!isInsideCard) {
-                    document.querySelectorAll('.ent-card.show-details').forEach(card => {
-                        card.classList.remove('show-details');
-                    });
-                }
-            });
-        }
-
         // Function to load awards data from an API
         function loadAwardsData(range) {
             const container = document.getElementById("awardsGrid");
-            container.innerHTML = "<p>Loading...</p>"; // Use a simple loading text
+            container.innerHTML = `<div class="loading-spinner"></div>`;
 
             fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
@@ -492,7 +469,9 @@
             });
         }
 
-        loadShowsData("shows!A2:J");
+        document.addEventListener('DOMContentLoaded', () => {
+            loadShowsData("shows!A2:J");
+        });
     </script>
 
 

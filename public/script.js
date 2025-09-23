@@ -33,32 +33,35 @@ tabShowsLinks.forEach((link) => {
     });
 });
 
-// for overlay click
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.ent-card');
-
-    cards.forEach(card => {
-        // toggle รายละเอียดเมื่อกดที่ card (ยกเว้นปุ่ม play)
+// Function to add event listeners to all cards
+function addCardEventListeners() {
+    document.querySelectorAll('.ent-card').forEach(card => {
+        // Toggle details on click/touch
         card.addEventListener('click', (event) => {
-            if (!event.target.closest('.play_btn')) {
-                cards.forEach(otherCard => {
-                    if (otherCard !== card) {
-                        otherCard.classList.remove('show-details');
-                    }
-                });
-                card.classList.toggle('show-details');
+            // Prevent link from triggering
+            const isLink = event.target.closest('.play_btn');
+            if (isLink) {
+                return;
             }
-        });
-    });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.ent-card');
+            // Hide details of other cards before toggling the clicked one
+            document.querySelectorAll('.ent-card.show-details').forEach(otherCard => {
+                if (otherCard !== card) {
+                    otherCard.classList.remove('show-details');
+                }
+            });
 
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            // สลับคลาส 'show-details' ทุกครั้งที่แตะ
             card.classList.toggle('show-details');
         });
     });
-});
+
+    // Handle clicks outside the cards to close all open details
+    document.body.addEventListener('click', (event) => {
+        const isInsideCard = event.target.closest('.ent-card');
+        if (!isInsideCard) {
+            document.querySelectorAll('.ent-card.show-details').forEach(card => {
+                card.classList.remove('show-details');
+            });
+        }
+    });
+}
