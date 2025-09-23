@@ -333,25 +333,58 @@
     <script>
         function createAwardsCard(row) {
             const [artist, date, award, category, result, link, note, img] = row;
-
             return `
                 <div class="ent-card">
                     <img src="${img}" alt="${award}" class="img-11" />
                     <div class="ent-details">
                         <p class="ent-title">${award}</p>
-                        <p class="ent-subtitle-1">${category}</p>
-                        <p class="ent-subtitle-2 ${result}">${result}</p>
-                        <a href="${link}" class="play_btn">
+                        <p class="ent-subtitle">${category}</p>
+                        <p class="ent-subtitle ${result}">${result}</p>
+                        <a href="${link}" class="play_btn" target="_blank">
                             <i class="fa-solid fa-link"></i>
                         </a>
-                    </p>
                     </div>
                 </div>
             `;
         }
+
+        // Function to add event listeners to all cards
+        function addCardEventListeners() {
+            document.querySelectorAll('.ent-card').forEach(card => {
+                // Toggle details on click/touch
+                card.addEventListener('click', (event) => {
+                    // Prevent link from triggering
+                    const isLink = event.target.closest('.play_btn');
+                    if (isLink) {
+                        return;
+                    }
+
+                    // Hide details of other cards before toggling the clicked one
+                    document.querySelectorAll('.ent-card.show-details').forEach(otherCard => {
+                        if (otherCard !== card) {
+                            otherCard.classList.remove('show-details');
+                        }
+                    });
+
+                    card.classList.toggle('show-details');
+                });
+            });
+
+            // Handle clicks outside the cards to close all open details
+            document.body.addEventListener('click', (event) => {
+                const isInsideCard = event.target.closest('.ent-card');
+                if (!isInsideCard) {
+                    document.querySelectorAll('.ent-card.show-details').forEach(card => {
+                        card.classList.remove('show-details');
+                    });
+                }
+            });
+        }
+
+        // Function to load awards data from an API
         function loadAwardsData(range) {
             const container = document.getElementById("awardsGrid");
-            container.innerHTML = `<div class="loading-spinner"></div>`;
+            container.innerHTML = "<p>Loading...</p>"; // Use a simple loading text
 
             fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
             .then(res => res.json())
@@ -359,38 +392,25 @@
                 let rows = data.values || [];
 
                 if (rows.length === 0) {
-                    container.innerHTML = "<p>no data</p>";
+                    container.innerHTML = "<p>ไม่มีข้อมูล</p>";
                     return;
                 }
 
                 container.innerHTML = rows.map(createAwardsCard).join("");
+                
+                // CRITICAL: Attach event listeners AFTER the cards are created
+                addCardEventListeners();
             })
             .catch(err => {
                 console.error(err);
-                container.innerHTML = "<p>error fetch data</p>";
+                container.innerHTML = "<p>เกิดข้อผิดพลาดในการดึงข้อมูล</p>";
             });
         }
-        // เพิ่มตัวจัดการเหตุการณ์การแตะ (click/touchstart)
-        document.querySelectorAll('.ent-card').forEach(card => {
-            card.addEventListener('click', (event) => {
-                // ป้องกันไม่ให้ลิงก์ทำงานทันที
-                const isLink = event.target.closest('.play_btn');
-                if (isLink) {
-                    return; 
-                }
 
-                // สลับคลาสเพื่อแสดง/ซ่อนรายละเอียด
-                card.classList.toggle('show-details');
-            });
-
-            card.addEventListener('touchstart', (event) => {
-                // ป้องกันการทำงานซ้ำซ้อนกับ click event
-                event.stopPropagation();
-                // สลับคลาสเพื่อแสดง/ซ่อนรายละเอียด
-                card.classList.toggle('show-details');
-            }, { passive: true }); // เพิ่ม passive: true เพื่อปรับปรุงประสิทธิภาพการเลื่อนบนอุปกรณ์มือถือ
+        // Initial call to load data when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAwardsData('awards!A2:Z');
         });
-        loadAwardsData('awards!A2:Z');
     </script>
 
     <!-- Shows Section -->

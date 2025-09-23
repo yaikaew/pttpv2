@@ -573,21 +573,22 @@ section {
 
 
 .ent-card {
-    overflow: hidden;
     position: relative;
-    isolation: isolate;
-    cursor: pointer;
+    overflow: hidden;
     border-radius: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
 }
-
+.ent-card:hover {
+    transform: translateY(-5px);
+}
 .ent-card img {
-    display: block;
     width: 100%;
     height: auto;
-    transition: filter 0.3s ease;
+    display: block;
     object-fit: cover;
+    transition: filter 0.3s ease;
 }
-
 .img-11 {
     aspect-ratio: 1 / 1;
 }
@@ -595,7 +596,6 @@ section {
 .img-34 {
     aspect-ratio: 3 / 4;
 }
-
 .ent-details {
     position: absolute;
     top: 0;
@@ -603,53 +603,40 @@ section {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 0.5s ease;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 1rem;
+    transition: opacity 0.5s ease;
 }
-
-.ent-card:hover .ent-details,
-.ent-card:active .ent-details,
-.ent-card.show-details .ent-details {
+.ent-card.show-details .ent-details,
+.ent-card:hover .ent-details {
     opacity: 1;
 }
-
-.ent-card:hover img,
-.ent-card:active img,
-.ent-card.show-details img {
+.ent-card.show-details img,
+.ent-card:hover img {
     filter: brightness(0.7);
 }
-
 .ent-title {
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    margin: 0;
 }
-
-.ent-subtitle-1, .ent-subtitle-2 {
-    font-size: 0.9rem;
+.ent-subtitle {
+    font-size: 0.875rem;
     font-weight: 500;
     margin-top: 0.5rem;
 }
-
 .play_btn {
     font-size: 1.2rem;
-    margin-top: 0.5rem;
-    cursor: pointer;
-}
-
-.play_btn i {
+    margin-top: 1rem;
     color: var(--text-dark);
     transition: transform 0.3s ease;
 }
-
-.play_btn:hover i {
+.play_btn:hover {
     transform: scale(1.1);
 }
 
