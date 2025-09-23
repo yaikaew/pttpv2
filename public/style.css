@@ -484,7 +484,7 @@ section {
 /* grid */
 .discography-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 210px);
+    grid-template-columns: repeat(auto-fit, 230px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
@@ -498,14 +498,14 @@ section {
 }
 .brand-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 210px);
+    grid-template-columns: repeat(auto-fit, 230px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 .awards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 210px);
+    grid-template-columns: repeat(auto-fit, 230px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
