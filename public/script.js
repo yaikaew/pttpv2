@@ -51,3 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.ent-card');
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // สลับคลาส 'show-details' ทุกครั้งที่แตะ
+            card.classList.toggle('show-details');
+        });
+    });
+});
