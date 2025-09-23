@@ -491,7 +491,7 @@ section {
 }
 .film-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 210px);
+    grid-template-columns: repeat(auto-fit, 330px);
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
