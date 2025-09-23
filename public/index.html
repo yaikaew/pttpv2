@@ -341,8 +341,9 @@
                         <p class="ent-title">${award}</p>
                         <p class="ent-subtitle-1">${category}</p>
                         <p class="ent-subtitle-2 ${result}">${result}</p>
-                        <p class="play_btn" onclick="openLink('${link}')">
-                        <i class="fa-solid fa-link"></i>
+                        <a href="${link}" class="play_btn">
+                            <i class="fa-solid fa-link"></i>
+                        </a>
                     </p>
                     </div>
                 </div>
@@ -369,6 +370,26 @@
                 container.innerHTML = "<p>error fetch data</p>";
             });
         }
+        // เพิ่มตัวจัดการเหตุการณ์การแตะ (click/touchstart)
+        document.querySelectorAll('.ent-card').forEach(card => {
+            card.addEventListener('click', (event) => {
+                // ป้องกันไม่ให้ลิงก์ทำงานทันที
+                const isLink = event.target.closest('.play_btn');
+                if (isLink) {
+                    return; 
+                }
+
+                // สลับคลาสเพื่อแสดง/ซ่อนรายละเอียด
+                card.classList.toggle('show-details');
+            });
+
+            card.addEventListener('touchstart', (event) => {
+                // ป้องกันการทำงานซ้ำซ้อนกับ click event
+                event.stopPropagation();
+                // สลับคลาสเพื่อแสดง/ซ่อนรายละเอียด
+                card.classList.toggle('show-details');
+            }, { passive: true }); // เพิ่ม passive: true เพื่อปรับปรุงประสิทธิภาพการเลื่อนบนอุปกรณ์มือถือ
+        });
         loadAwardsData('awards!A2:Z');
     </script>
 
