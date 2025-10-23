@@ -30,6 +30,7 @@
                 <li class="link"><a href="#filmography">Filmography</a></li>
                 <li class="link"><a href="#brand">Brand Presenter</a></li>
                 <li class="link"><a href="#awards">Awards</a></li>
+                <li class="link"><a href="#magazine">Magazine</a></li>
                 <li class="link"><a href="#shows">Shows</a></li>
             </ul>
         </nav>
@@ -278,8 +279,6 @@
         });
     </script>
 
-
-
     <!-- Brand Presenter Section -->
     <section class="brand" id="brand">
         <div class="brand-container">
@@ -390,6 +389,58 @@
         });
     </script>
 
+    <!-- Magazine Section -->
+    <section class="magazine" id="magazine">
+        <div class="magazine-container">
+            <h2 class="section-title">Magazine</h2>
+            <div class="magazine-grid" id="magazineGrid"></div>
+        </div>
+    </section>
+
+    <script>
+        function createMagazineCard(row) {
+            const [artist, date, name, pic, link, note] = row;
+
+            return `
+                <div class="ent-card">
+                    <img src="${pic}" alt="${name}" class="img-11" />
+                    <div class="ent-details">
+                        <p class="ent-title">${name}</p>
+                        <p class="ent-subtitle">${date}</p>
+                        <p class="play_btn" onclick="openLink('${link}')">
+                            <i class="fa-solid fa-link"></i>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        function loadMagazineData(range) {
+            const container = document.getElementById("magazineGrid");
+            container.innerHTML = `<div class="loading-spinner"></div>`;
+            
+            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
+            .then(res => res.json())
+            .then(data => {
+                let rows = data.values || [];
+
+                if (rows.length === 0) {
+                    container.innerHTML = "<p>no data</p>";
+                    return;
+                }
+
+                container.innerHTML = rows.map(createMagazineCard).join("");
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = "<p>error fetch data</p>";
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMagazineData('magazine!A2:Z');
+        });
+    </script>
+
     <!-- Shows Section -->
     <section class="shows" id="shows">
         <div class="shows-container">
@@ -482,8 +533,18 @@
             });
         }
 
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadShowsData("shows!A2:J");
+        });
+
+        // Add a resize listener to re-render the layout if the user resizes the window
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                loadShowsData("shows!A2:J");
+            }, 250); // Debounce to prevent excessive calls
         });
     </script>
 
