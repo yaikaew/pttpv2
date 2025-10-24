@@ -413,6 +413,63 @@ section {
 .schedule-table tbody tr:nth-child(even) td {
     background-color: #eaf1fb;
 }
+
+.schedule-list-table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0 auto;
+    background: var(--extra-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    table-layout: fixed;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+.schedule-list-table {
+    min-width: 1000px;
+}
+.schedule-list-table th, .schedule-list-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+.schedule-list-table td {
+    font-size: 0.9rem;
+}
+.schedule-list-table th {
+    background: var(--primary-color);
+    color: var(--extra-light);
+    font-weight: 600;
+}
+.schedule-list-table th:nth-child(1), .schedule-list-table td:nth-child(1),
+.schedule-list-table th:nth-child(2), .schedule-list-table td:nth-child(2),
+.schedule-list-table th:nth-child(3), .schedule-list-table td:nth-child(3) {
+    width: 7%;
+    min-width: 70px;
+}
+.schedule-list-table th:nth-child(4), .schedule-list-table td:nth-child(4),
+.schedule-list-table th:nth-child(5), .schedule-list-table td:nth-child(5) {
+    width: 39.5%;
+    min-width: 395px;
+}
+.schedule-list-table a {
+    color: var(--text-dark);
+}
+.schedule-list-table tr:last-child td:first-child {
+    border-bottom-left-radius: 1rem;
+}
+.schedule-list-table tr:last-child td:last-child {
+    border-bottom-right-radius: 1rem;
+}
+/* สลับสีระหว่าง row */
+.schedule-list-table tbody tr:nth-child(odd) td {
+    background-color: #f5f7fa;
+}
+.schedule-list-table tbody tr:nth-child(even) td {
+    background-color: #eaf1fb;
+}
+
 .schedule-rerun {
     display: block;
     width: 100%;

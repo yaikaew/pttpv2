@@ -14,7 +14,6 @@
 
 <body>
 
-    <!-- Navbar -->
     <div class="nav">
         <nav>
             <div class="nav-logo"><span><a href="index.html">PTTP</a></span></div>
@@ -32,13 +31,12 @@
         </nav>
     </div>
 
-    <!-- Schedule Section -->
     <section class="schedule" id="upcoming">
         <div class="schedule-container">
             <h2 class="section-title">Upcoming</h2>
             <div class="schedule-table-wrapper">
                 <div class="loading-spinner" id="loading-upcoming"></div>
-                <table class="schedule-table" id="table-upcoming">
+                <table class="schedule-list-table" id="table-upcoming">
                     <thead>
                         <tr>
                             <th>Artist</th>
@@ -46,8 +44,6 @@
                             <th>Time</th>
                             <th>Title</th>
                             <th>Location</th>
-                            <th>Hashtag</th>
-                            <th>Rerun</th>
                         </tr>
                     </thead>
                     <tbody id="upcoming_list"></tbody>
@@ -56,7 +52,6 @@
         </div>
     </section>
 
-    <!-- Year Sections -->
     <section class="schedule" id="2025">
         <div class="schedule-container">
             <h2 class="section-title">2025</h2>
@@ -79,6 +74,7 @@
             </div>
         </div>
     </section>
+
     <section class="schedule" id="2024">
         <div class="schedule-container">
             <h2 class="section-title">2024</h2>
@@ -109,7 +105,22 @@
     </footer>
 
     <script>
-        function renderRows(rows) {
+        function renderUpcomingRows(rows) {
+            return rows.map(row => {
+                const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
+                return `
+                <tr>
+                    <td>${artist || ""}</td>
+                    <td>${date || ""}</td>
+                    <td>${time || ""}</td>
+                    <td>${title || ""}</td>
+                    <td>${location || ""}</td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function renderHistoricalRows(rows) {
             return rows.map(row => {
                 const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
                 return `
@@ -131,7 +142,7 @@
             }).join('');
         }
 
-        function loadScheduleData(range, elementId, spinnerId, tableId, filterFn = null) {
+        function loadScheduleData(range, elementId, spinnerId, tableId, renderFn, filterFn = null) {
             const grid = document.getElementById(elementId);
             const spinner = spinnerId ? document.getElementById(spinnerId) : null;
             const table = document.getElementById(tableId);
@@ -151,14 +162,18 @@
                         rows = rows.filter(filterFn);
                     }
 
-                    grid.innerHTML = renderRows(rows);
+                    grid.innerHTML = renderFn(rows);
+                })
+                .catch(error => {
+                    console.error("Error loading schedule data:", error);
+                    if (spinner) spinner.style.display = "none";
                 });
         }
 
-        // โหลดปกติ
-        loadScheduleData('upcoming_2!A2:N', 'upcoming_list', 'loading-upcoming', 'table-upcoming');
-        loadScheduleData('2025!A2:N', '2025_list', 'loading-2025', 'table-2025');
-        loadScheduleData('2024!A2:N', '2024_list', 'loading-2024', 'table-2024');
+        loadScheduleData('upcoming_2!A2:N', 'upcoming_list', 'loading-upcoming', 'table-upcoming', renderUpcomingRows);
+        
+        loadScheduleData('2025!A2:N', '2025_list', 'loading-2025', 'table-2025', renderHistoricalRows);
+        loadScheduleData('2024!A2:N', '2024_list', 'loading-2024', 'table-2024', renderHistoricalRows);
 
     </script>
 
