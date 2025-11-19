@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pttp</title>
+    <title>pippor & 2tee</title>
     <link rel="icon" href="assets/icon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -611,33 +611,19 @@
                 return `
                 <div data-category="${type.toLowerCase()}" class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md">
                     <a href="${link}" target="_blank" class="block">
-                        <div class="md:hidden flex p-2">
-                            <img src="${thumbnail}" alt="thumbnail" class="w-32 h-20 object-cover rounded-lg mr-3">
-                            <div class="flex-1 flex flex-col justify-center">
+                        <div class="relative aspect-video">
+                            <img src="${thumbnail}" alt="thumbnail" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-1.5 py-0.5 rounded">
+                                ${duration}
+                            </span>
+                        </div>
+                        <div class="flex p-2">
+                            <img src="${imgchannel}" alt="channel" class="w-8 h-8 rounded-full mr-2">
+                            <div class="flex-1">
                                 <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
                                     ${title}
                                 </h3>
-                                <p class="text-xs text-gray-600 mt-1">${channel}</p>
-                                <p class="text-xs text-gray-600 mt-1">${date}</p>
-                            </div>
-                        </div>
-
-                        <!-- Layout แบบเดิม (ซ่อนบนมือถือ) -->
-                        <div class="hidden md:block">
-                            <div class="relative aspect-video">
-                                <img src="${thumbnail}" alt="thumbnail" class="w-full h-full object-cover">
-                                <span class="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-1.5 py-0.5 rounded">
-                                    ${duration}
-                                </span>
-                            </div>
-                            <div class="flex p-2">
-                                <img src="${imgchannel}" alt="channel" class="w-8 h-8 rounded-full mr-2">
-                                <div class="flex-1">
-                                    <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
-                                        ${title}
-                                    </h3>
-                                    <p class="text-xs text-gray-600 mt-1">${channel} • ${date}</p>
-                                </div>
+                                <p class="text-xs text-gray-600 mt-1">${channel} • ${date}</p>
                             </div>
                         </div>
                     </a>
@@ -1125,6 +1111,24 @@
                         </div>
                     `).join('');
 
+                    const noteMap = {
+                        "งานปิดงดติดตาม": "Follow is not allowed",
+                        "มีรวมพลหลังเลิกงาน": "Fans gathering after the event",
+                        "สามารถไปให้กำลังใจรอบ ๆ งานได้": "All the fans can join in the surrounding area",
+                        "แฟนคลับสามารถไปร่วมกิจกรรมได้": "All the fans can joint the event",
+                        "เฉพาะผู้มีสิทธิ์เข้าร่วมงาน": "Private Event",
+                        "รับของขวัญ": "Can receive gifts",
+                    };
+                    let noteText = "";
+                    if (event.note) {
+                        const notes = event.note
+                            .split("/")                  // แยกด้วย comma
+                            .map(n => n.trim())          // ตัดช่องว่าง
+                            .filter(n => n.length > 0)   // ตัดค่าว่าง
+                            .map(n => noteMap[n] || n);  // แปลแต่ละอัน
+                        noteText = notes.join("/ ");      // รวมกลับ
+                    }
+
                     return `
                         <div class="p-4 mb-4 border-l-4 rounded-lg shadow-md ${borderColor} bg-white">
                             <a href="${event.info}" target="_blank" rel="noopener noreferrer"><h3 class="text-xl font-bold text-gray-900">${event.title}</h3></a>
@@ -1145,7 +1149,7 @@
                             </div>
                             <p class="mt-2 text-sm text-gray-700"><i class="fa-solid fa-clock w-4 mr-1 ${getDayColor}"></i> ${event.time || '-'}</p>
                             <p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-location-dot w-4 mr-1 ${getDayColor}"></i> ${event.location || '-'}</p>
-                            ${event.note ? `<p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-bullhorn w-4 mr-1 ${getDayColor}"></i> ${event.note}</p>` : ''}
+                            ${noteText ? `<p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-bullhorn w-4 mr-1 ${getDayColor}"></i> ${noteText}</p>` : ''}
                             
                             ${event.link ? `
                                 <div class="mt-3">
