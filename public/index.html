@@ -1,19 +1,68 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>pippor & 2tee</title>
-    <link rel="icon" href="assets/icon.png" type="image/png">
+    <link rel="icon" href="assets/icon.png" type="image/png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css" />
-    <script src="config.js"></script>
+    <style>
+        /* (ผมเก็บสไตล์สำคัญเดิมของคุณไว้ — calendar, popup, scrollbar, ฯลฯ) */
+        @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,4,12,0.05); }
+        .text-primary-blue { color:#007bff; }
+        .received { color: green; } .nominated { color: red; }
+
+        /* popup */
+        #popup, .popup { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000; }
+        .popup-content { display:flex; flex-direction:column; align-items:center; justify-content:center; height:80%; max-width:90%; overflow:hidden; }
+        .popup-content img { max-width:100%; max-height:100%; object-fit:contain; cursor:pointer; }
+        .nav-btn { position:absolute; top:50%; transform:translateY(-50%); background-color: rgba(255,255,255,0.7); border:none; font-size:24px; color:#333; cursor:pointer; padding:10px; border-radius:50%; }
+        .prev-btn { left:10px; } .next-btn { right:10px; }
+
+        /* Calendar */
+        .calendar-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:4px; box-sizing:border-box; width:100%; }
+        .day-cell { box-sizing:border-box; min-height:120px; transition: background-color .15s; min-width:0; }
+        .day-cell:hover { background-color:#f3f4f6; }
+        .event-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; }
+        .current-month-day { background-color:#f9f9f9; }
+        .loading-spinner { border:4px solid #f3f3f3; border-top:4px solid #3b82f6; border-radius:50%; width:30px; height:30px; animation:spin 1s linear infinite; margin:20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+        @media (max-width:768px) {
+            .day-cell { min-height:80px; padding:4px; }
+            .day-number { font-size:.875rem; }
+            .event-dot { width:6px; height:6px; }
+            .event-title { display:none; }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Custom colors defined for easy use
+                        'primary-blue': '#3b82f6', // blue-500
+                        'secondary-blue': '#bfdbfe', // blue-200
+                        'accent-light': '#eff6ff', // blue-50
+                        'card-bg': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Bai Jamjuree', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body class="bg-accent-light text-gray-800">
 
-    <!-- Navbar (แถบนำทาง) -->
     <nav class="fixed top-0 left-0 w-full bg-white shadow-lg z-50 transition-shadow duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -274,204 +323,6 @@
 
             </div>
         </div>
-        <script>
-            let filmographyData = [];
-            let currentImageIndex = 0;
-            let currentFilmImages = [];
-            
-            const range = 'series!A2:Z';
-
-            const GSHEET_URL = `/api/spreadsheets?range=${encodeURIComponent(range)}`;
-            
-            const keys = ['title', 'role', 'role2', 'date', 'platform', 'episodes', 'link', 'link2', 'poster', 'image2', 'image3', 'image4'];
-
-            function parseSheetsV4Data(json) {
-                const data = [];
-                const rows = json.values;
-                if (!rows || rows.length === 0) return data; 
-
-                // Assuming no header row is included in the specified RANGE (A2:Z or similar)
-                rows.forEach(row => {
-                    const entry = {};
-                    keys.forEach((key, j) => {
-                        // Map column data to keys
-                        entry[key] = row[j] || ''; 
-                    });
-                    
-                    // Basic check to ensure valid entry
-                    if (entry.title) {
-                        data.push(entry);
-                    }
-                });
-
-                return data;
-            }
-
-            async function fetchFilmographyData() {
-                const listContainer = document.getElementById('filmography-list');
-                if (listContainer) {
-                    listContainer.innerHTML = '<p class="text-center col-span-full p-8 text-gray-600">Loading filmography data...</p>';
-                }
-
-                try {
-                    const response = await fetch(GSHEET_URL);
-                    const json = await response.json();
-
-                    if (!response.ok || json.error) {
-                        throw new Error(`API Error: ${json.error?.message || response.statusText}`);
-                    }
-                    
-                    filmographyData = parseSheetsV4Data(json);
-
-                    if (filmographyData.length > 0) {
-                        generateFilmCards();
-                    } else {
-                        listContainer.innerHTML = '<p class="text-red-600 text-center col-span-full p-8 bg-white rounded-xl shadow-lg">⚠️ No filmography data found in Google Sheet. Check your RANGE and API Key permissions.</p>';
-                    }
-
-                } catch (error) {
-                    console.error("Could not fetch data:", error);
-                    if(listContainer) {
-                        listContainer.innerHTML = `<p class="text-red-600 text-center col-span-full p-8 bg-white rounded-xl shadow-lg">⚠️ Could not load data. Check console for error details. Message: ${error.message}</p>`;
-                    }
-                }
-            }
-            
-            // Function to generate HTML Cards (Using the new structure and 3:4 aspect ratio)
-            function generateFilmCards() {
-                const listContainer = document.getElementById('filmography-list');
-                if (!listContainer) return;
-
-                // Clear the loading message
-                listContainer.innerHTML = ''; 
-
-                if (filmographyData.length === 0) {
-                    listContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full p-8 bg-white rounded-xl shadow-lg">No joint filmography found.</p>';
-                    return;
-                }
-
-                // Create Cards using the user's requested structure (3:4 aspect ratio)
-                listContainer.innerHTML = filmographyData.map((film, index) => `
-                    <div class="bg-card-bg rounded-xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden cursor-pointer" onclick="showDetailsModal(${index})">
-                        <!-- โปสเตอร์และชื่อเรื่อง -->
-                        <div class="relative">
-                            <img 
-                                src="${film.poster}" 
-                                alt="โปสเตอร์ ${film.title}" 
-                                class="w-full aspect-[4/5] object-cover"
-                                onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Poster+N/A';"
-                            >
-                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/80 to-transparent p-4">
-                                <h3 class="text-2xl font-bold text-white leading-tight">${film.title}</h3>
-                            </div>
-                        </div>
-
-                        <!-- ข้อมูลหลัก -->
-                        <div class="p-4">
-                            <span class="text-lg font-semibold text-gray-800">Role: ${film.role2 || '-'}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            // --- CAROUSEL LOGIC ---
-
-            // Function to update the displayed image and button states
-            function updateCarouselUI() {
-                const imgElement = document.getElementById('modal-poster-slider');
-                const counterElement = document.getElementById('image-counter');
-                const navLeft = document.getElementById('nav-left');
-                const navRight = document.getElementById('nav-right');
-
-                if (!imgElement || currentFilmImages.length === 0) return;
-
-                // Update image source
-                const imageUrl = currentFilmImages[currentImageIndex];
-                imgElement.src = imageUrl;
-                imgElement.onerror = function() { this.src='https://placehold.co/300x400/cccccc/333333?text=IMAGE+N/A'; };
-                
-                // Update counter
-                counterElement.textContent = `${currentImageIndex + 1} / ${currentFilmImages.length}`;
-
-                // Update button states
-                navLeft.disabled = (currentImageIndex === 0);
-                navRight.disabled = (currentImageIndex === currentFilmImages.length - 1);
-            }
-
-            // Function to handle image navigation (called by buttons)
-            function navigateImage(direction) {
-                const newIndex = currentImageIndex + direction;
-
-                if (newIndex >= 0 && newIndex < currentFilmImages.length) {
-                    currentImageIndex = newIndex;
-                    updateCarouselUI();
-                }
-            }
-
-
-            // Function to show the Modal with film details
-            function showDetailsModal(index) {
-                const film = filmographyData[index];
-                const modal = document.getElementById('details-modal');
-                const modalTitle = document.getElementById('modal-title');
-                
-                const modalRole = document.getElementById('modal-role');
-                const modalDate = document.getElementById('modal-date');
-                const modalPlatform = document.getElementById('modal-platform');
-                const modalEpisodes = document.getElementById('modal-episodes');
-                const modalLink = document.getElementById('modal-link');
-
-                if (!film || !modal) return;
-                
-                // 1. Initialize Image Carousel Data
-                currentFilmImages = [];
-                // Add all available image URLs (poster is the first image)
-                if (film.poster) currentFilmImages.push(film.poster);
-                if (film.image2) currentFilmImages.push(film.image2);
-                if (film.image3) currentFilmImages.push(film.image3);
-                if (film.image4) currentFilmImages.push(film.image4);
-                
-                // Set initial index
-                currentImageIndex = 0;
-                
-                // If only one image, hide the counter and navigation controls for simplicity
-                const posterContainer = document.getElementById('modal-poster-container');
-                const navElements = posterContainer.querySelectorAll('#nav-left, #nav-right, #image-counter');
-                navElements.forEach(el => el.classList.toggle('hidden', currentFilmImages.length <= 1));
-
-                // 2. Populate Modal data
-                modalTitle.textContent = film.title;
-                
-                // 3. Render Carousel UI
-                updateCarouselUI();
-
-                // 4. Details
-                modalRole.innerHTML = `<strong class="text-gray-900">Role:</strong> ${film.role || '-'}`;
-                modalDate.innerHTML = `<strong class="text-gray-900">Air Date:</strong> ${film.date || '-'}`;
-                modalPlatform.innerHTML = `<strong class="text-gray-900">Platform:</strong> ${film.platform || '-'}`;
-                modalEpisodes.innerHTML = `<strong class="text-gray-900">Episodes:</strong> ${film.episodes || '-'}`;
-
-                //modalLink.href = film.link;
-                // Dynamic link text based on content type
-                //modalLink.textContent = film.title.toLowerCase().includes('movie') || film.episodes.toLowerCase().includes('film') ? 'Watch Movie Now' : 'Watch Series Now';
-
-                // 5. Show Modal
-                modal.classList.remove('hidden', 'opacity-0');
-                modal.classList.add('opacity-100');
-            }
-
-            // 6. Function to close Modal
-            function closeDetailsModal() {
-                const modal = document.getElementById('details-modal');
-                modal.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300); // Wait for transition to finish before hiding
-            }
-
-            // Fetch data when the page loads
-            window.onload = fetchFilmographyData;
-        </script>
 
         <!-- เพลง (Music) -->
         <section id="music" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
@@ -483,122 +334,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            function createDiscographyCard(row) {
-                const [artist2, date, song, artist, link, img, formatdate] = row;
-
-                return `
-                <div class="flex items-center bg-accent-light p-4 rounded-xl shadow-md hover:bg-secondary-blue/30 transition">
-                    <img src="${img}" alt="cover" class="w-20 h-20 object-cover rounded-lg mr-4">
-                    <div class="flex-grow">
-                        <h3 class="text-lg font-semibold text-gray-800">${song}</h3>
-                        <p class="text-sm text-gray-600">${artist}</p>
-                    </div>
-                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-primary-blue hover:text-blue-700">
-                        <i class="fa-solid fa-circle-play fa-2x"></i>
-                    </a>
-                </div>
-
-                `;
-            }
-
-            function loadDiscographyData(range) {
-                const container = document.getElementById("discographyGrid");
-                container.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (rows.length === 0) {
-                        container.innerHTML = "<p>no data</p>";
-                        return;
-                    }
-
-                    container.innerHTML = rows.map(createDiscographyCard).join("");
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.innerHTML = "<p>error fetch data</p>";
-                });
-            }
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                loadDiscographyData("discography!A2:Z");
-            });
-        </script>
-
-        <section id="performance" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
-                    Performances
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="performanceGrid">
-                </div>
-            </div>
-        </section>
-        <section id="cover" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
-                    Covers
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="coverGrid">
-                </div>
-            </div>
-        </section>
-        <script>
-            function createPerformanceCard(row) {
-                const [type, artist, date, song, artist2, link, pic, note, channel, imgchannel] = row;
-
-                return `
-                <div class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
-                    <a href="${link}" target="_blank" class="block">
-                        <div class="relative aspect-video">
-                            <img src="${pic}" alt="thumbnail" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex p-2">
-                            <img src="${imgchannel}" alt="channel" class="w-8 h-8 rounded-full mr-2">
-                            <div class="flex-1">
-                                <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
-                                    ${song}
-                                </h3>
-                                <p class="text-xs text-gray-600 mt-1">${channel} • ${date}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                `;
-            }
-
-            function loadPerformanceData(range) {
-                const container = document.getElementById("performanceGrid");
-                const container2 = document.getElementById("coverGrid");
-                container.innerHTML = container2.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (rows.length === 0) {
-                        container.innerHTML = container2.innerHTML = "<p>no data</p>";
-                        return;
-                    }
-
-                    container.innerHTML = rows.filter(row => row[0] === "Rec Perf").map(createPerformanceCard).join("");
-                    container2.innerHTML = rows.filter(row => row[0] === "Cover").map(createPerformanceCard).join("");
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.innerHTML = container2.innerHTML = "<p>error fetch data</p>";
-                });
-            }
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                loadPerformanceData('performance!A2:Z');
-            });
-        </script>
 
         <!-- นิตยสาร (Magazine) -->
         <section id="magazine" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
@@ -609,48 +344,6 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="magazineGrid"></div>
             </div>
         </section>
-        <script>
-            function createMagazineCard(row) {
-                const [artist, date, name, pic, link, note] = row;
-
-                return `
-                <div class="text-center" onclick="openLink('${link}')">
-                    <div class="w-full aspect-[3/4] overflow-hidden rounded-lg shadow-xl mb-3 border-2 border-primary-blue">
-                        <img src="${pic}" 
-                            alt="${name}"
-                            class="w-full h-full object-cover object-center transition transform hover:scale-105">
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">${name}</p>
-                </div>
-                `;
-            }
-
-            function loadMagazineData(range) {
-                const container = document.getElementById("magazineGrid");
-                container.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (rows.length === 0) {
-                        container.innerHTML = "<p>no data</p>";
-                        return;
-                    }
-
-                    container.innerHTML = rows.map(createMagazineCard).join("");
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.innerHTML = "<p>error fetch data</p>";
-                });
-            }
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                loadMagazineData('magazine!A2:Z');
-            });
-        </script>
 
         <!-- รายการ (Shows) -->
         <section id="shows" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
@@ -676,93 +369,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            function createShowscard(row) {
-                const [type, artist, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
-                return `
-                <div data-category="${type.toLowerCase()}" class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
-                    <a href="${link}" target="_blank" class="block">
-                        <div class="relative aspect-video">
-                            <img src="${thumbnail}" alt="thumbnail" class="w-full h-full object-cover">
-                            <span class="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-1.5 py-0.5 rounded">
-                                ${duration}
-                            </span>
-                        </div>
-                        <div class="flex p-2">
-                            <img src="${imgchannel}" alt="channel" class="w-8 h-8 rounded-full mr-2">
-                            <div class="flex-1">
-                                <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
-                                    ${title}
-                                </h3>
-                                <p class="text-xs text-gray-600 mt-1">${channel} • ${date}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                `;
-            }
-
-            function loadShowsData(range) {
-                const container = document.getElementById("media-grid");
-                container.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const rows = data.values || [];
-                        if (rows.length === 0) {
-                            container.innerHTML = "<p>no data</p>";
-                            return;
-                        }
-
-                        container.innerHTML = rows.map(createShowscard).join("");
-
-                        // ✅ หลังจากโหลดข้อมูลเสร็จแล้ว ค่อย initialize tab filter
-                        initTabs();
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        container.innerHTML = "<p>error fetch data</p>";
-                    });
-            }
-
-            function initTabs() {
-                const tabs = document.querySelectorAll('.tab-button');
-                const mediaCards = document.querySelectorAll('.media-card');
-
-                function filterMedia(category) {
-                    const showAll = category === 'all';
-                    mediaCards.forEach(card => {
-                        const cardCategory = card.getAttribute('data-category');
-                        card.style.display = (showAll || cardCategory === category) ? 'block' : 'none';
-                    });
-                }
-
-                function setActiveTab(clickedTab) {
-                    tabs.forEach(tab => {
-                        tab.classList.add('text-gray-500', 'border-transparent');
-                        tab.classList.remove('text-blue-600', 'border-blue-500');
-                    });
-                    clickedTab.classList.remove('text-gray-500', 'border-transparent');
-                    clickedTab.classList.add('text-blue-600', 'border-blue-500');
-                }
-
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        const category = this.getAttribute('data-category');
-                        filterMedia(category);
-                        setActiveTab(this);
-                    });
-                });
-
-                // Default: show all on load
-                filterMedia('online');
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                loadShowsData('shows!A2:Z');
-            });
-        </script>
 
         <!-- Brand Presenter (สินค้า/แบรนด์) -->
         <section id="brand-presenter" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
@@ -773,46 +379,6 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center items-stretch" id="presenterGrid"></div>
             </div>
         </section>
-        <script>
-            function createPresenterCard(row) {
-                const [artist, date, brand, link, dmd, img] = row;
-
-                return `
-                    <div class="w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
-                        <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('${dmd}')">
-                            <img src="${img}" alt="${brand}" class="w-full h-full object-cover object-center transition transform hover:scale-105">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800">${brand}</h3>
-                        <p class="text-sm text-gray-500">Start: ${date}</p>
-                    </div>
-                `;
-            }
-            function loadPresenterData(range) {
-                const container = document.getElementById("presenterGrid");
-                container.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-                
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (rows.length === 0) {
-                        container.innerHTML = "<p>no data</p>";
-                        return;
-                    }
-
-                    container.innerHTML = rows.map(createPresenterCard).join("");
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.innerHTML = "<p>error fetch data</p>";
-                });
-            }
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                loadPresenterData('presenter!A2:Z');
-            });
-        </script>
 
         <!-- รางวัลที่ได้รับ (Awards) -->
         <section id="awards" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
@@ -823,57 +389,6 @@
                 <div class="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4" id="awardsGrid"></div>
             </div>
         </section>
-        <script>
-            function createAwardsCard(row) {
-                const [artist, date, award, category, award2, result, link, note, img, icon, resultth] = row;
-                return `
-                    <div class="flex flex-col md:flex-row items-start bg-accent-light p-5 rounded-xl shadow-lg card-hover">
-                        <div class="flex items-start w-full">
-                            <i data-lucide="${icon}" class="w-6 h-6 text-primary-blue mr-4 mt-1 flex-shrink-0"></i>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-gray-800" onclick="openLink('${link}')">${category}</h3>
-                                <p class="${result.toLowerCase()}">${result}</p>
-                                <p class="text-gray-700">${award}</p>
-                                <p class="text-sm text-gray-500 mt-1">${award2}</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 md:mt-0 md:ml-4 flex-shrink-0 w-full md:w-24 md:h-24 overflow-hidden rounded-md border">
-                            <img src="${img}" alt="poster" class="w-full h-full object-cover" onclick="openPopup(['${img}'])">
-                        </div>
-                    </div>
-                `;
-            }
-
-            // Function to load awards data from an API
-            function loadAwardsData(range) {
-                const container = document.getElementById("awardsGrid");
-                container.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
-
-                fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-
-                    if (rows.length === 0) {
-                        container.innerHTML = "<p>ไม่มีข้อมูล</p>";
-                        return;
-                    }
-
-                    container.innerHTML = rows.map(createAwardsCard).join("");
-                    lucide.createIcons();
-
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.innerHTML = "<p>เกิดข้อผิดพลาดในการดึงข้อมูล</p>";
-                });
-            }
-
-            // Initial call to load data when the page loads
-            document.addEventListener('DOMContentLoaded', () => {
-                loadAwardsData('awards!A2:Z');
-            });
-        </script>
 
         <!-- ตารางงาน (Schedule) - ใช้ Google Sheets Data -->
         <section id="schedule" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light">
@@ -937,329 +452,6 @@
                 </div>
             </div>
         </div>
-        <script>
-            let currentMonth = new Date();
-            let allScheduleData = {};
-
-            const getDayColorClass = (dow) => {
-                switch (dow) {
-                    case 'Mon': return 'text-yellow-500';
-                    case 'Tue': return 'text-pink-500';
-                    case 'Wed': return 'text-green-500';
-                    case 'Thu': return 'text-orange-500';
-                    case 'Fri': return 'text-blue-500';
-                    case 'Sat': return 'text-purple-500';
-                    case 'Sun': return 'text-red-500';
-                    default: return 'text-gray-800';
-                }
-            };
-
-            const getBorderColorClass = (dow) => {
-                switch (dow) {
-                    case 'Mon': return 'border-yellow-500';
-                    case 'Tue': return 'border-pink-500';
-                    case 'Wed': return 'border-green-500';
-                    case 'Thu': return 'border-orange-500';
-                    case 'Fri': return 'border-blue-500';
-                    case 'Sat': return 'border-purple-500';
-                    case 'Sun': return 'border-red-500';
-                    default: return 'border-primary-blue';
-                }
-            };
-
-            // Utility to format Date object to key (YYYY-MM-DD)
-            const formatDateKey = (date) => {
-                const y = date.getFullYear();
-                const m = String(date.getMonth() + 1).padStart(2, '0');
-                const d = String(date.getDate()).padStart(2, '0');
-                return `${y}-${m}-${d}`;
-            };
-            
-            // Function to parse the date string "DD Mon YYYY" (e.g., "27 Apr 2024") into YYYY-MM-DD
-            function parseDateToKey(dateString) {
-                if (!dateString) return null;
-                
-                // Map of standard English month abbreviations to number
-                const monthMap = {
-                    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
-                    'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12',
-                };
-
-                const parts = dateString.trim().split(/\s+/); // Split by space
-                
-                if (parts.length < 3) return null;
-
-                const day = parts[0].padStart(2, '0');
-                const monthAbbr = parts[1];
-                const year = parts[2];
-                
-                const month = monthMap[monthAbbr];
-
-                if (month) {
-                    return `${year}-${month}-${day}`;
-                }
-                
-                // Fallback for other formats (less reliable, but safer than nothing)
-                try {
-                    const dateObj = new Date(dateString);
-                    if (!isNaN(dateObj) && dateObj.getFullYear() > 1900) {
-                        return formatDateKey(dateObj);
-                    }
-                } catch (e) {
-                    console.error("Date fallback parsing failed:", e);
-                }
-                
-                return null;
-            }
-
-
-            // 1. Fetch ALL relevant data (assuming data is in '2025!A2:Z' for demonstration)
-            async function fetchAllScheduleData() {
-                const grid = document.getElementById('calendarGrid');
-                grid.innerHTML = '<div class="loading-spinner col-span-7"></div>'; // Show spinner over the whole grid
-                
-                const range = 'Sheet1!A2:Z'; 
-
-                try {
-                    const url = `/api/spreadsheets?range=${encodeURIComponent(range)}`;
-                    const res = await fetch(url);
-                    const data = await res.json();
-                    const rows = data.values || [];
-                    
-                    allScheduleData = {};
-
-                    rows.forEach(row => {
-                        // Columns: 0(date), 1(time), 2(artist), 3(title), ..., 14(dateformat), 15(month), 16(day), 17(dow)
-                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat, month, day, dow] = row;
-                        
-                        // Use column 0 ('date') and the new parser to generate the key
-                        const key = parseDateToKey(date);
-                        
-                        if (key) { // Use the parsed key (YYYY-MM-DD)
-                            if (!allScheduleData[key]) {
-                                allScheduleData[key] = [];
-                            }
-                            allScheduleData[key].push({
-                                date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat, month, day, dow
-                            });
-                        }
-                    });
-
-                    renderCalendar(); // Render the calendar once data is loaded
-
-                } catch (error) {
-                    console.error("Error fetching schedule data:", error);
-                    // Translated error message
-                    grid.innerHTML = '<div class="col-span-7 text-center text-red-500 p-4">Could not load schedule data. Please check API Key and Sheet ID.</div>';
-                }
-            }
-
-            // 2. Render the calendar grid for the currentMonth
-            function renderCalendar() {
-                const year = currentMonth.getFullYear();
-                const month = currentMonth.getMonth();
-                
-                // Translated month names
-                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                
-                document.getElementById('currentMonthDisplay').textContent = `${monthNames[month]} ${year}`;
-
-                const grid = document.getElementById('calendarGrid');
-                grid.innerHTML = ''; // Clear previous grid
-
-                // 1. Calculate start/end days
-                const firstDayOfMonth = new Date(year, month, 1);
-                const lastDayOfMonth = new Date(year, month + 1, 0);
-                const daysInMonth = lastDayOfMonth.getDate();
-                
-                // Adjust startDayIndex: 0=Sunday, 1=Monday... 
-                let startDayIndex = firstDayOfMonth.getDay(); 
-
-                // 2. Fill in leading blanks (previous month)
-                for (let i = 0; i < startDayIndex; i++) {
-                    grid.innerHTML += `<div class="day-cell p-2 border rounded-md text-right bg-gray-100/50"></div>`;
-                }
-
-                // 3. Fill in days of the current month
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const currentDate = new Date(year, month, day);
-                    const dateKey = formatDateKey(currentDate);
-                    const events = allScheduleData[dateKey] || [];
-                    
-                    // Get the day of the week for styling (0=Sun, 6=Sat)
-                    const dowIndex = currentDate.getDay();
-                    const dowNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                    const dow = dowNames[dowIndex];
-                    const dayColor = getDayColorClass(dow);
-
-                    // Check if it's today
-                    const today = new Date();
-                    const isToday = today.toDateString() === currentDate.toDateString();
-                    const todayClass = isToday ? 'bg-blue-100 border-2 border-blue-500' : 'bg-white border-gray-200';
-
-                    let eventContent = events.map(event => {
-                        // Use a simple colored dot and title for the calendar cell
-                        const eventColor = getBorderColorClass(event.dow).replace('border-', 'bg-');
-
-                        return `
-                            <!-- Use w-full and min-w-0 truncate to ensure text is clipped correctly within the cell -->
-                            <div class="mt-1 text-xs flex items-center w-full cursor-pointer group" onclick="showEventDetails('${dateKey}')">
-                                <span class="event-dot ${eventColor} shadow-sm flex-shrink-0"></span>
-                                <span class="event-title text-gray-700 font-medium truncate min-w-0 leading-tight">${event.title}</span>
-                            </div>
-                        `;
-                    }).join('');
-
-                    grid.innerHTML += `
-                        <div id="day-${dateKey}" class="day-cell p-2 border rounded-md text-right current-month-day ${todayClass} cursor-pointer hover:bg-gray-50 transition duration-150" 
-                            onclick="showEventDetails('${dateKey}')">
-                            <div class="day-number text-lg font-bold ${dayColor} mb-1">${day}</div>
-                            <!-- Add overflow-hidden here to enforce text clipping at cell boundaries -->
-                            <div class="event-list text-left space-y-0.5 overflow-hidden">
-                                ${eventContent}
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // 4. Fill in trailing blanks (next month)
-                const totalCells = startDayIndex + daysInMonth;
-                const remainingCells = 42 - totalCells; // Max 6 rows = 42 cells
-                for (let i = 0; i < remainingCells && totalCells + i < 42; i++) {
-                    grid.innerHTML += `<div class="day-cell p-2 border rounded-md text-right bg-gray-100/50"></div>`;
-                }
-            }
-
-            // 3. Navigation functions
-            function changeMonth(delta) {
-                currentMonth.setMonth(currentMonth.getMonth() + delta);
-                renderCalendar();
-            }
-
-            function goToCurrentMonth() {
-                currentMonth = new Date();
-                currentMonth.setDate(1); // Set to 1st of the current month
-                renderCalendar();
-            }
-
-            // 4. Modal/Popup function to show event details when clicking a day
-            function showEventDetails(dateKey) {
-                const events = allScheduleData[dateKey] || [];
-                const modalBody = document.getElementById('eventModalBody');
-                const modalDate = document.getElementById('eventModalDate');
-                const modal = document.getElementById('eventModal');
-
-                if (events.length === 0) {
-                    modalBody.innerHTML = '<p class="text-gray-500">No schedule found for this date.</p>'; // Translated
-                    modalDate.textContent = dateKey; 
-                    modal.classList.remove('hidden');
-                    return;
-                }
-                
-                // Display date as YYYY-MM-DD
-                modalDate.textContent = dateKey; 
-                
-                modalBody.innerHTML = events.map(event => {
-                    const getDayColor = getDayColorClass(event.dow);
-                    const borderColor = getBorderColorClass(event.dow);
-                    
-                    // Artist parsing from original function (simplified)
-                    const parseArtists = (name) => {
-                        if (name === "PTTP") return ["TeeTee", "Por"];
-                        return [name];
-                    };
-                    const artistImages = {
-                        "Por": "https://pbs.twimg.com/media/GuB0uEoWMAAHVIT?format=jpg&name=large",
-                        "TeeTee": "https://pbs.twimg.com/media/Gt93Ot5WYAAMRKO?format=jpg&name=4096x4096",
-                        "DEXX": "https://pbs.twimg.com/media/G2veDg5bcAAwDpN?format=jpg&name=large"
-                    };
-                    const artistHTML = parseArtists(event.artist).map(a => `
-                        <div class="flex items-center bg-gray-100 rounded-full px-3 py-1 shadow-sm">
-                            <img src="${artistImages[a] || 'https://placehold.co/64x64'}" 
-                                alt="${a}" 
-                                class="w-6 h-6 rounded-full object-cover mr-2">
-                            <span class="text-gray-800 font-semibold text-sm">${a}</span>
-                        </div>
-                    `).join('');
-
-                    const noteMap = {
-                        "งานปิดงดติดตาม": "Follow is not allowed",
-                        "มีรวมพลหลังเลิกงาน": "Fans gathering after the event",
-                        "สามารถไปให้กำลังใจรอบ ๆ งานได้": "All the fans can join in the surrounding area",
-                        "แฟนคลับสามารถไปร่วมกิจกรรมได้": "All the fans can joint the event",
-                        "เฉพาะผู้มีสิทธิ์เข้าร่วมงาน": "Private Event",
-                        "รับของขวัญ": "Can receive gifts",
-                    };
-                    let noteText = "";
-                    if (event.note) {
-                        const notes = event.note
-                            .split("/")                  // แยกด้วย comma
-                            .map(n => n.trim())          // ตัดช่องว่าง
-                            .filter(n => n.length > 0)   // ตัดค่าว่าง
-                            .map(n => noteMap[n] || n);  // แปลแต่ละอัน
-                        noteText = notes.join("/ ");      // รวมกลับ
-                    }
-
-                    return `
-                        <div class="p-4 mb-4 border-l-4 rounded-lg shadow-md ${borderColor} bg-white">
-                            <a href="${event.info}" target="_blank" rel="noopener noreferrer"><h3 class="text-xl font-bold text-gray-900">${event.title}</h3></a>
-                            ${event.tag ? `
-                                <div class="mt-1 mb-2 text-xs flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
-                                    ${event.keyword ? `
-                                        <span class="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-medium w-fit">
-                                            <a href="${event.keylink}" target="_blank" rel="noopener noreferrer">${event.keyword}</a>
-                                        </span>` : ''}
-                                    ${event.tag ? `
-                                        <span class="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-medium w-fit">
-                                            <a href="${event.taglink}" target="_blank" rel="noopener noreferrer">${event.tag}</a>
-                                        </span>` : ''}
-                                </div>
-                            ` : ''}
-                            <div class="mt-2 text-xs flex flex-wrap gap-2">
-                                ${artistHTML}
-                            </div>
-                            <p class="mt-2 text-sm text-gray-700"><i class="fa-solid fa-clock w-4 mr-1 ${getDayColor}"></i> ${event.time || '-'}</p>
-                            <p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-location-dot w-4 mr-1 ${getDayColor}"></i> ${event.location || '-'}</p>
-                            ${noteText ? `<p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-bullhorn w-4 mr-1 ${getDayColor}"></i> ${noteText}</p>` : ''}
-                            
-                            ${event.link ? `
-                                <div class="mt-3">
-                                    <span class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-xs inline-flex items-center transition duration-150">
-                                        <i class="fa-brands fa-youtube mr-1"></i>
-                                        <a href="${event.link}" target="_blank" rel="noopener noreferrer">Watch Video</a> <!-- Translated -->
-                                        <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
-                                    </span>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
-                }).join('');
-
-                modal.classList.remove('hidden');
-            }
-
-            function closeModal() {
-                document.getElementById('eventModal').classList.add('hidden');
-            }
-
-            // --- Initialization ---
-            document.addEventListener('DOMContentLoaded', () => {
-                currentMonth.setDate(1); // Start viewing from the 1st of the current month
-                fetchAllScheduleData();
-                
-                // Re-create icons (for the prev/next buttons)
-                lucide.createIcons();
-                
-                // Set listener for modal close
-                document.getElementById('eventModal').addEventListener('click', (e) => {
-                    if (e.target.id === 'eventModal') {
-                        closeModal();
-                    }
-                });
-                document.getElementById('closeModalButton').addEventListener('click', closeModal);
-            });
-
-        </script>
 
         <div id="popup" class="popup" onclick="closePopup()">
 			<div class="popup-content" onclick="event.stopPropagation()">
@@ -1275,12 +467,560 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-primary-blue text-white p-4 text-center">
         <p class="text-sm">&copy; Made with Love | By <a href="https://x.com/yorkorrrr" target="_blank">yorkor</a><br/></p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- ================== Consolidated Script: fetch once -> render ================== -->
+    <script>
+    // ---------- Utility helpers ----------
+    const byId = id => document.getElementById(id);
+    const safe = v => v === undefined || v === null ? '' : v;
 
+    function mapToObjects(rows, keys) {
+        if (!Array.isArray(rows)) return [];
+        return rows.map(r => {
+            const obj = {};
+            keys.forEach((k, i) => obj[k] = r[i] || '');
+            return obj;
+        }).filter(o => Object.values(o).some(v => v !== ''));
+    }
+
+    // ---------- RENDERERS (use your original templates, converted to functions) ----------
+    // Series / Filmography
+    function renderSeries(rows) {
+        const list = byId('filmography-list');
+        if (!list) return;
+        const keys = ['title','role','role2','date','platform','episodes','link','link2','poster','image2','image3','image4'];
+        const films = mapToObjects(rows, keys);
+
+        if (films.length === 0) {
+            list.innerHTML = '<p class="text-gray-600 text-center col-span-full p-8 bg-white rounded-xl shadow-lg">No joint filmography found.</p>';
+            return;
+        }
+
+        list.innerHTML = films.map((film, index) => `
+            <div class="bg-card-bg rounded-xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden cursor-pointer" onclick="showDetailsModalFromData(${index})" data-index="${index}">
+                <div class="relative">
+                    <img src="${film.poster || 'https://placehold.co/600x400/cccccc/333333?text=Poster+N/A'}"
+                         alt="โปสเตอร์ ${film.title}" class="w-full aspect-[4/5] object-cover"
+                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Poster+N/A'">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/80 to-transparent p-4">
+                        <h3 class="text-2xl font-bold text-white leading-tight">${film.title}</h3>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <span class="text-lg font-semibold text-gray-800">Role: ${film.role2 || '-'}</span>
+                </div>
+            </div>
+        `).join('');
+
+        // store films for modal usage
+        window.__seriesData = films;
+    }
+
+    // Modal helpers for Series
+    let currentImageIndex = 0;
+    let currentFilmImages = [];
+    function showDetailsModalFromData(index) {
+        const films = window.__seriesData || [];
+        const film = films[index];
+        const modal = byId('details-modal');
+        if (!film || !modal) return;
+
+        currentFilmImages = [];
+        if (film.poster) currentFilmImages.push(film.poster);
+        if (film.image2) currentFilmImages.push(film.image2);
+        if (film.image3) currentFilmImages.push(film.image3);
+        if (film.image4) currentFilmImages.push(film.image4);
+        currentImageIndex = 0;
+
+        byId('modal-title').textContent = film.title || '';
+        byId('modal-role').innerHTML = `<strong class="text-gray-900">Role:</strong> ${film.role || '-'}`;
+        byId('modal-date').innerHTML = `<strong class="text-gray-900">Air Date:</strong> ${film.date || '-'}`;
+        byId('modal-platform').innerHTML = `<strong class="text-gray-900">Platform:</strong> ${film.platform || '-'}`;
+        byId('modal-episodes').innerHTML = `<strong class="text-gray-900">Episodes:</strong> ${film.episodes || '-'}`;
+        byId('modal-link').href = film.link || '#';
+
+        // update carousel UI
+        updateCarouselUI();
+
+        modal.classList.remove('hidden','opacity-0');
+        modal.classList.add('opacity-100');
+    }
+    function updateCarouselUI() {
+        const imgElement = byId('modal-poster-slider');
+        const counterElement = byId('image-counter');
+        const navLeft = byId('nav-left');
+        const navRight = byId('nav-right');
+        if (!imgElement || !counterElement) return;
+        if (!currentFilmImages || currentFilmImages.length === 0) {
+            imgElement.src = 'https://placehold.co/300x400/cccccc/333333?text=POSTER+N/A';
+            counterElement.textContent = '';
+            navLeft && navLeft.classList.add('hidden');
+            navRight && navRight.classList.add('hidden');
+            return;
+        }
+        imgElement.src = currentFilmImages[currentImageIndex];
+        imgElement.onerror = function(){ this.src='https://placehold.co/300x400/cccccc/333333?text=IMAGE+N/A'; };
+        counterElement.textContent = `${currentImageIndex + 1} / ${currentFilmImages.length}`;
+        if (navLeft && navRight) {
+            navLeft.disabled = (currentImageIndex === 0);
+            navRight.disabled = (currentImageIndex === currentFilmImages.length - 1);
+            navLeft.classList.toggle('hidden', currentFilmImages.length <= 1);
+            navRight.classList.toggle('hidden', currentFilmImages.length <= 1);
+            counterElement.classList.toggle('hidden', currentFilmImages.length <= 1);
+        }
+    }
+    function navigateImage(direction) {
+        const newIndex = currentImageIndex + direction;
+        if (newIndex >= 0 && newIndex < currentFilmImages.length) {
+            currentImageIndex = newIndex;
+            updateCarouselUI();
+        }
+    }
+    function closeDetailsModal() {
+        const modal = byId('details-modal');
+        if (!modal) return;
+        modal.classList.add('opacity-0');
+        setTimeout(()=> modal.classList.add('hidden'), 300);
+    }
+    window.navigateImage = (d) => navigateImage(d);
+    window.closeDetailsModal = closeDetailsModal;
+
+    // Discography
+    function renderDiscography(rows) {
+        const container = byId('discographyGrid');
+        if (!container) return;
+        const keys = ['artist2','date','song','artist','link','img','formatdate'];
+        const items = mapToObjects(rows, keys);
+        if (items.length === 0) {
+            container.innerHTML = '<p class="text-center col-span-full p-8 text-gray-600">no data</p>';
+            return;
+        }
+        container.innerHTML = items.map(it => `
+            <div class="flex items-center bg-accent-light p-4 rounded-xl shadow-md hover:bg-secondary-blue/30 transition">
+                <img src="${safe(it.img)}" alt="cover" class="w-20 h-20 object-cover rounded-lg mr-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-800">${safe(it.song)}</h3>
+                    <p class="text-sm text-gray-600">${safe(it.artist)}</p>
+                </div>
+                <a href="${safe(it.link)}" target="_blank" rel="noopener noreferrer" class="text-primary-blue hover:text-blue-700">
+                    <i class="fa-solid fa-circle-play fa-2x"></i>
+                </a>
+            </div>
+        `).join('');
+    }
+
+    // Magazine
+    function renderMagazine(rows) {
+        const container = byId('magazineGrid');
+        if (!container) return;
+        const keys = ['artist','date','name','pic','link','note'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div class="text-center" onclick="openLink('${safe(it.link)}')">
+                <div class="w-full aspect-[3/4] overflow-hidden rounded-lg shadow-xl mb-3 border-2 border-primary-blue">
+                    <img src="${safe(it.pic)}" alt="${safe(it.name)}" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                </div>
+                <p class="text-sm font-medium text-gray-700">${safe(it.name)}</p>
+            </div>
+        `).join('');
+    }
+
+    // Shows (tabs)
+    function renderShows(rows) {
+        const container = byId('media-grid');
+        if (!container) return;
+        const keys = ['type','artist','date','title','link','id','thumbnail','channel','imgchannel','duration'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div data-category="${safe(it.type).toLowerCase()}" class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
+                <a href="${safe(it.link)}" target="_blank" class="block">
+                    <div class="relative aspect-video">
+                        <img src="${safe(it.thumbnail)}" alt="thumbnail" class="w-full h-full object-cover">
+                        <span class="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-1.5 py-0.5 rounded">
+                            ${safe(it.duration)}
+                        </span>
+                    </div>
+                    <div class="flex p-2">
+                        <img src="${safe(it.imgchannel)}" alt="channel" class="w-8 h-8 rounded-full mr-2">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
+                                ${safe(it.title)}
+                            </h3>
+                            <p class="text-xs text-gray-600 mt-1">${safe(it.channel)} • ${safe(it.date)}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        `).join('');
+
+        initTabs(); // re-init tabs filter after render
+    }
+    function initTabs() {
+        const tabs = document.querySelectorAll('.tab-button');
+        const mediaCards = document.querySelectorAll('.media-card');
+
+        function filterMedia(category) {
+            const showAll = category === 'all';
+            mediaCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category') || '';
+                card.style.display = (showAll || cardCategory === category) ? 'block' : 'none';
+            });
+        }
+
+        function setActiveTab(clickedTab) {
+            tabs.forEach(tab => {
+                tab.classList.add('text-gray-500','border-transparent');
+                tab.classList.remove('text-blue-600','border-blue-500');
+            });
+            clickedTab.classList.remove('text-gray-500','border-transparent');
+            clickedTab.classList.add('text-blue-600','border-blue-500');
+        }
+
+        tabs.forEach(tab => tab.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            filterMedia(category);
+            setActiveTab(this);
+        }));
+
+        // default selection (your previous default was 'online')
+        filterMedia('online');
+    }
+
+    // Presenter
+    function renderPresenter(rows) {
+        const container = byId('presenterGrid');
+        if (!container) return;
+        const keys = ['artist','date','brand','link','dmd','img'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div class="w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
+                <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('${safe(it.dmd)}')">
+                    <img src="${safe(it.img)}" alt="${safe(it.brand)}" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">${safe(it.brand)}</h3>
+                <p class="text-sm text-gray-500">Start: ${safe(it.date)}</p>
+            </div>
+        `).join('');
+    }
+
+    // Awards
+    function renderAwards(rows) {
+        const container = byId('awardsGrid');
+        if (!container) return;
+        const keys = ['artist','date','award','category','award2','result','link','note','img','icon','resultth'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div class="flex flex-col md:flex-row items-start bg-accent-light p-5 rounded-xl shadow-lg card-hover">
+                <div class="flex items-start w-full">
+                    <i data-lucide="${safe(it.icon)}" class="w-6 h-6 text-primary-blue mr-4 mt-1 flex-shrink-0"></i>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-800" onclick="openLink('${safe(it.link)}')">${safe(it.category)}</h3>
+                        <p class="${safe(it.result).toLowerCase()}">${safe(it.result)}</p>
+                        <p class="text-gray-700">${safe(it.award)}</p>
+                        <p class="text-sm text-gray-500 mt-1">${safe(it.award2)}</p>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 md:ml-4 flex-shrink-0 w-full md:w-24 md:h-24 overflow-hidden rounded-md border">
+                    <img src="${safe(it.img)}" alt="poster" class="w-full h-full object-cover" onclick="openPopup(['${safe(it.img)}'])">
+                </div>
+            </div>
+        `).join('');
+        lucide.createIcons();
+    }
+
+    // Schedule (calendar)
+    let currentMonth = new Date();
+    let allScheduleData = {}; // keyed by YYYY-MM-DD
+
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const dowNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    const getDayColorClass = (dow) => {
+        switch (dow) {
+            case 'Mon': return 'text-yellow-500';
+            case 'Tue': return 'text-pink-500';
+            case 'Wed': return 'text-green-500';
+            case 'Thu': return 'text-orange-500';
+            case 'Fri': return 'text-blue-500';
+            case 'Sat': return 'text-purple-500';
+            case 'Sun': return 'text-red-500';
+            default: return 'text-gray-800';
+        }
+    };
+    const getBorderColorClass = (dow) => {
+        switch (dow) {
+            case 'Mon': return 'border-yellow-500';
+            case 'Tue': return 'border-pink-500';
+            case 'Wed': return 'border-green-500';
+            case 'Thu': return 'border-orange-500';
+            case 'Fri': return 'border-blue-500';
+            case 'Sat': return 'border-purple-500';
+            case 'Sun': return 'border-red-500';
+            default: return 'border-primary-blue';
+        }
+    };
+
+    function formatDateKey(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth()+1).padStart(2,'0');
+        const d = String(date.getDate()).padStart(2,'0');
+        return `${y}-${m}-${d}`;
+    }
+    function parseDateToKey(dateString) {
+        if (!dateString) return null;
+        const monthMap = { 'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12' };
+        const parts = dateString.trim().split(/\s+/);
+        if (parts.length < 3) {
+            try {
+                const dt = new Date(dateString);
+                if (!isNaN(dt) && dt.getFullYear() > 1900) return formatDateKey(dt);
+            } catch(e){}
+            return null;
+        }
+        const day = parts[0].padStart(2,'0');
+        const monthAbbr = parts[1];
+        const year = parts[2];
+        const month = monthMap[monthAbbr];
+        return month ? `${year}-${month}-${day}` : ( (() => { try{ const dt = new Date(dateString); return isNaN(dt)?null:formatDateKey(dt);}catch(e){return null;} })() );
+    }
+
+    function renderSchedule(rows) {
+        // rows are raw arrays; map to objects with known columns as in original sheet
+        const keys = ['date','time','artist','title','location','info','img','link','outfit','keyword','tag','note','keylink','taglink','dateformat','month','day','dow'];
+        const items = mapToObjects(rows, keys);
+        // build map by date
+        allScheduleData = {};
+        items.forEach(it => {
+            const key = parseDateToKey(it.date);
+            if (!key) return;
+            if (!allScheduleData[key]) allScheduleData[key] = [];
+            allScheduleData[key].push(it);
+        });
+        // render calendar
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+        byId('currentMonthDisplay') && (byId('currentMonthDisplay').textContent = `${monthNames[month]} ${year}`);
+        const grid = byId('calendarGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month+1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startIndex = firstDay.getDay();
+
+        for (let i=0;i<startIndex;i++) grid.innerHTML += `<div class="day-cell p-2 border rounded-md text-right bg-gray-100/50"></div>`;
+
+        for (let day=1; day<=daysInMonth; day++) {
+            const currentDate = new Date(year, month, day);
+            const dateKey = formatDateKey(currentDate);
+            const events = allScheduleData[dateKey] || [];
+            const dow = dowNames[currentDate.getDay()];
+            const dayColor = getDayColorClass(dow);
+            const today = (new Date()).toDateString() === currentDate.toDateString();
+            const todayClass = today ? 'bg-blue-100 border-2 border-blue-500' : 'bg-white border-gray-200';
+
+            const eventContent = events.map(e => {
+                const eventColor = getBorderColorClass(e.dow || dow).replace('border-','bg-') || 'bg-blue-500';
+                return `<div class="mt-1 text-xs flex items-center w-full cursor-pointer group" onclick="showEventDetails('${dateKey}')">
+                            <span class="event-dot ${eventColor} shadow-sm flex-shrink-0"></span>
+                            <span class="event-title text-gray-700 font-medium truncate min-w-0 leading-tight">${safe(e.title)}</span>
+                        </div>`;
+            }).join('');
+
+            grid.innerHTML += `
+                <div id="day-${dateKey}" class="day-cell p-2 border rounded-md text-right current-month-day ${todayClass} cursor-pointer hover:bg-gray-50 transition duration-150"
+                     onclick="showEventDetails('${dateKey}')">
+                    <div class="day-number text-lg font-bold ${dayColor} mb-1">${day}</div>
+                    <div class="event-list text-left space-y-0.5 overflow-hidden">${eventContent}</div>
+                </div>
+            `;
+        }
+
+        const totalCells = startIndex + daysInMonth;
+        const remaining = 42 - totalCells;
+        for (let i=0;i<remaining && totalCells+i < 42; i++) grid.innerHTML += `<div class="day-cell p-2 border rounded-md text-right bg-gray-100/50"></div>`;
+    }
+
+    function changeMonth(delta) {
+        currentMonth.setMonth(currentMonth.getMonth() + delta);
+        renderCalendar();
+    }
+    function goToCurrentMonth() {
+        currentMonth = new Date();
+        currentMonth.setDate(1);
+        renderCalendar();
+    }
+
+    // Event modal details
+    function showEventDetails(dateKey) {
+        const events = allScheduleData[dateKey] || [];
+        const modalBody = byId('eventModalBody');
+        const modalDate = byId('eventModalDate');
+        const modal = byId('eventModal');
+        if (!modal || !modalBody) return;
+        modalDate && (modalDate.textContent = dateKey);
+        if (events.length === 0) {
+            modalBody.innerHTML = '<p class="text-gray-500">No schedule found for this date.</p>';
+            modal.classList.remove('hidden');
+            return;
+        }
+        modalBody.innerHTML = events.map(event => {
+            const getDayColor = getDayColorClass(event.dow || 'Fri');
+            const borderColor = getBorderColorClass(event.dow || 'Fri');
+            const artistImages = { "Por":"https://pbs.twimg.com/media/GuB0uEoWMAAHVIT?format=jpg&name=large", "TeeTee":"https://pbs.twimg.com/media/Gt93Ot5WYAAMRKO?format=jpg&name=4096x4096", "DEXX":"https://pbs.twimg.com/media/G2veDg5bcAAwDpN?format=jpg&name=large" };
+            const parseArtists = (name) => { if (name === "PTTP") return ["TeeTee","Por"]; return [name]; };
+            const artistHTML = parseArtists(event.artist).map(a => `
+                <div class="flex items-center bg-gray-100 rounded-full px-3 py-1 shadow-sm">
+                    <img src="${artistImages[a] || 'https://placehold.co/64x64'}" alt="${a}" class="w-6 h-6 rounded-full object-cover mr-2">
+                    <span class="text-gray-800 font-semibold text-sm">${a}</span>
+                </div>`).join('');
+
+            const noteMap = {
+                "งานปิดงดติดตาม": "Follow is not allowed",
+                "มีรวมพลหลังเลิกงาน": "Fans gathering after the event",
+                "สามารถไปให้กำลังใจรอบ ๆ งานได้": "All the fans can join in the surrounding area",
+                "แฟนคลับสามารถไปร่วมกิจกรรมได้": "All the fans can joint the event",
+                "เฉพาะผู้มีสิทธิ์เข้าร่วมงาน": "Private Event",
+                "รับของขวัญ": "Can receive gifts"
+            };
+            let noteText = "";
+            if (event.note) {
+                const notes = event.note.split("/").map(n=>n.trim()).filter(n=>n.length>0).map(n => noteMap[n] || n);
+                noteText = notes.join("/ ");
+            }
+
+            return `<div class="p-4 mb-4 border-l-4 rounded-lg shadow-md ${borderColor} bg-white">
+                        <a href="${safe(event.info)}" target="_blank" rel="noopener noreferrer"><h3 class="text-xl font-bold text-gray-900">${safe(event.title)}</h3></a>
+                        ${event.tag ? `<div class="mt-1 mb-2 text-xs flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
+                            ${event.keyword ? `<span class="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-medium w-fit"><a href="${safe(event.keylink)}" target="_blank">${safe(event.keyword)}</a></span>` : ''}
+                            ${event.tag ? `<span class="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-medium w-fit"><a href="${safe(event.taglink)}" target="_blank">${safe(event.tag)}</a></span>` : ''}
+                        </div>` : ''}
+                        <div class="mt-2 text-xs flex flex-wrap gap-2">${artistHTML}</div>
+                        <p class="mt-2 text-sm text-gray-700"><i class="fa-solid fa-clock w-4 mr-1 ${getDayColor}"></i> ${safe(event.time) || '-'}</p>
+                        <p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-location-dot w-4 mr-1 ${getDayColor}"></i> ${safe(event.location) || '-'}</p>
+                        ${noteText ? `<p class="mt-1 text-sm text-gray-700"><i class="fa-solid fa-bullhorn w-4 mr-1 ${getDayColor}"></i> ${noteText}</p>` : ''}
+                        ${event.link ? `<div class="mt-3"><span class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-xs inline-flex items-center transition duration-150"><i class="fa-brands fa-youtube mr-1"></i><a href="${safe(event.link)}" target="_blank" rel="noopener noreferrer">Watch Video</a><i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></span></div>` : ''}
+                    </div>`;
+        }).join('');
+        modal.classList.remove('hidden');
+    }
+    function closeModal() {
+        const modal = byId('eventModal');
+        modal && modal.classList.add('hidden');
+    }
+    window.showEventDetails = showEventDetails;
+    window.closeModal = closeModal;
+
+    // Popup image/video viewer
+    let popupIndex = 0;
+    let popupItems = [];
+    function openPopup(items, start=0) {
+        popupItems = items || [];
+        popupIndex = start || 0;
+        const popup = byId('popup');
+        if (!popup) return;
+        const img = byId('popup-img');
+        const video = byId('popup-video');
+        const source = byId('video-source');
+
+        const current = popupItems[popupIndex] || '';
+        if (current.match(/\.(mp4|webm|ogg)$/i)) {
+            img.style.display = 'none';
+            video.style.display = 'block';
+            source.src = current;
+            video.load();
+        } else {
+            video.style.display = 'none';
+            img.style.display = 'block';
+            img.src = current;
+        }
+        popup.style.display = 'flex';
+    }
+    function closePopup() {
+        const popup = byId('popup');
+        if (!popup) return;
+        const video = byId('popup-video');
+        if (video) { video.pause(); video.currentTime = 0; }
+        popup.style.display = 'none';
+    }
+    function prevMedia() {
+        if (!popupItems.length) return;
+        popupIndex = (popupIndex - 1 + popupItems.length) % popupItems.length;
+        openPopup(popupItems, popupIndex);
+    }
+    function nextMedia() {
+        if (!popupItems.length) return;
+        popupIndex = (popupIndex + 1) % popupItems.length;
+        openPopup(popupItems, popupIndex);
+    }
+    window.openPopup = openPopup;
+    window.closePopup = closePopup;
+    window.prevMedia = prevMedia;
+    window.nextMedia = nextMedia;
+
+    // Utility to open external links
+    function openLink(url) { if (!url) return; window.open(url, '_blank'); }
+    window.openLink = openLink;
+
+    // ---------- MAIN: fetch once and render ----------
+    async function loadAllData() {
+        try {
+            // show small loading indicators where appropriate
+            const filmContainer = byId('filmography-list');
+            if (filmContainer) filmContainer.innerHTML = '<p class="text-center col-span-full p-8 text-gray-600">Loading filmography data...</p>';
+            const disc = byId('discographyGrid'); if (disc) disc.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const mag = byId('magazineGrid'); if (mag) mag.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const shows = byId('media-grid'); if (shows) shows.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const prs = byId('presenterGrid'); if (prs) prs.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const aws = byId('awardsGrid'); if (aws) aws.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const cal = byId('calendarGrid'); if (cal) cal.innerHTML = `<div class="loading-spinner col-span-7"></div>`;
+
+            const res = await fetch('/api/all-data');
+            if (!res.ok) throw new Error('Failed to fetch /api/all-data');
+            const json = await res.json();
+
+            // call individual renderers
+            renderSeries(json.series || []);
+            renderDiscography(json.discography || []);
+            renderMagazine(json.magazine || []);
+            renderShows(json.shows || []);
+            renderPresenter(json.presenter || []);
+            renderAwards(json.awards || []);
+            renderSchedule(json.schedule || []);
+
+            // setup icons & misc
+            lucide.createIcons();
+            // ensure calendar listeners
+            document.addEventListener('click', (e) => {
+                const popup = byId('popup');
+                if (e.target.id === 'popup') closePopup();
+            });
+            const closeModalBtn = byId('closeModalButton');
+            closeModalBtn && closeModalBtn.addEventListener('click', closeModal);
+
+        } catch (err) {
+            console.error('loadAllData error', err);
+            // show friendly error
+            const all = document.querySelectorAll('[id$="Grid"], #filmography-list, #calendarGrid');
+            all && all.forEach(el => el && (el.innerHTML = '<p class="text-red-600 p-4">ไม่สามารถโหลดข้อมูลได้ โปรดตรวจสอบการตั้งค่า API</p>'));
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        currentMonth.setDate(1);
+        loadAllData();
+    });
+
+    </script>
+    <!-- ================== END consolidated script ================== -->
+
+    <!-- If you had additional external scripts, keep them after this point -->
 </body>
 </html>

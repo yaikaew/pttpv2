@@ -6,30 +6,54 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('public'));
 
-// API endpoint สำหรับ frontend
-app.get('/api/spreadsheets', async (req, res) => {
-    const range = req.query.range;
-    const sheetId = process.env.SHEET_ID;
-    const apiKey = process.env.API_KEY;
+// ---- Google Sheet Config ----
+const SHEET_ID = process.env.SHEET_ID;
+const API_KEY = process.env.API_KEY;
 
-    if (!range) {
-        return res.status(400).json({ error: 'Missing range' });
-    }
+// range map = ชื่อ tab → range ของแต่ละ sheet
+const sheetRanges = {
+    series: 'series!A2:L',
+    discography: 'discography!A2:G',
+    magazine: 'magazine!A2:F',
+    shows: 'shows!A2:K',
+    presenter: 'presenter!A2:F',
+    awards: 'awards!A2:K',
+    schedule: 'Sheet1!A2:P'
+};
 
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${apiKey}`;
+// ---- Helper: fetch a single sheet ----
+async function fetchSheet(range) {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.values || [];
+}
+
+// ---- MAIN API: fetch all sheets once ----
+app.get('/api/all-data', async (req, res) => {
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        res.json(data);
+        const entries = await Promise.all(
+            Object.entries(sheetRanges).map(async ([key, range]) => {
+                const data = await fetchSheet(range);
+                return [key, data];
+            })
+        );
+
+        // convert array of entries → object
+        const result = Object.fromEntries(entries);
+
+        res.json(result);
+
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch from Google Sheets' });
+        console.error("ERROR /api/all-data:", err);
+        res.status(500).json({ error: 'Failed to load all Google Sheets data' });
     }
 });
 
+// ---- Server start ----
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running → http://localhost:${PORT}`);
 });
