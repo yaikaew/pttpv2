@@ -529,6 +529,77 @@
             });
         </script>
 
+        <section id="performance" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
+                    Performances
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="performanceGrid">
+                </div>
+            </div>
+        </section>
+        <section id="cover" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
+                    Covers
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="coverGrid">
+                </div>
+            </div>
+        </section>
+        <script>
+            function createPerformanceCard(row) {
+                const [type, artist, date, song, artist2, link, pic, note, channel, imgchannel] = row;
+
+                return `
+                <div class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
+                    <a href="${link}" target="_blank" class="block">
+                        <div class="relative aspect-video">
+                            <img src="${pic}" alt="thumbnail" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex p-2">
+                            <img src="${imgchannel}" alt="channel" class="w-8 h-8 rounded-full mr-2">
+                            <div class="flex-1">
+                                <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
+                                    ${song}
+                                </h3>
+                                <p class="text-xs text-gray-600 mt-1">${channel} • ${date}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                `;
+            }
+
+            function loadPerformanceData(range) {
+                const container = document.getElementById("performanceGrid");
+                const container2 = document.getElementById("coverGrid");
+                container.innerHTML = container2.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+
+                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`)
+                .then(res => res.json())
+                .then(data => {
+                    let rows = data.values || [];
+
+                    if (rows.length === 0) {
+                        container.innerHTML = container2.innerHTML = "<p>no data</p>";
+                        return;
+                    }
+
+                    container.innerHTML = rows.filter(row => row[0] === "Rec Perf").map(createPerformanceCard).join("");
+                    container2.innerHTML = rows.filter(row => row[0] === "Cover").map(createPerformanceCard).join("");
+                })
+                .catch(err => {
+                    console.error(err);
+                    container.innerHTML = container2.innerHTML = "<p>error fetch data</p>";
+                });
+            }
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                loadPerformanceData('performance!A2:Z');
+            });
+        </script>
+
         <!-- นิตยสาร (Magazine) -->
         <section id="magazine" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
             <div class="max-w-7xl mx-auto">
