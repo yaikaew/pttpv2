@@ -680,7 +680,7 @@
             function createShowscard(row) {
                 const [type, artist, date, title, link, id, thumbnail, channel, imgchannel, duration] = row;
                 return `
-                <div data-category="${type.toLowerCase()}" class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md">
+                <div data-category="${type.toLowerCase()}" class="media-card bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
                     <a href="${link}" target="_blank" class="block">
                         <div class="relative aspect-video">
                             <img src="${thumbnail}" alt="thumbnail" class="w-full h-full object-cover">
