@@ -16,6 +16,8 @@ const API_KEY = process.env.API_KEY;
 const sheetRanges = {
     series: 'series!A2:L',
     discography: 'discography!A2:G',
+    performance: 'performance!A2:J',
+    cover: 'cover!A2:J',
     magazine: 'magazine!A2:F',
     shows: 'shows!A2:K',
     presenter: 'presenter!A2:F',

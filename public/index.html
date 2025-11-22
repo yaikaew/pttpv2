@@ -8,9 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css" />
     <style>
-        /* (ผมเก็บสไตล์สำคัญเดิมของคุณไว้ — calendar, popup, scrollbar, ฯลฯ) */
         @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
         html { scroll-behavior: smooth; }
         ::-webkit-scrollbar { width: 8px; }
@@ -67,7 +65,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo/Brand -->
-                <a href="index.html" class="flex-shrink-0 text-2xl font-bold text-primary-blue hover:text-blue-700 transition duration-150">
+                <a href="" class="flex-shrink-0 text-2xl font-bold text-primary-blue hover:text-blue-700 transition duration-150">
                     PTTP
                 </a>
 
@@ -90,6 +88,12 @@
                             </a>
                             <a href="#music" class="block px-4 py-2 text-sm text-gray-700 hover:bg-accent-light hover:text-primary-blue transition duration-150 border-t border-gray-100">
                                 <i data-lucide="music" class="inline-block w-4 h-4 mr-1"></i> Musics
+                            </a>
+                            <a href="#performance" class="block px-4 py-2 text-sm text-gray-700 hover:bg-accent-light hover:text-primary-blue transition duration-150 border-t border-gray-100">
+                                <i data-lucide="person-standing" class="inline-block w-4 h-4 mr-1"></i> Performances
+                            </a>
+                            <a href="#cover" class="block px-4 py-2 text-sm text-gray-700 hover:bg-accent-light hover:text-primary-blue transition duration-150 border-t border-gray-100">
+                                <i data-lucide="mic-vocal" class="inline-block w-4 h-4 mr-1"></i> Covers
                             </a>
                             <a href="#magazine" class="block px-4 py-2 text-sm text-gray-700 hover:bg-accent-light hover:text-primary-blue transition duration-150 border-t border-gray-100">
                                 <i data-lucide="book-open" class="inline-block w-4 h-4 mr-1"></i> Magazines
@@ -154,6 +158,12 @@
                         </a>
                         <a href="#music" class="block text-gray-800 hover:bg-primary-blue hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
                             <i data-lucide="music" class="inline-block w-4 h-4 mr-2"></i> Musics
+                        </a>
+                        <a href="#performance" class="block text-gray-800 hover:bg-primary-blue hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="person-standing" class="inline-block w-4 h-4 mr-2"></i> Performances
+                        </a>
+                        <a href="#cover" class="block text-gray-800 hover:bg-primary-blue hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="mic-vocal" class="inline-block w-4 h-4 mr-2"></i> Covers
                         </a>
                         <a href="#magazine" class="block text-gray-800 hover:bg-primary-blue hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
                             <i data-lucide="book-open" class="inline-block w-4 h-4 mr-2"></i> Magazines
@@ -335,6 +345,24 @@
             </div>
         </section>
 
+        <section id="performance" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
+                    Performances
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="performanceGrid"></div>
+            </div>
+        </section>
+
+        <section id="cover" class="py-16 px-4 md:py-24 md:px-8 bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-12">
+                    Covers
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center" id="coverGrid"></div>
+            </div>
+        </section>
+
         <!-- นิตยสาร (Magazine) -->
         <section id="magazine" class="py-16 px-4 md:py-24 md:px-8 bg-accent-light border-b border-gray-200">
             <div class="max-w-7xl mx-auto">
@@ -434,7 +462,6 @@
                 </div>
             </div>
         </section>
-
         <!-- Event Detail Modal (Popup) -->
         <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
             <div class="bg-white rounded-lg max-w-xl w-full mx-auto shadow-2xl transform transition-all duration-300 scale-100">
@@ -607,6 +634,55 @@
                 </div>
                 <a href="${safe(it.link)}" target="_blank" rel="noopener noreferrer" class="text-primary-blue hover:text-blue-700">
                     <i class="fa-solid fa-circle-play fa-2x"></i>
+                </a>
+            </div>
+        `).join('');
+    }
+
+    function renderPerformance(rows) {
+        const container = byId('performanceGrid');
+        if (!container) return;
+        const keys = ['type', 'artist', 'date', 'song', 'artist2', 'link', 'pic', 'note', 'channel', 'imgchannel'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
+                <a href="${safe(it.link)}" target="_blank" class="block">
+                    <div class="relative aspect-video">
+                        <img src="${safe(it.pic)}" alt="thumbnail" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex p-2">
+                        <img src="${safe(it.imgchannel)}" alt="channel" class="w-8 h-8 rounded-full mr-2">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
+                                ${safe(it.song)}
+                            </h3>
+                            <p class="text-xs text-gray-600 mt-1">${safe(it.channel)} • ${safe(it.date)}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        `).join('');
+    }
+    function renderCover(rows) {
+        const container = byId('coverGrid');
+        if (!container) return;
+        const keys = ['type', 'artist', 'date', 'song', 'artist2', 'link', 'pic', 'note', 'channel', 'imgchannel'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105">
+                <a href="${safe(it.link)}" target="_blank" class="block">
+                    <div class="relative aspect-video">
+                        <img src="${safe(it.pic)}" alt="thumbnail" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex p-2">
+                        <img src="${safe(it.imgchannel)}" alt="channel" class="w-8 h-8 rounded-full mr-2">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">
+                                ${safe(it.song)}
+                            </h3>
+                            <p class="text-xs text-gray-600 mt-1">${safe(it.channel)} • ${safe(it.date)}</p>
+                        </div>
+                    </div>
                 </a>
             </div>
         `).join('');
@@ -976,6 +1052,8 @@
             const filmContainer = byId('filmography-list');
             if (filmContainer) filmContainer.innerHTML = '<p class="text-center col-span-full p-8 text-gray-600">Loading filmography data...</p>';
             const disc = byId('discographyGrid'); if (disc) disc.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const perf = byId('performanceGrid'); if (perf) perf.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const cov = byId('coverGrid'); if (cov) cov.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
             const mag = byId('magazineGrid'); if (mag) mag.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
             const shows = byId('media-grid'); if (shows) shows.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
             const prs = byId('presenterGrid'); if (prs) prs.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
@@ -989,6 +1067,8 @@
             // call individual renderers
             renderSeries(json.series || []);
             renderDiscography(json.discography || []);
+            renderPerformance(json.performance || []);
+            renderCover(json.cover || []);
             renderMagazine(json.magazine || []);
             renderShows(json.shows || []);
             renderPresenter(json.presenter || []);
@@ -1022,5 +1102,73 @@
     <!-- ================== END consolidated script ================== -->
 
     <!-- If you had additional external scripts, keep them after this point -->
+     <script>
+        function replaceIcons() {
+            lucide.createIcons();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            replaceIcons();
+
+            // ซ่อนเมนูย่อยทั้งหมดก่อน
+            document.querySelectorAll('[id$="-submenu"]').forEach(submenu => submenu.classList.add('hidden'));
+            document.querySelectorAll('[id$="-chevron"]').forEach(chevron => chevron.classList.remove('rotate-180'));
+            
+            const button = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            button.addEventListener('click', () => {
+                const isExpanded = menu.classList.contains('hidden');
+                menu.classList.toggle('hidden');
+                
+                if (isExpanded) {
+                    menuIcon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                    button.setAttribute('aria-expanded', 'true');
+                } else {
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            document.querySelectorAll('button[id$="-toggle"]').forEach(button => {
+                const submenuId = button.id.replace('-toggle', '-submenu');
+                const chevronId = button.id.replace('-toggle', '-chevron');
+                const submenu = document.getElementById(submenuId);
+                const chevron = document.getElementById(chevronId);
+                
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const isExpanded = submenu.classList.contains('hidden');
+                    
+                    submenu.classList.toggle('hidden');
+                    
+                    if (isExpanded) {
+                        button.setAttribute('aria-expanded', 'true');
+                        chevron.classList.add('rotate-180');
+                    } else {
+                        button.setAttribute('aria-expanded', 'false');
+                        chevron.classList.remove('rotate-180');
+                    }
+                });
+            });
+        });
+
+        // Function ปิดเมนูมือถือเมื่อคลิกลิงก์
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const button = document.getElementById('mobile-menu-button');
+
+            menu.classList.add('hidden');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            button.setAttribute('aria-expanded', 'false');
+        }
+     </script>
 </body>
 </html>
