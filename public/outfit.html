@@ -62,57 +62,145 @@
     </section>
 
     <script>
+    // ---------- Utility helpers ----------
+    const byId = id => document.getElementById(id);
+    const safe = v => v === undefined || v === null ? '' : v;
 
-        function loadOutfitsData(range, elementId) {
-            const grid = document.getElementById(elementId);
-            grid.innerHTML = '<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>';
+    function mapToObjects(rows, keys) {
+        if (!Array.isArray(rows)) return [];
+        return rows.map(r => {
+            const obj = {};
+            keys.forEach((k, i) => obj[k] = r[i] || '');
+            return obj;
+        }).filter(o => Object.values(o).some(v => v !== ''));
+    }
 
-            //fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`)
-            fetch(`/api/spreadsheets?range=${encodeURIComponent(range)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let rows = data.values || [];
-                    grid.innerHTML = rows.map(row => {
-                        const [date, time, artist, title, location, info, img, link, outfit, keyword, tag, note, keylink, taglink, dateformat] = row;
-                        return `
-                            ${outfit ? `
-                                <div class="group outfits-card relative bg-white dark:bg-gray-800 rounded-xl shadow-xl transition duration-300 ease-in-out hover:shadow-primary-500/50 transform hover:-translate-y-1 overflow-hidden">
-                                    <!-- Aspect Ratio Container (1:1) -->
-                                    <div class="w-full aspect-square overflow-hidden">
-                                        <img 
-                                            src="${outfit}" 
-                                            alt="Outfit Visual" 
-                                            class="w-full h-full object-cover object-center transition duration-500 group-hover:scale-[1.05] transform"
-                                            loading="lazy"
-                                            onclick="openPopup(['${outfit}'])"
-                                        />
-                                    </div>
-                                    
-                                    <!-- Outfit Details Overlay/Footer -->
-                                    <div class="p-3">
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 text-center">
-                                            ${dateformat || 'Date Unknown'}
-                                        </p>
-                                        <p class="outfits-tags text-center">
-                                            <a href="${tag ? taglink : keylink}" target="_blank" rel="noopener noreferrer" class="
-                                                inline-block px-3 py-1 text-xs font-bold rounded-full 
-                                                bg-primary-500/10 text-primary-600 
-                                                hover:bg-primary-500/20 
-                                                dark:text-primary-400 dark:hover:bg-primary-500/30
-                                                transition duration-200
-                                            ">
-                                                ${tag || keyword}
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                            ` : ''}
-                        `;
-                    }).join('');
-                });
+    // ---------- RENDERERS (use your original templates, converted to functions) ----------
+    // Outfit
+    function renderOutfit(rows) {
+        const container = byId('outfits-all');
+        if (!container) return;
+        const keys = ['date', 'time', 'artist', 'title', 'location', 'info', 'img', 'link', 'outfit', 'keyword', 'tag', 'note', 'keylink', 'taglink', 'dateformat'];
+        const items = mapToObjects(rows, keys);
+        container.innerHTML = items.map(it => `
+            ${safe(it.outfit) ? `
+                <div class="group outfits-card relative bg-white dark:bg-gray-800 rounded-xl shadow-xl transition duration-300 ease-in-out hover:shadow-primary-500/50 transform hover:-translate-y-1 overflow-hidden">
+                    <!-- Aspect Ratio Container (1:1) -->
+                    <div class="w-full aspect-square overflow-hidden">
+                        <img 
+                            src="${safe(it.outfit)}" 
+                            alt="Outfit Visual" 
+                            class="w-full h-full object-cover object-center transition duration-500 group-hover:scale-[1.05] transform"
+                            loading="lazy"
+                            onclick="openPopup(['${safe(it.outfit)}'])"
+                        />
+                    </div>
+                    
+                    <!-- Outfit Details Overlay/Footer -->
+                    <div class="p-3">
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 text-center">
+                            ${safe(it.dateformat) || 'Date Unknown'}
+                        </p>
+                        <p class="outfits-tags text-center">
+                            <a href="${safe(it.tag) ? safe(it.taglink) : safe(it.keylink)}" target="_blank" rel="noopener noreferrer" class="
+                                inline-block px-3 py-1 text-xs font-bold rounded-full 
+                                bg-primary-500/10 text-primary-600 
+                                hover:bg-primary-500/20 
+                                dark:text-primary-400 dark:hover:bg-primary-500/30
+                                transition duration-200
+                            ">
+                                ${safe(it.tag) || safe(it.keyword)}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            ` : ''}
+        `).join('');
+        lucide.createIcons();
+    }
+
+    // Popup image/video viewer
+    let popupIndex = 0;
+    let popupItems = [];
+    function openPopup(items, start=0) {
+        popupItems = items || [];
+        popupIndex = start || 0;
+        const popup = byId('popup');
+        if (!popup) return;
+        const img = byId('popup-img');
+        const video = byId('popup-video');
+        const source = byId('video-source');
+
+        const current = popupItems[popupIndex] || '';
+        if (current.match(/\.(mp4|webm|ogg)$/i)) {
+            img.style.display = 'none';
+            video.style.display = 'block';
+            source.src = current;
+            video.load();
+        } else {
+            video.style.display = 'none';
+            img.style.display = 'block';
+            img.src = current;
         }
+        popup.style.display = 'flex';
+    }
+    function closePopup() {
+        const popup = byId('popup');
+        if (!popup) return;
+        const video = byId('popup-video');
+        if (video) { video.pause(); video.currentTime = 0; }
+        popup.style.display = 'none';
+    }
+    function prevMedia() {
+        if (!popupItems.length) return;
+        popupIndex = (popupIndex - 1 + popupItems.length) % popupItems.length;
+        openPopup(popupItems, popupIndex);
+    }
+    function nextMedia() {
+        if (!popupItems.length) return;
+        popupIndex = (popupIndex + 1) % popupItems.length;
+        openPopup(popupItems, popupIndex);
+    }
+    window.openPopup = openPopup;
+    window.closePopup = closePopup;
+    window.prevMedia = prevMedia;
+    window.nextMedia = nextMedia;
 
-        loadOutfitsData('Sheet1!A2:O', 'outfits-all');
+    // Utility to open external links
+    function openLink(url) { if (!url) return; window.open(url, '_blank'); }
+    window.openLink = openLink;
+
+    // ---------- MAIN: fetch once and render ----------
+    async function loadAllData() {
+        try {
+            // show small loading indicators where appropriate
+            const outfits = byId('outfits-all'); if (outfits) outfits.innerHTML = `<p class="text-center col-span-full p-8 text-gray-600">loading data...</p>`;
+            const res = await fetch('/api/all-data');
+            if (!res.ok) throw new Error('Failed to fetch /api/all-data');
+            const json = await res.json();
+
+            // call individual renderers
+            renderOutfit(json.outfit || []);
+
+            // setup icons & misc
+            lucide.createIcons();
+            // ensure calendar listeners
+            document.addEventListener('click', (e) => {
+                const popup = byId('popup');
+                if (e.target.id === 'popup') closePopup();
+            });
+            const closeModalBtn = byId('closeModalButton');
+            closeModalBtn && closeModalBtn.addEventListener('click', closeModal);
+
+        } catch (err) {
+            console.error('loadAllData error', err);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        currentMonth.setDate(1);
+        loadAllData();
+    });
 
     </script>
 

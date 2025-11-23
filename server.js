@@ -22,7 +22,8 @@ const sheetRanges = {
     shows: 'shows!A2:K',
     presenter: 'presenter!A2:F',
     awards: 'awards!A2:K',
-    schedule: 'Sheet1!A2:P'
+    schedule: 'Sheet1!A2:P',
+    outfit: 'Sheet1!A2:O',
 };
 
 // ---- Helper: fetch a single sheet ----
