@@ -951,7 +951,7 @@
             const getDayColor = getDayColorClass(event.dow || 'Fri');
             const borderColor = getBorderColorClass(event.dow || 'Fri');
             const artistImages = { "Por":"https://pbs.twimg.com/media/GuB0uEoWMAAHVIT?format=jpg&name=large", "TeeTee":"https://pbs.twimg.com/media/Gt93Ot5WYAAMRKO?format=jpg&name=4096x4096", "DEXX":"https://pbs.twimg.com/media/G2veDg5bcAAwDpN?format=jpg&name=large" };
-            const parseArtists = (name) => { if (name === "PTTP") return ["TeeTee","Por"]; return [name]; };
+            const parseArtists = (name) => { if (name === "TTP") return ["TeeTee","Por"]; return [name]; };
             const artistHTML = parseArtists(event.artist).map(a => `
                 <div class="flex items-center bg-gray-100 rounded-full px-3 py-1 shadow-sm">
                     <img src="${artistImages[a] || 'https://placehold.co/64x64'}" alt="${a}" class="w-6 h-6 rounded-full object-cover mr-2">
