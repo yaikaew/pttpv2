@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>pippor & 2tee</title>
+    <link rel="icon" href="assets/icon.png" type="image/png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+        * { font-family: 'Bai Jamjuree', sans-serif; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,4,12,0.05); }
+        .text-blue-500 { color:#007bff; }
+        .received { color: green; } .nominated { color: red; }
+    </style>
+</head>
+<body class="bg-blue-50 text-slate-800">
+
+    <nav class="fixed top-0 left-0 w-full bg-white shadow-lg z-50 transition-shadow duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Brand -->
+                <a href="" class="flex-shrink-0 text-2xl font-bold text-blue-500 hover:text-blue-700 transition duration-150">
+                    TTP
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:space-x-4">
+                    <!-- Profile -->
+                    <a href="#profile" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-150">
+                        <i data-lucide="user" class="inline-block w-4 h-4 mr-1"></i> Profile
+                    </a>
+
+                    <!-- Works Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-150 focus:outline-none">
+                            <i data-lucide="clapperboard" class="inline-block w-4 h-4 mr-1"></i> Works
+                            <i data-lucide="chevron-down" class="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180"></i>
+                        </button>
+                        <div class="absolute top-full hidden group-hover:block w-52 bg-white shadow-2xl rounded-xl ring-1 ring-black ring-opacity-5 z-20 overflow-hidden">
+                            <a href="#series" class="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-500 transition duration-150">
+                                <i data-lucide="monitor-play" class="inline-block w-4 h-4 mr-1"></i> Series
+                            </a>
+                            <a href="#music" class="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-500 transition duration-150 border-t border-slate-100">
+                                <i data-lucide="music" class="inline-block w-4 h-4 mr-1"></i> Musics
+                            </a>
+                            <a href="#performance" class="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-500 transition duration-150 border-t border-slate-100">
+                                <i data-lucide="person-standing" class="inline-block w-4 h-4 mr-1"></i> Performances
+                            </a>
+                            <a href="#magazine" class="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-500 transition duration-150 border-t border-slate-100">
+                                <i data-lucide="book-open" class="inline-block w-4 h-4 mr-1"></i> Magazines
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="#brand-presenter" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-150">
+                        <i data-lucide="star" class="inline-block w-4 h-4 mr-1"></i> Brand Presenter
+                    </a>
+
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition duration-150" aria-expanded="false">
+                        <!-- Icon when menu is closed -->
+                        <i data-lucide="menu" id="menu-icon" class="block h-6 w-6"></i>
+                        <!-- Icon when menu is open (Hidden initially) -->
+                        <i data-lucide="x" id="close-icon" class="hidden h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Collapsed by default) -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#profile" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                    <i data-lucide="user" class="inline-block w-4 h-4 mr-2"></i> Profile
+                </a>
+
+                <div>
+                    <button id="mobile-works-toggle" class="w-full flex justify-between items-center text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" aria-expanded="false">
+                        <span><i data-lucide="clapperboard" class="inline-block w-4 h-4 mr-2"></i> Works</span>
+                        <i data-lucide="chevron-down" id="mobile-works-chevron" class="w-4 h-4 transform transition-transform duration-200"></i>
+                    </button>
+                    <div id="mobile-works-submenu" class="pl-6 pt-1 hidden space-y-1">
+                        <a href="#series" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="monitor-play" class="inline-block w-4 h-4 mr-2"></i> Series
+                        </a>
+                        <a href="#music" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="music" class="inline-block w-4 h-4 mr-2"></i> Musics
+                        </a>
+                        <a href="#performance" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="person-standing" class="inline-block w-4 h-4 mr-2"></i> Performances
+                        </a>
+                        <a href="#magazine" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                            <i data-lucide="book-open" class="inline-block w-4 h-4 mr-2"></i> Magazines
+                        </a>
+                    </div>
+                </div>
+
+                <a href="#brand-presenter" class="block text-slate-800 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-base font-medium transition duration-150" onclick="closeMobileMenu()">
+                    <i data-lucide="star" class="inline-block w-4 h-4 mr-2"></i> Brand Presenter
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content (Padding added to offset fixed navbar) -->
+    <main class="pt-16 bg-white">
+
+        <!-- หน้าประวัติส่วนตัว (Profile) -->
+        <section id="profile" class="py-16 px-4 md:py-24 md:px-8 border-b-4 border-blue-500">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="text-center">
+                    <div class="relative w-80 h-120 mx-auto mb-6">
+                        <img src="https://pbs.twimg.com/media/GuB0uEoWMAAHVIT?format=jpg&name=large" alt="por" 
+                            class="rounded-full object-cover w-full h-full border-4 border-blue-200 shadow-xl">
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Por</h2>
+                    <!-- <p class="text-slate-600 mb-6">Rising actor-singer who debuted as a main member of DVI after competing on LAZiCON. Notable role as Punlee in Your Sky Series; upcoming as Qin in Duang With You Series.</p> -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-lg text-left max-w-sm mx-auto">
+                        <h3 class="text-2xl font-semibold text-slate-700 mb-3">Suppakarn Jirachotikul</h3>
+                        <ul class="space-y-2 text-slate-600">
+                            <li><span class="font-semibold text-blue-500">Date of Birth: </span>17 October 2002</li>
+                            <li><span class="font-semibold text-blue-500">Hashtag: </span>#porsuppakarn</li>
+                            <li class="flex items-center space-x-4 social-links">
+                                <a href="https://x.com/porsuppakarn" target="_blank" class="text-blue-500 hover:text-slate-800">
+                                    <i class="fa-brands fa-x-twitter text-xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/porsuppakarn" target="_blank" class="text-blue-500 hover:text-pink-500">
+                                    <i class="fa-brands fa-instagram text-xl"></i>
+                                </a>
+                                <a href="https://www.tiktok.com/@porsuppakarn" target="_blank" class="text-blue-500 hover:text-slate-800">
+                                    <i class="fa-brands fa-tiktok text-xl"></i>
+                                </a>
+                                <a href="https://weibo.com/u/7910928995" target="_blank" class="text-blue-500 hover:text-red-500">
+                                    <i class="fa-brands fa-weibo text-xl"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="relative w-80 h-120 mx-auto mb-6">
+                        <img src="https://pbs.twimg.com/media/Gt93Ot5WYAAMRKO?format=jpg&name=4096x4096" alt="Teetee" 
+                            class="rounded-full object-cover w-full h-full border-4 border-blue-200 shadow-xl">
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">TeeTee</h2>
+                    <!-- <p class="text-slate-600 mb-6">New-generation actor recognized from DMD Friendship the Reality. Trained via TO BE NUMBER ONE IDOL. Appeared as Glaijai in Your Sky Series, with an upcoming lead as Duang in Duang With You Series.</p> -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-lg text-left max-w-sm mx-auto">
+                        <h3 class="text-2xl font-semibold text-slate-700 mb-3">Wanpichit Nimitparkpoom</h3>
+                        <ul class="space-y-2 text-slate-600">
+                            <li><span class="font-semibold text-blue-500">Date of Birth: </span>20 March 2005</li>
+                            <li><span class="font-semibold text-blue-500">Hashtag: </span>#twnpich</li>
+                            <li class="flex items-center space-x-4 social-links">
+                                <a href="https://x.com/twnpich" target="_blank" class="text-blue-500 hover:text-slate-800">
+                                    <i class="fa-brands fa-x-twitter text-xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/twnpich/" target="_blank" class="text-blue-500 hover:text-pink-500">
+                                    <i class="fa-brands fa-instagram text-xl"></i>
+                                </a>
+                                <a href="https://www.tiktok.com/@teetee.wpc" target="_blank" class="text-blue-500 hover:text-slate-800">
+                                    <i class="fa-brands fa-tiktok text-xl"></i>
+                                </a>
+                                <a href="https://weibo.com/u/7978599852" target="_blank" class="text-blue-500 hover:text-red-500">
+                                    <i class="fa-brands fa-weibo text-xl"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="series" class="py-16 px-4 md:py-24 md:px-8 border-b border-slate-200">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-500 text-center mb-12">
+                    Series
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/GcjdDQYaMAIjOfF?format=jpg&name=4096x4096" alt="Your Sky" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute top-3 right-3">
+                                <span class="px-2.5 py-1 rounded-full text-[7px] font-black uppercase tracking-widest shadow-sm border bg-white text-slate-400 border-slate-100">
+                                    Support
+                                </span>
+                            </div>
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2024
+                                </span>
+                                <div class="flex items-center gap-1 text-slate-300">
+                                    <Tv class="w-2.5 h-2.5" />
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">series</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug mb-4 group-hover:text-blue-500 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                กี่หมื่นฟ้า Your Sky
+                            </h3>
+
+                            <div class="flex items-start gap-3 mb-5 pb-4 border-b border-blue-50/50">
+                                <div class="flex-1 min-w-0 border-l-2 border-sky-100 pl-2">
+                                    <span class="text-xs font-bold text-sky-400 uppercase block mb-0.5">Por</span>
+                                    <p class="text-sm text-slate-500 truncate">Punlee (พันลี้)</p>
+                                </div>
+                                <div class="flex-1 min-w-0 border-l-2 border-purple-100 pl-2">
+                                    <span class="text-xs font-bold text-purple-400 uppercase block mb-0.5">Teetee</span>
+                                    <p class="text-sm text-slate-500 truncate">Ghlaijai (ใกล้ใจ)</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://youtube.com/playlist?list=PLcTibKbv20S4l3tuUU0ydM9BzZEc0nrLm" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="circle-play" class="w-3.5 h-3.5"></i>Watch
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/GmZg7Lhb0AAYn69?format=jpg&name=medium" alt="Your Sky Of Us" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute top-3 right-3">
+                                <span class="px-2.5 py-1 rounded-full text-[7px] font-black uppercase tracking-widest shadow-sm border bg-white text-slate-400 border-slate-100">
+                                    Support
+                                </span>
+                            </div>
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1 text-slate-300">
+                                    <Tv class="w-2.5 h-2.5" />
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">series</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug mb-4 group-hover:text-blue-500 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                กี่หมื่นฟ้า Your Sky Of Us
+                            </h3>
+
+                            <div class="flex items-start gap-3 mb-5 pb-4 border-b border-blue-50/50">
+                                <div class="flex-1 min-w-0 border-l-2 border-sky-100 pl-2">
+                                    <span class="text-xs font-bold text-sky-400 uppercase block mb-0.5">Por</span>
+                                    <p class="text-sm text-slate-500 truncate">Punlee (พันลี้)</p>
+                                </div>
+                                <div class="flex-1 min-w-0 border-l-2 border-purple-100 pl-2">
+                                    <span class="text-xs font-bold text-purple-400 uppercase block mb-0.5">Teetee</span>
+                                    <p class="text-sm text-slate-500 truncate">Ghlaijai (ใกล้ใจ)</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <a 
+                                    href={item.link} target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="circle-play" class="w-3.5 h-3.5"></i>Watch
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G95RkWtagAElWM0?format=jpg&name=large" alt="Duang with you" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div class="absolute top-3 right-3">
+                                <span class="px-2.5 py-1 rounded-full text-[7px] font-black uppercase tracking-widest shadow-sm border bg-amber-400 text-white border-amber-300">
+                                    Main
+                                </span>
+                            </div>
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2026
+                                </span>
+                                <div class="flex items-center gap-1 text-slate-300">
+                                    <Tv class="w-2.5 h-2.5" />
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">series</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug mb-4 group-hover:text-blue-500 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                ด้วงกับเธอ Duang With You
+                            </h3>
+
+                            <div class="flex items-start gap-3 mb-5 pb-4 border-b border-blue-50/50">
+                                <div class="flex-1 min-w-0 border-l-2 border-purple-100 pl-2">
+                                    <span class="text-xs font-bold text-purple-400 uppercase block mb-0.5">TeeTee</span>
+                                    <p class="text-sm text-slate-500 truncate">Duang (ด้วง)</p>
+                                </div>
+                                <div class="flex-1 min-w-0 border-l-2 border-sky-100 pl-2">
+                                    <span class="text-xs font-bold text-sky-400 uppercase block mb-0.5">Por</span>
+                                    <p class="text-sm text-slate-500 truncate">Qin (ฉิน)</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://youtu.be/G7ExYljjGoo" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="circle-play" class="w-3.5 h-3.5"></i>Watch
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="music" class="py-16 px-4 md:py-24 md:px-8 border-b border-slate-200">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-500 text-center mb-12">
+                    Musics
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="group cursor-pointer"><a href="https://youtu.be/bpe9zQ5zDDc" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://images.genius.com/9a7dce0598f3c8ed9d3532a739b61fb7.1000x1000x1.jpg" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">YESTERDAY TODAY TOMORROW</h3><p class="text-sm text-slate-500">TRINITY & 4NOLOGUE TRAINEE • 2020</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/BvXbFJ3GrUw" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/Fnp7kO-aUAEb-4W?format=jpg&name=medium" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">Sugar</h3><p class="text-sm text-slate-500">DVI • 2023</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/0xRa0DwkOvw" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/FoK0-r2acAAGlkQ?format=jpg&name=medium" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">To The Top</h3><p class="text-sm text-slate-500">PSYCHIC FEVER feat. DVI • 2023</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/57O1sPt22PE" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/F1PrFJdaEAAvqUW?format=jpg&name=large" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">Second Chance</h3><p class="text-sm text-slate-500">DVI • 2023</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/tb_z1s97fuU" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/GEHQKJFb0AAnz7E?format=jpg&name=4096x4096" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">รักเธอเต็มฟีด (LOVE FEED)</h3><p class="text-sm text-slate-500">DMD BOYS • 2024</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/uDAO04OQi8c" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/GFBnObCbUAAXer5?format=jpg&name=4096x4096" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">เพื่อน (แอบ) รัก - Close(d) Friend</h3><p class="text-sm text-slate-500">DVI • 2024</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/HaXOu4gzYmw" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://i.scdn.co/image/ab67616d0000b27335892d98b65b52bb75da0500" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">ศูนย์รวมความน่ารัก (Cuteness Center)</h3><p class="text-sm text-slate-500">DMD Gen3 • 2024</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/Rnk8wYtEBsY" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/GhvGt1DbwAArGN4?format=jpg&name=large" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">Perfect Match</h3><p class="text-sm text-slate-500">DMD Gen4 • 2025</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/sevERDj4naU" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/GidVC7ybcAEnwf7?format=jpg&name=large" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">ใกล้ใจ</h3><p class="text-sm text-slate-500">Por Suppakarn • 2025</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/GTY_Ss32G48" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://pbs.twimg.com/media/GuQv8caacAA-v-j?format=jpg&name=large" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">CLANG CLANG</h3><p class="text-sm text-slate-500">DEXX • 2025</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/NU4wsJ_3z2Y" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://lh3.googleusercontent.com/ehTWsxjYn_Mq64gGXzsVksp-2EqQC4x7IsUv1MIhPLGPAmQAQudiODKGVmrfrFieaOKYcew9-IBjKvY=w544-h544-l90-rj" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">อกหักเป็นเพื่อนเธอ (Beside You)</h3><p class="text-sm text-slate-500">DEXX • 2025</p></a></div>
+                    <div class="group cursor-pointer"><a href="https://youtu.be/9PbEZkBHZ6s" target="_blank" rel="noopener noreferrer"><div class="relative overflow-hidden rounded-lg aspect-square bg-slate-100 mb-4 border border-slate-100"><img src="https://lh3.googleusercontent.com/PkVoevkmNklJRvhi0sSKNlzpGpHiaKNTyVaHZDiV35Xj5qkNiLLhTR5DQj_YXXLYApGU7lARYIqibVg=w544-h544-l90-rj" alt="Album Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div></div><h3 class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">Skinship</h3><p class="text-sm text-slate-500">DEXX • 2025</p></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance" class="py-16 px-4 md:py-24 md:px-8 border-b border-slate-200">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-500 text-center mb-12">
+                    Performances
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/zRUrF2ucNDg target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/zRUrF2ucNDg/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">คนมันรัก | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 16 Oct 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/ESH11YaOiCg target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/ESH11YaOiCg/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Shape of You | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 24 Oct 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/oDzVyqtvjJU target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/oDzVyqtvjJU/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">สองใจ | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 30 Oct 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/38FypwXjf0w target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/38FypwXjf0w/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">รู้งี้เป็นแฟนกันตั้งนานแล้ว | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 06 Nov 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/DHN_irFw7O4 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DHN_irFw7O4/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">ที่หนึ่งในใจของเธอ (Last One) | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 13 Nov 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/kNyUDqCu5MY target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/kNyUDqCu5MY/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">So What | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 20 Nov 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/nnDnNujgQD4 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/nnDnNujgQD4/mqdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">PLEASE | LAZ iCON</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 04 Dec 2021</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/fL99-DVvf4Q target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/fL99-DVvf4Q/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/69Ng5lvicC0Zb8QOauBsEiFx1m02EVOozGVbYAGd42dUH5B86WAVoV_RtGJStXpMreqZ8GjElA=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">HIDDEN TRACK & IOU | 4LLOWEEN PARTY version</h3><p class="text-xs text-gray-600 mt-1">4NOLOGUE • 14 Nov 2022</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/cXkeT6lClKA target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/cXkeT6lClKA/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Second Chance | Performance Video</h3><p class="text-xs text-gray-600 mt-1">DVI • 26 Jul 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/unYklP-NsN8 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/unYklP-NsN8/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Second Chance | Self-Cam in Japan</h3><p class="text-xs text-gray-600 mt-1">DVI • 31 Jul 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/f0sOcqvQqSQ target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/f0sOcqvQqSQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Second Chance | Dance Performance</h3><p class="text-xs text-gray-600 mt-1">DVI • 29 Aug 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/ztiogPFuOsQ target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/ztiogPFuOsQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">ISTJ</h3><p class="text-xs text-gray-600 mt-1">DVI • 23 Sep 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/4f-snvC8lXo target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/4f-snvC8lXo/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">3D</h3><p class="text-xs text-gray-600 mt-1">DVI • 17 Nov 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/Ax6m4JfE-TE target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/Ax6m4JfE-TE/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Christmas Special Cover 🎄</h3><p class="text-xs text-gray-600 mt-1">DVI • 24 Dec 2023</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/sUjJmKAdc3M&t=165 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/sUjJmKAdc3M/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/1Hap5B_PUhODOLV9flBm73OomNRdzMQh0VXjUP2DpeK7Pwl2p2A6ulRoihbh2ajyaF-7fGO1lw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">ศูนย์รวมความน่ารัก (Cuteness Center) | DMD Friendship</h3><p class="text-xs text-gray-600 mt-1">Mandee Channel • 28 Jan 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/sUjJmKAdc3M&t=785 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/sUjJmKAdc3M/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/1Hap5B_PUhODOLV9flBm73OomNRdzMQh0VXjUP2DpeK7Pwl2p2A6ulRoihbh2ajyaF-7fGO1lw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Candy | DMD Friendship</h3><p class="text-xs text-gray-600 mt-1">Mandee Channel • 28 Jan 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/3wFaK8wQ2ss target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/3wFaK8wQ2ss/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/dg_epL0JA5RyYfJWlA4V0gPPsJVADTDUuN8un-Mub2-Nje1GaFimB-zIcqxW5GYLdjfAglwulw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">เพื่อน(แอบ)รัก - Close(d) Friend</h3><p class="text-xs text-gray-600 mt-1">DVI • 14 Feb 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/NT-ev7TygwQ target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/NT-ev7TygwQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">SHEESH</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 08 Jun 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/OFH_Alk1rUQ target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/OFH_Alk1rUQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">MAESTRO</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 24 Jun 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/EivlqUBngEk target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/EivlqUBngEk/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/1Hap5B_PUhODOLV9flBm73OomNRdzMQh0VXjUP2DpeK7Pwl2p2A6ulRoihbh2ajyaF-7fGO1lw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">แค่เธอ | DMD Friendship SS2</h3><p class="text-xs text-gray-600 mt-1">Mandee Channel • 14 Oct 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/F5Rl-NnAgjY&t=111 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/F5Rl-NnAgjY/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/1Hap5B_PUhODOLV9flBm73OomNRdzMQh0VXjUP2DpeK7Pwl2p2A6ulRoihbh2ajyaF-7fGO1lw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Perfect Match | DMD Friendship SS2</h3><p class="text-xs text-gray-600 mt-1">Mandee Channel • 10 Nov 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/F5Rl-NnAgjY&t=1508 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/F5Rl-NnAgjY/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/1Hap5B_PUhODOLV9flBm73OomNRdzMQh0VXjUP2DpeK7Pwl2p2A6ulRoihbh2ajyaF-7fGO1lw=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">FEAT | DMD Friendship SS2</h3><p class="text-xs text-gray-600 mt-1">Mandee Channel • 10 Nov 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/V_NdpI3bCHE target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/V_NdpI3bCHE/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/8_OrTp1RsgytzLpECg9mAC92qup1y-xMsgLaGngfEo2pH_6d4erTw_o8jX9pzUl_UsKmA17ic7k=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Knock Knock</h3><p class="text-xs text-gray-600 mt-1">ช่อง one31 • 12 Nov 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/FUn_SZoR5OQ?si=Mc9cQ87imtJ9K45X&t=3808 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/FUn_SZoR5OQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Knock Knock | DMD CHARITY 2024</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 19 Dec 2024</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/4VReuq81VUE target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/4VReuq81VUE/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/YG_XnvMNXpMBLVOCYaamlminbsFobpFnwAcXL46AXJmjHPfd4R687JnO0C3TdS1eyuztixjMuA=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">ที่รักครับ (Only One) - ATLAS | karaoke version by Thomas x Por x Save (DMD)</h3><p class="text-xs text-gray-600 mt-1">T-POP STAGE • 29 May 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/APgM4mWhtk4 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/APgM4mWhtk4/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/YG_XnvMNXpMBLVOCYaamlminbsFobpFnwAcXL46AXJmjHPfd4R687JnO0C3TdS1eyuztixjMuA=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">กี่หมื่นครั้งที่ตกหลุมรักคนเดิม - MARCKRIS BUS | karaoke version by Kong x TeeTee x AuAu (DMD)</h3><p class="text-xs text-gray-600 mt-1">T-POP STAGE • 31 May 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/mOTYo4WzL1k&t=1882 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/mOTYo4WzL1k/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG | DEXX DEBUT SHOWCASE</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 26 Jun 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/mOTYo4WzL1k&t=3628 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/mOTYo4WzL1k/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">HOTEL LOBBY | DEXX DEBUT SHOWCASE</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 26 Jun 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/CwUqyDVwj7k target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/CwUqyDVwj7k/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/YG_XnvMNXpMBLVOCYaamlminbsFobpFnwAcXL46AXJmjHPfd4R687JnO0C3TdS1eyuztixjMuA=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG | T-POP STAGE</h3><p class="text-xs text-gray-600 mt-1">T-POP STAGE • 26 Jun 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/Tx2Wd1kz4ls target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/Tx2Wd1kz4ls/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/YG_XnvMNXpMBLVOCYaamlminbsFobpFnwAcXL46AXJmjHPfd4R687JnO0C3TdS1eyuztixjMuA=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG ONE TAKE STAGE | T-POP STAGE</h3><p class="text-xs text-gray-600 mt-1">T-POP STAGE • 01 Jul 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/xy1j7dpffdQ target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/xy1j7dpffdQ/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG | Dance Performance</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 08 Jul 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/vyyioTfYhAo target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/vyyioTfYhAo/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG | Dance Practice (Still Version)</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 13 Jul 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/noPhufmrzck target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/noPhufmrzck/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">อกหักเป็นเพื่อนเธอ (Beside You) | Dance Practice</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 23 Oct 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://youtu.be/7TvqoWiJ6Q0 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/7TvqoWiJ6Q0/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tKwrR3fqzkD8ZbmPr7oFxeUOYlAZRGdaFPs0rlsTNV9aVZ6UDD8qYD4kBWfwbIHf8xfWODXo=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">อกหักเป็นเพื่อนเธอ (Beside You) | Live Session</h3><p class="text-xs text-gray-600 mt-1">DMD MUSIC • 28 Nov 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/DRg6Ub_jn9w?si=Vmw8tAIVPePJUT-C&t=24537 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DRg6Ub_jn9w/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">CLANG CLANG | DMD CHARITY 2025</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 04 Dec 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/DRg6Ub_jn9w?si=OeFRGcH2T-k8V8t_&t=25018 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DRg6Ub_jn9w/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">อกหักเป็นเพื่อนเธอ (Beside You) | DMD CHARITY 2025</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 04 Dec 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/DRg6Ub_jn9w?si=NxfGUK2uhucmZiKX&t=30647 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DRg6Ub_jn9w/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">Perfect Match | DMD CHARITY 2025</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 04 Dec 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/DRg6Ub_jn9w?si=cLM4M0p_vuriD4vc&t=27661 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DRg6Ub_jn9w/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">นี่คือรักใช่ไหม | DMD CHARITY 2025</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 04 Dec 2025</p></div></div></a></div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover w-full max-w-md transition transform hover:scale-105"><a href=https://www.youtube.com/live/DRg6Ub_jn9w?si=pqoE-C8A_HLHNwzU&t=31012 target="_blank" class="block"><div class="relative aspect-video"><img src=https://img.youtube.com/vi/DRg6Ub_jn9w/maxresdefault.jpg alt="thumbnail" class="w-full h-full object-cover"></div><div class="flex p-2"><img src=https://yt3.ggpht.com/tWXk2yU7bkf9zNnvQz-0hv8e6kTbV2CN9PGDWAeFO8nZWln8DeZwVPQXq4Xi9YK01jfgvblFCm0=s88-c-k-c0x00ffffff-no-rj alt="channel" class="w-8 h-8 rounded-full mr-2"><div class="flex-1"><h3 class="text-sm font-bold leading-tight hover:text-primary-blue cursor-pointer line-clamp-2">ศูนย์รวมความน่ารัก (Cuteness Center) | DMD CHARITY 2025</h3><p class="text-xs text-gray-600 mt-1">DomundiTV • 04 Dec 2025</p></div></div></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="magazine" class="py-16 px-4 md:py-24 md:px-8 border-b border-slate-200">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-500 text-center mb-12">
+                    Magazines
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/GSGYLJYaUAMrtZj?format=jpg&name=medium" alt="แพรว ก.ค. 67" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2024
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">TTP</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                แพรว ก.ค. 67
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors"></p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://praew.com/people/praew-interview/537125.html" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G5ConqebIAEaXRz?format=jpg&name=large" alt="Astral" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">TTP</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                Astral
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors">Cover A</p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://x.com/astral_office/status/1918558029886243306" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G5ConqKbsAAGaED?format=jpg&name=large" alt="Astral" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">TTP</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                Astral
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors">Cover B</p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://x.com/astral_office/status/1918558029886243306" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/GsG3ZwZaUAIOiOI?format=jpg&name=large" alt="GAS" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">TTP</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                GAS
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors"></p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://weibo.com/7503853716/5168366461654448" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G4fC7QQaYAAhLEG?format=jpg&name=large" alt="Astral" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">DEXX</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                Astral
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors">Cover A</p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://x.com/astral_office/status/1984171897282613673" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G4fC7OcawAA1d9c?format=jpg&name=large" alt="Astral" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">DEXX</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                Astral
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors">Cover B</p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://x.com/astral_office/status/1984171897282613673" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group flex flex-col bg-white rounded-[1rem] p-3 border border-blue-50 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-100/30">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-50 mb-4">
+                            <img src="https://pbs.twimg.com/media/G4_FHICaEAAkZq-?format=jpg&name=4096x4096" alt="KAZZ MAGAZINE issue.212" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
+                        <div class="px-1 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">
+                                    2025
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-[8px] font-medium uppercase tracking-tighter">DEXX</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-500 transition-colors">
+                                KAZZ MAGAZINE
+                            </h3>
+                            <p class="text-xs text-slate-300 mb-2 group-hover:text-blue-500 transition-colors">issue.212</p>
+                            <div class="mt-auto">
+                                <a 
+                                    href="https://x.com/Kazzmagazine/status/1986024715950146021" target="_blank" rel="noreferrer"
+                                    class="flex items-center justify-center gap-1.5 py-2.5 bg-white border border-blue-100 text-blue-400 hover:bg-blue-50 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                >
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> More Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="brand-presenter" class="py-16 px-4 md:py-24 md:px-8 border-b border-slate-200">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-500 text-center mb-12">
+                    Brand Presenter
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center items-stretch">
+                    <div class="group w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
+                        <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('https://x.com/DomundiTV/status/1901099188022374689')">
+                            <img src="https://pbs.twimg.com/media/GmIPWPlbcAEvdd8?format=jpg&name=medium" alt="Friend of Mille" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-500 transition-colors">Friend of Mille</h3>
+                        <p class="text-sm text-gray-500 group-hover:text-blue-500 transition-colors">Start: Mar 16, 2025</p>
+                    </div>
+                    <div class="group w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
+                        <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('https://x.com/DomundiTV/status/1919243554532057329')">
+                            <img src="https://pbs.twimg.com/media/GqKFtVUbUAAI_3B?format=jpg&name=large" alt="Friends of G2G" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-500 transition-colors">Friends of G2G</h3>
+                        <p class="text-sm text-gray-500 group-hover:text-blue-500 transition-colors">Start: May 5, 2025</p>
+                    </div>
+                    <div class="group w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
+                        <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('https://x.com/DomundiTV/status/1942227920313098615')">
+                            <img src="https://pbs.twimg.com/media/GvbVfO2WAAEADYV?format=jpg&name=large" alt="Presenter of Maison Mylène" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-500 transition-colors">Presenter of Maison Mylène</h3>
+                        <p class="text-sm text-gray-500 group-hover:text-blue-500 transition-colors">Start: Jul 9, 2025</p>
+                    </div>
+                    <div class="group w-full max-w-xs p-4 bg-white rounded-xl shadow-lg text-center flex flex-col h-full card-hover">
+                        <div class="w-full aspect-[1/1] overflow-hidden rounded-lg mb-4" onclick="openLink('https://x.com/DomundiTV/status/1978456719266357311')">
+                            <img src="https://pbs.twimg.com/media/G3TQYqfasAEM6Zx?format=jpg&name=large" alt="Friends of HONAH LEE" class="w-full h-full object-cover object-center transition transform hover:scale-105">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-500 transition-colors">Friends of HONAH LEE</h3>
+                        <p class="text-sm text-gray-500 group-hover:text-blue-500 transition-colors">Start: Oct 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-blue-500 text-white p-4 text-center">
+        <p class="text-sm">&copy; Made with Love | By <a href="https://x.com/yorkorrrr" target="_blank">yorkor</a><br/></p>
+    </footer>
+
+    <!-- If you had additional external scripts, keep them after this point -->
+     <script>
+        function replaceIcons() {
+            lucide.createIcons();
+        }
+
+        // เปิดลิ้งค์
+        function openLink(url) {
+            window.open(url, "_blank");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            replaceIcons();
+
+            // ซ่อนเมนูย่อยทั้งหมดก่อน
+            document.querySelectorAll('[id$="-submenu"]').forEach(submenu => submenu.classList.add('hidden'));
+            document.querySelectorAll('[id$="-chevron"]').forEach(chevron => chevron.classList.remove('rotate-180'));
+            
+            const button = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            button.addEventListener('click', () => {
+                const isExpanded = menu.classList.contains('hidden');
+                menu.classList.toggle('hidden');
+                
+                if (isExpanded) {
+                    menuIcon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                    button.setAttribute('aria-expanded', 'true');
+                } else {
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            document.querySelectorAll('button[id$="-toggle"]').forEach(button => {
+                const submenuId = button.id.replace('-toggle', '-submenu');
+                const chevronId = button.id.replace('-toggle', '-chevron');
+                const submenu = document.getElementById(submenuId);
+                const chevron = document.getElementById(chevronId);
+                
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const isExpanded = submenu.classList.contains('hidden');
+                    
+                    submenu.classList.toggle('hidden');
+                    
+                    if (isExpanded) {
+                        button.setAttribute('aria-expanded', 'true');
+                        chevron.classList.add('rotate-180');
+                    } else {
+                        button.setAttribute('aria-expanded', 'false');
+                        chevron.classList.remove('rotate-180');
+                    }
+                });
+            });
+        });
+
+        // Function ปิดเมนูมือถือเมื่อคลิกลิงก์
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const button = document.getElementById('mobile-menu-button');
+
+            menu.classList.add('hidden');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            button.setAttribute('aria-expanded', 'false');
+        }
+     </script>
+</body>
+</html>
